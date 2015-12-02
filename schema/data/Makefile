@@ -13,4 +13,4 @@ ncbi_genes.sql: Homo_sapiens.gene_info.gz
 	echo "-- Source: $<" > $@
 	perl -le 'print "-- Modified: " . localtime((stat shift)[9])' $< >> $@
 	echo "-- Generated: `date`" >> $@
-	gunzip -c $< | ncbi-gene-to-sql >> $@
+	(gunzip -c $< || test $$? -eq 2) | ncbi-gene-to-sql >> $@
