@@ -1,0 +1,20 @@
+#!/bin/bash
+set -e -o pipefail -o nounset
+
+rid=https://rid.ncifcrf.gov
+
+function query-rid() {
+  echo "Querying RID" >&2
+  curl -fsS $rid/result.php \
+    -d virusnm=HIV1 \
+    -d subtypenm[]=all \
+    -d host=hg19 \
+    -d chr[]=all \
+    -d site_info[]=all
+}
+
+echo "Extracting download URL" >&2
+tsv=$(query-rid | grep -Pio '(?<=href=)(.+?)(?=>Download\s+Result)')
+
+echo "Downloading TSV" >&2
+curl -fsS $rid/$tsv
