@@ -2,7 +2,7 @@ SHELL := /bin/bash
 export SHELLOPTS:=errexit:pipefail
 .DELETE_ON_ERROR:
 
-PATH := ../bin:$(PATH)
+PATH := ../../bin:$(PATH)
 
 all: ncbi_genes.sql
 
