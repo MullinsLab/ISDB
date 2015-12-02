@@ -1,0 +1,48 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use utf8;
+use open qw< :std :encoding(UTF-8) >;
+use Text::CSV;
+
+my $tsv = Text::CSV->new({
+    binary => 1,
+    sep    => "\t",
+}) or die "Can't create new Text::CSV: " . Text::CSV->error_diag . "\n";
+
+my (@header, @sql);
+
+while (<>) {
+    if (/^#/) {
+        if ($. == 1) {
+            s/^#Format:\s*//;   # stupid prefix
+            s/\s+\(.+?\)$//;    # stupid suffix
+            @header = split ' ';
+        }
+        next;
+    }
+
+    $tsv->parse($_)
+        or die sprintf "Parse error: %s\nInput: «%s»\nLine: $.\n",
+            scalar $tsv->error_diag, $tsv->error_input;
+
+    my %gene;
+    @gene{@header} = $tsv->fields;
+
+    push @sql, sprintf "(%d, %s)", $gene{GeneID}, quote($gene{Symbol});
+}
+
+print <<SQL;
+BEGIN;
+INSERT INTO ncbi_gene (ncbi_gene_id, name) VALUES
+    @{[ join ",\n    ", @sql ]}
+;
+COMMIT;
+SQL
+
+sub quote {
+    local $_ = shift;
+    s/'/''/g;
+    s/[\r\n]+/ /g;
+    return "'$_'";
+}
