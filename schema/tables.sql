@@ -18,8 +18,7 @@ CREATE DOMAIN orientation AS text CHECK (
 
 CREATE TABLE ncbi_gene (
     ncbi_gene_id    integer NOT NULL PRIMARY KEY,
-    name            text    NOT NULL,
-    UNIQUE (name)
+    name            text    NOT NULL
 );
 
 -- Source document example fields
