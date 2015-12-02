@@ -1,0 +1,5 @@
+#!/bin/bash
+set -e -o pipefail
+recs fromcsv -d $'\t' --header source.tsv \
+    | recs xform -E transform.recs \
+    | recs tocsv -k '!.!f!s' # All keys (regex "."), recurse ("f"), sorted ("s")

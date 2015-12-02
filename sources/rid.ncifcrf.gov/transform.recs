@@ -1,0 +1,45 @@
+# This is a recs <https://recs.pl> snippet for use with `recs xform`.
+# vim: set ft=perl :
+use strict;
+use warnings;
+use 5.010;
+
+my $t = {
+    source_name => "NCI-RID",
+    sample => {
+        original_id => $r->{origin_id},
+        pubmed_id   => $r->{pubmed_id},
+    },
+};
+
+$t->{ltr} = { "5LTR" => "5p", "3LTR" => "3p" }->{ $r->{LTR} }
+    if $r->{LTR};
+
+$t->{chromosome} = uc $r->{chr} =~ s/^chr//ir;
+$t->{location}   = $r->{insert_position};
+
+# Convert to zero-origin, interbase coordinates assuming that the reported
+# location is base-numbered and indicates the first chromosomal base outside of
+# the indicated HIV LTR.  If the HIV LTR is not indicated, assume 5' and hence
+# no conversion necessary.
+$t->{location} -= 1
+    if $t->{LTR}
+   and $t->{LTR} eq "3p";
+
+$t->{orientation_in_reference} = $r->{insert_orientation} =~ y/+-/FR/r;
+$t->{orientation_in_gene}      = $r->{gene_orientation}   =~ y/+-/FR/r;
+
+$t->{ncbi_gene_id} = $r->{gene_id};
+
+# For debugging/cross-checking in a subsequent step?
+$t->{gene} = $r->{inserted_gene}
+    if $r->{inserted_gene}
+   and $r->{inserted_gene} ne "not found";
+
+$t->{note} = $r->{comment};
+
+# Normalizing empty strings to undef/NULL should be handled by the loading
+# step.
+
+push_output($t)
+    for 1 .. ($r->{count} || 1);

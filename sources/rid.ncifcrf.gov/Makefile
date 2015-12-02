@@ -2,6 +2,8 @@ SHELL := /bin/bash
 export SHELLOPTS:=errexit:pipefail
 .DELETE_ON_ERROR:
 
-.PHONY: source.tsv
+transformed.csv: source.tsv
+	./transform $< > $@
+
 source.tsv:
 	./download > $@
