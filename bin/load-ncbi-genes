@@ -1,16 +1,24 @@
 #!/usr/bin/env perl
+use 5.010;
 use strict;
 use warnings;
 use utf8;
 use open qw< :std :encoding(UTF-8) >;
 use Text::CSV;
+use ISDB::Schema;
 
 my $tsv = Text::CSV->new({
-    binary => 1,
-    sep    => "\t",
+    binary   => 1,
+    sep_char => "\t",
 }) or die "Can't create new Text::CSV: " . Text::CSV->error_diag . "\n";
 
-my (@header, @sql);
+my $db   = ISDB::Schema->connect_default;
+my $txn  = $db->txn_scope_guard;
+my $gene = $db->resultset("NCBIGene");
+
+my @header;
+my $loaded = 0;
+say "Loading genes…";
 
 while (<>) {
     if (/^#/) {
@@ -26,23 +34,18 @@ while (<>) {
         or die sprintf "Parse error: %s\nInput: «%s»\nLine: $.\n",
             scalar $tsv->error_diag, $tsv->error_input;
 
-    my %gene;
-    @gene{@header} = $tsv->fields;
+    my %row;
+    @row{@header} = $tsv->fields;
 
-    push @sql, sprintf "(%d, %s)", $gene{GeneID}, quote($gene{Symbol});
+    $gene->create({
+        ncbi_gene_id => $row{GeneID},
+        name         => $row{Symbol},
+    });
+
+    $loaded++;
+    say sprintf "  …%d", $loaded
+        if $loaded % 10_000 == 0;
 }
 
-print <<SQL;
-BEGIN;
-INSERT INTO ncbi_gene (ncbi_gene_id, name) VALUES
-    @{[ join ",\n    ", @sql ]}
-;
-COMMIT;
-SQL
-
-sub quote {
-    local $_ = shift;
-    s/'/''/g;
-    s/[\r\n]+/ /g;
-    return "'$_'";
-}
+$txn->commit;
+say "Total: $loaded genes";
