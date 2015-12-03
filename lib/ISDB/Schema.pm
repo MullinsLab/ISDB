@@ -16,8 +16,9 @@ __PACKAGE__->load_namespaces;
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:v0gwY6SVU5Sc1FGqiUXwUw
 
 sub connect_default {
-    my $self = shift;
-    return $self->connect({ dsn => "dbi:Pg:dbname=isdb" });
+    my $self   = shift;
+    my $dbname = $ENV{PGDATABASE} || 'isdb';
+    return $self->connect({ dsn => "dbi:Pg:dbname=$dbname" });
 }
 
 1;
