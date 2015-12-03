@@ -1,4 +1,12 @@
 {
     "name": "NCI-RID",
-    "uri": "https://rid.ncifcrf.gov"
+    "uri": "https://rid.ncifcrf.gov",
+    "citation": {
+        "_type":    "@misc",
+        "_citekey": "NCI-RID",
+        "author":   "Wei Shao and Jigui Shan and Mary Kearney and Xiaolin Wu and Frank Maldarelli and John W. Mellors and Brian Luke and John M. Coffin and Stephen H. Hughes",
+        "title":    "RID: NCI Retrovirus Integration Database",
+        "year":     "2015",
+        "url":      "https://rid.ncifcrf.gov"
+    }
 }
