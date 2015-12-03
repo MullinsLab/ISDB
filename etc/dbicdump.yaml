@@ -1,0 +1,13 @@
+---
+schema_class: ISDB::Schema
+connect_info:
+  dsn: dbi:Pg:dbname=isdb
+loader_options:
+  dump_directory: ./lib
+  moniker_map:
+    ncbi_gene: NCBIGene
+  col_collision_map:
+    sequence: seq
+    source_name: source
+  rel_collision_map:
+    source_name: source
