@@ -21,6 +21,12 @@ CREATE TABLE ncbi_gene (
     name            text    NOT NULL
 );
 
+CREATE TABLE ncbi_gene_alias (
+    ncbi_gene_id    integer NOT NULL REFERENCES ncbi_gene(ncbi_gene_id),
+    name            text    NOT NULL,
+    PRIMARY KEY (ncbi_gene_id, name)
+);
+
 -- Source document example fields
 --  • pubmed_id
 --  • lab

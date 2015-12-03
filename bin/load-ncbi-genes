@@ -40,6 +40,11 @@ while (<>) {
     $gene->create({
         ncbi_gene_id => $row{GeneID},
         name         => $row{Symbol},
+        aliases      => [
+              map { +{ name => $_ } }
+             grep { defined and length and $_ ne "-" }
+            split /\|/, $row{Synonyms}
+        ],
     });
 
     $loaded++;

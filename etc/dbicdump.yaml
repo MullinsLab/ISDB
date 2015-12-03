@@ -6,6 +6,9 @@ loader_options:
   dump_directory: ./lib
   moniker_map:
     ncbi_gene: NCBIGene
+    ncbi_gene_alias: NCBIGeneAlias
+  rel_name_map:
+    ncbi_gene_aliases: aliases
   col_collision_map:
     sequence: seq
     source_name: source

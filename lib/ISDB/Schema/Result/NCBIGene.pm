@@ -56,6 +56,21 @@ __PACKAGE__->set_primary_key("ncbi_gene_id");
 
 =head1 RELATIONS
 
+=head2 aliases
+
+Type: has_many
+
+Related object: L<ISDB::Schema::Result::NCBIGeneAlias>
+
+=cut
+
+__PACKAGE__->has_many(
+  "aliases",
+  "ISDB::Schema::Result::NCBIGeneAlias",
+  { "foreign.ncbi_gene_id" => "self.ncbi_gene_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 integrations
 
 Type: has_many
@@ -72,8 +87,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-12-02 17:08:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7KV6Kf+4jcPzM8bQ12jI/A
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-12-03 12:33:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cvBx7uTbEU8cAne6oxdx7w
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
