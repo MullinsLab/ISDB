@@ -1,0 +1,131 @@
+#!/usr/bin/env perl
+use 5.010;
+use strict;
+use warnings;
+use utf8;
+use open qw< :std :encoding(UTF-8) >;
+use Getopt::Long::Descriptive;
+use Hash::Fold 0.001002;
+use ISDB::Schema;
+use JSON::PP;
+use Text::CSV;
+use Time::HiRes qw< time >;
+use Try::Tiny;
+
+my ($opt, $usage) = describe_options(
+    '%c [--dry-run] [--validate] [integrations.csv]',
+    [],
+    [ "Loads integration site observations into the ISDB.  Input is CSV, either" ],
+    [ "specified by files on the command line or from stdin." ],
+    [],
+    [ 'dry-run',  "insert data but rollback the transaction at the end" ],
+    [ 'validate', "validate rows and gene info, but don't try to insert any data; implies --dry-run", { implies => 'dry_run' } ],
+    [ 'help',     "print usage message and exit" ],
+);
+
+print($usage->text), exit(!$opt->help)
+    if $opt->help or (not @ARGV and -t STDIN);
+
+$SIG{__WARN__} = sub {
+    warn "Warning: ", @_;
+};
+
+main();
+
+sub main {
+    my $db    = ISDB::Schema->connect_default;
+    my $txn   = $db->txn_scope_guard;
+    my $is    = $db->resultset("Integration");
+    my $line  = 0;
+
+    print "Loading integration sites... ";
+    while (my $row = read_input()) {
+        $line++;
+        try {
+            $row = normalize($db, $row);
+            $is->create($row)
+                unless $opt->validate;
+        } catch {
+            s/ at \S+ line \d+//;
+            if ($opt->validate) {
+                warn "Error: $_, input line $line";
+            } else {
+                die "Error: $_, input line $line";
+            }
+        };
+        report_status($line, every => 1000);
+    }
+    report_status($line, every => 1);
+
+    die "This was a DRY RUN, aborting transaction.\n"
+        if $opt->dry_run;
+    $txn->commit;
+    say "OK";
+}
+
+sub report_status {
+    state $start = time;
+    my $count    = shift;
+    my $every    = { @_ }->{every} || 1000;
+    my $elapsed  = time - $start;
+    printf STDERR "$count lines processed in %0.3f seconds (%0.0f lines/s)\n",
+        $elapsed, $count / $elapsed
+            if $count % $every == 0;
+}
+
+sub normalize {
+    my ($db, $row) = @_;
+
+    state $hash = Hash::Fold->new(
+        array_delimiter => '/#',
+        hash_delimiter  => '/',
+    );
+
+    # Reconstitute any flattened structures and encode as JSON.
+    $row = $hash->unflatten($row);
+    $row->{sample} &&= encode_json($row->{sample});
+    $row->{info}   &&= encode_json($row->{info});
+
+    # Normalize empty strings into NULL
+    $_ = undef for grep { not length } values %$row;
+
+    $row = normalize_gene($db, $row);
+
+    return $row;
+}
+
+sub normalize_gene {
+    my ($db, $row) = @_;
+
+    my $id   = $row->{ncbi_gene_id};
+    my $name = delete $row->{gene};
+
+    # Short-circuit ourselves early, even though find_best would handle it
+    return $row unless $id or $name;
+
+    state $genes = $db->resultset("NCBIGene");
+
+    my $gene = $genes->find_best_cached({
+        ncbi_gene_id => $id,
+        name         => $name,
+    });
+
+    $row->{ncbi_gene_id} = $gene ? $gene->id : undef;
+
+    return $row;
+}
+
+sub read_input {
+    state $csv = Text::CSV->new({
+        binary => 1,
+    }) or die "Can't create new Text::CSV: " . Text::CSV->error_diag . "\n";
+
+    state $header;
+    unless ($header) {
+        $header = $csv->getline(*ARGV)
+            or die "No header line‽ " . $csv->error_diag;
+        $csv->column_names(@$header);
+    }
+
+    return $csv->getline_hr(*ARGV);
+}

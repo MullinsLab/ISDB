@@ -20,12 +20,14 @@ CREATE TABLE ncbi_gene (
     ncbi_gene_id    integer NOT NULL PRIMARY KEY,
     name            text    NOT NULL
 );
+CREATE INDEX ncbi_gene_name_upper_idx ON ncbi_gene(UPPER(name));
 
 CREATE TABLE ncbi_gene_alias (
     ncbi_gene_id    integer NOT NULL REFERENCES ncbi_gene(ncbi_gene_id),
     name            text    NOT NULL,
     PRIMARY KEY (ncbi_gene_id, name)
 );
+CREATE INDEX ncbi_gene_alias_name_upper_idx ON ncbi_gene_alias(UPPER(name));
 
 -- Source document example fields
 --  • pubmed_id
