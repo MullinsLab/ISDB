@@ -3,12 +3,16 @@
 use strict;
 use warnings;
 use 5.010;
+our $line;  # from recs
 
 my $t = {
     source_name => "NCI-RID",
     sample => {
         original_id => $r->{origin_id},
         pubmed_id   => $r->{pubmed_id},
+    },
+    info => {
+        source_line => $line + 1,   # header isn't counted
     },
 };
 
