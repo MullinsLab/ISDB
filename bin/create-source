@@ -1,4 +1,5 @@
 #!/usr/bin/env perl
+use 5.010;
 use strict;
 use warnings;
 use open qw< :std :encoding(UTF-8) >;
@@ -21,6 +22,8 @@ my $json     = do { local $/; <> };
 my $metadata = decode_json($json);
 $SourceMetadata->assert_valid($metadata);
 
+print "Creating source $metadata->{name}... ";
+
 my $db  = ISDB::Schema->connect_default;
 my $txn = $db->txn_scope_guard;
 $db->resultset("Source")->create({
@@ -28,3 +31,5 @@ $db->resultset("Source")->create({
     document    => $json,
 });
 $txn->commit;
+
+say "OK";

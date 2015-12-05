@@ -1,0 +1,24 @@
+#!/usr/bin/env perl
+use 5.010;
+use strict;
+use warnings;
+use open qw< :std :encoding(UTF-8) >;
+use FindBin qw< $Script >;
+use ISDB::Schema;
+
+my $source = shift
+    or die "usage: $Script source-name\n";
+
+print "Dropping all data from source $source... ";
+
+my $db  = ISDB::Schema->connect_default;
+my $txn = $db->txn_scope_guard;
+
+if ($source = $db->resultset("Source")->find({ source_name => $source })) {
+    $source->integrations->delete;
+    $source->delete;
+}
+
+$txn->commit;
+
+say "OK", !$source ? " # doesn't exist" : "";
