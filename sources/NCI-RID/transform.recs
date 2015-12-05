@@ -22,12 +22,19 @@ $t->{ltr} = { "5LTR" => "5p", "3LTR" => "3p" }->{ $r->{LTR} }
 $t->{chromosome} = uc $r->{chr} =~ s/^chr//ir;
 $t->{location}   = $r->{insert_position};
 
+delete $t->{chromosome}
+    if $t->{chromosome} eq "UN";
+
+delete $t->{location}
+    if not $t->{chromosome};
+
 # Convert to zero-origin, interbase coordinates assuming that the reported
 # location is base-numbered and indicates the first chromosomal base outside of
 # the indicated HIV LTR.  If the HIV LTR is not indicated, assume 5' and hence
 # no conversion necessary.
 $t->{location} -= 1
-    if $t->{LTR}
+    if $t->{location}
+   and $t->{LTR}
    and $t->{LTR} eq "3p";
 
 $t->{orientation_in_reference} = $r->{insert_orientation} =~ y/+-/FR/r;
