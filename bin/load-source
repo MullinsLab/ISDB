@@ -3,13 +3,23 @@ set -e -o pipefail
 isdb=$(dirname $0)/..
 
 if [[ -z $1 ]]; then
-    echo "usage: $(basename $0) source-name"
+    echo "usage: $(basename $0) source-name|source-path"
     exit 1
 fi
-name=$1
+source=$1
+name=$(basename $1)
 
 set -o nounset
 
+if [[ $source == $name ]]; then
+    source=$isdb/sources/$name
+fi
+
+if ! test -d $source; then
+    echo "Error: $source ($name) is not a directory" 2>&1
+    exit 2
+fi
+
 $isdb/bin/drop-source $name
-$isdb/bin/create-source $isdb/sources/$name/metadata.json
-$isdb/bin/load-integrations $isdb/sources/$name/transformed.csv
+$isdb/bin/create-source $source/metadata.json
+$isdb/bin/load-integrations $source/transformed.csv
