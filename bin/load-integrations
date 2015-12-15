@@ -38,7 +38,7 @@ sub main {
     my $is    = $db->resultset("Integration");
     my $line  = 0;
 
-    print "Loading integration sites... ";
+    say "Loading integration sites... ";
     while (my $row = read_input()) {
         $line++;
         try {
@@ -68,7 +68,7 @@ sub report_status {
     my $count    = shift;
     my $every    = { @_ }->{every} || 1000;
     my $elapsed  = time - $start;
-    printf STDERR "$count lines processed in %0.3f seconds (%0.0f lines/s)\n",
+    printf "$count lines processed in %0.3f seconds (%0.0f lines/s)\n",
         $elapsed, $count / $elapsed
             if $count % $every == 0;
 }
@@ -123,12 +123,18 @@ sub read_input {
 
     my $row      = $csv->getline(*ARGV);
     my $new_file = (not $file or $file ne $ARGV);
+
+    say "Finished file: $file"
+        if ($new_file and $file) or not $row;
+
     return undef unless $row;
 
     if ($new_file) {
         # We got the header of a new file.
         $csv->column_names(@$row);
         $row = $csv->getline(*ARGV);
+
+        say "Started file: ", $file = $ARGV;
     }
     my %row;
     @row{ $csv->column_names } = @$row;
