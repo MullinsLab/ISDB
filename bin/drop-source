@@ -6,6 +6,8 @@ use open qw< :std :encoding(UTF-8) >;
 use FindBin qw< $Script >;
 use ISDB::Schema;
 
+$|++;
+
 my $source = shift
     or die "usage: $Script source-name\n";
 
