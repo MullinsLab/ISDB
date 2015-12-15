@@ -116,16 +116,21 @@ sub normalize_gene {
 }
 
 sub read_input {
-    state $csv = Text::CSV->new({
+    state $file;
+    state $csv  = Text::CSV->new({
         binary => 1,
     }) or die "Can't create new Text::CSV: " . Text::CSV->error_diag . "\n";
 
-    state $header;
-    unless ($header) {
-        $header = $csv->getline(*ARGV)
-            or die "No header line‽ " . $csv->error_diag;
-        $csv->column_names(@$header);
-    }
+    my $row      = $csv->getline(*ARGV);
+    my $new_file = (not $file or $file ne $ARGV);
+    return undef unless $row;
 
-    return $csv->getline_hr(*ARGV);
+    if ($new_file) {
+        # We got the header of a new file.
+        $csv->column_names(@$row);
+        $row = $csv->getline(*ARGV);
+    }
+    my %row;
+    @row{ $csv->column_names } = @$row;
+    return \%row;
 }
