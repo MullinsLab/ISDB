@@ -21,6 +21,7 @@ my %sample_extractor = (
     25011556 => qr/^(?<subject>[BLR]1)_/i,                                  # Wagner, et al.
     24968937 => qr/^(?<subject>PT[1-5])(?:_Y(?<years_on_art>[\d.]+))?/i,    # Maldarelli, et al.
     12843741 => qr/^(?<clone>(?:AL|AD|C)-\d+)_/,                            # Mack, et al.
+    15163705 => qr/^(?<subject>\d+)/,                                       # Han, et al.
 );
 if (my $re = $sample_extractor{ $t->{sample}{pubmed_id} }) {
     if ($t->{sample}{original_id} =~ $re) {
