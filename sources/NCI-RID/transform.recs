@@ -31,6 +31,10 @@ if (my $re = $sample_extractor{ $t->{sample}{pubmed_id} }) {
     }
 }
 
+# 23953889, Sherrill-Mix, et al.
+$t->{sample}{tissue} = "cell culture"
+    if $t->{sample}{pubmed_id} == 23953889;
+
 # 12843741, Mack, et al.
 if ($t->{sample}{pubmed_id} == 12843741 and $t->{sample}{clone}) {
     my %clones;
