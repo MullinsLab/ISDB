@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e -o pipefail
+base=$(dirname $0)
+recs join --left genbank sample/genbank \
+    /dev/stdin \
+    <(recs fromcsv -d $'\t' -k genbank,isolate $base/genbank-isolates.tsv) \
+    | recs xform '({{sample/subject}}) = {{isolate}} =~ /(Pt\.\d+)/ if {{isolate}}'

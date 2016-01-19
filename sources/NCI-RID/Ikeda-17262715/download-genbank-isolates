@@ -1,0 +1,5 @@
+#!/bin/bash
+perl -E 'say for "AB256049" .. "AB256512"' \
+    | parallel --group \
+        curl -fsS https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi -d db=nuccore -d rettype=gb -d retmode=text -d id={} \
+            \| perl -ne \''print, exit if s<^\s*/isolate="(.+?)"><{}\t$1>'\'
