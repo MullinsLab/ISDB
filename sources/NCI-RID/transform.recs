@@ -16,6 +16,17 @@ my $t = {
     },
 };
 
+# Named captures get copied into the sample document.
+my %sample_extractor = (
+    25011556 => qr/^(?<subject>[BLR]1)_/i,                                  # Wagner, et al.
+);
+if (my $re = $sample_extractor{ $t->{sample}{pubmed_id} }) {
+    if ($t->{sample}{original_id} =~ $re) {
+        $t->{sample}{$_} = $+{$_}
+            for keys %+;
+    }
+}
+
 $t->{ltr} = { "5LTR" => "5p", "3LTR" => "3p" }->{ $r->{LTR} }
     if $r->{LTR};
 
