@@ -8,4 +8,5 @@ psql="psql --set ON_ERROR_STOP=1 $dbname"
 createdb $dbname -E UTF-8
 $psql < $isdb/schema/tables.sql
 $psql < $isdb/schema/views.sql
+$psql < $isdb/schema/acl.sql
 $isdb/bin/load-ncbi-genes <(gunzip -qc $isdb/schema/data/Homo_sapiens.gene_info.gz)

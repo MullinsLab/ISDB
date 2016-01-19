@@ -74,6 +74,4 @@ CREATE INDEX integration_chromosome_location_idx  ON integration(chromosome, loc
 CREATE INDEX integration_ltr_idx                  ON integration(ltr);
 CREATE INDEX integration_ncbi_gene_id_idx         ON integration(ncbi_gene_id);
 
---- XXX TODO: ACL
-
 COMMIT;

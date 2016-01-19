@@ -26,6 +26,4 @@ CREATE VIEW summary_by_gene AS
      GROUP BY gene
 ;
 
--- XXX TODO: ACL
-
 COMMIT;
