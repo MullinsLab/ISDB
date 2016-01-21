@@ -41,11 +41,6 @@ __PACKAGE__->table("integration_summary");
   data_type: 'text'
   is_nullable: 1
 
-=head2 total_in_gene
-
-  data_type: 'bigint'
-  is_nullable: 1
-
 =head2 landmark
 
   data_type: 'text'
@@ -54,11 +49,6 @@ __PACKAGE__->table("integration_summary");
 =head2 location
 
   data_type: 'integer'
-  is_nullable: 1
-
-=head2 total_at_location
-
-  data_type: 'bigint'
   is_nullable: 1
 
 =head2 orientation_in_reference
@@ -85,14 +75,10 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "gene",
   { data_type => "text", is_nullable => 1 },
-  "total_in_gene",
-  { data_type => "bigint", is_nullable => 1 },
   "landmark",
   { data_type => "text", is_nullable => 1 },
   "location",
   { data_type => "integer", is_nullable => 1 },
-  "total_at_location",
-  { data_type => "bigint", is_nullable => 1 },
   "orientation_in_reference",
   { data_type => "orientation", is_nullable => 1 },
   "orientation_in_gene",
@@ -102,8 +88,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-12-02 17:03:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IRYRM0dGz4LIJFGDqMlAbw
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-21 15:03:35
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oEY+e+rmODsdnyUn3M+X2A
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
