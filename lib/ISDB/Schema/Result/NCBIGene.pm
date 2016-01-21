@@ -15,6 +15,18 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<ISDB::Schema::InflateColumn::JSON>
+
+=back
+
+=cut
+
+__PACKAGE__->load_components("+ISDB::Schema::InflateColumn::JSON");
+
 =head1 TABLE: C<ncbi_gene>
 
 =cut
@@ -87,8 +99,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-12-03 12:33:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cvBx7uTbEU8cAne6oxdx7w
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-21 15:04:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:p15tTjrmRkEIWHu2+1yPpg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

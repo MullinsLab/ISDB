@@ -1,10 +1,12 @@
 requires 'perl', '5.010';
 requires 'DBD::Pg', '3.5.1';
 requires 'DBIx::Class';
+requires 'DBIx::Class::InflateColumn';
 requires 'DBIx::Class::Schema::Loader';
 requires 'Getopt::Long::Descriptive';
 requires 'Hash::Fold', '0.1.2';
-requires 'JSON::PP';
+requires 'JSON::MaybeXS';
+requires 'namespace::clean';
 requires 'Text::CSV';
 requires 'Time::HiRes';
 requires 'Try::Tiny';

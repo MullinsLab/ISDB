@@ -14,6 +14,18 @@ use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
+
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<ISDB::Schema::InflateColumn::JSON>
+
+=back
+
+=cut
+
+__PACKAGE__->load_components("+ISDB::Schema::InflateColumn::JSON");
 __PACKAGE__->table_class("DBIx::Class::ResultSource::View");
 
 =head1 TABLE: C<integration_summary>
@@ -88,8 +100,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-21 15:03:35
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oEY+e+rmODsdnyUn3M+X2A
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-21 15:04:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HH16la+p1cROKmIDlGSgsg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

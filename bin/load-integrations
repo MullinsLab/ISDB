@@ -9,7 +9,7 @@ use lib "$Bin/../lib";
 use Getopt::Long::Descriptive;
 use Hash::Fold 0.001002;
 use ISDB::Schema;
-use JSON::PP;
+use JSON::MaybeXS;
 use Text::CSV;
 use Time::HiRes qw< time >;
 use Try::Tiny;

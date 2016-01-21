@@ -15,6 +15,18 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<ISDB::Schema::InflateColumn::JSON>
+
+=back
+
+=cut
+
+__PACKAGE__->load_components("+ISDB::Schema::InflateColumn::JSON");
+
 =head1 TABLE: C<integration>
 
 =cut
@@ -169,8 +181,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-12-02 17:08:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GXua3PQCCDU3wLRT6zCi1g
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-21 15:04:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8kfdb3hoGqcgLFTY1zg/9Q
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
