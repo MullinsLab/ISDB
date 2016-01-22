@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Integration Site Database (ISDB)</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <style type="text/css">
+    .text-lg { font-size: 1.2em }
+  </style>
+</head>
+<body class="container">
+  <h1>Integration Site Database <small>ISDB</small></h1>
+  <hr>
+  <div class="row">
+    <div class="col-md-6">
+      <p class="lead">
+        The ISDB aims to provide a stable, authoritative, and standardized
+        source of data for analysing HIV-1 integration sites. It seeks to
+        support analyses using the tools of your choice, whether that’s R and
+        ggplot or Excel and Prism.
+      </p>
+
+      <p>
+        The data contained within comes from a variety of sources external and
+        internal to the <a href="https://mullinslab.microbiol.washington.edu">Mullins Lab</a>
+        and our collaborators.  The database itself is regularly and
+        automatically regenerated from our primary and secondary sources in
+        order to incorporate changes and additions.
+      </p>
+
+      <% counts_by_source = isdb.resultset("Integration").counts_by_source %>
+      <h3>Sources <small>n=<% isdb.resultset("Source").count %></small></h3>
+      <p>
+        The database contains
+        <strong><% isdb.resultset("Integration").count | commafy %> observations</strong> across
+        <strong><% isdb.resultset("Integration").count_distinct_genes | commafy %> genes</strong>
+        from the following sources:
+      </p>
+      <ul>
+        <% FOR row IN counts_by_source.all %>
+          <li>
+            <% IF row.source.document.uri %>
+              <a href="<% row.source.document.uri %>"><% row.source.name %></a>
+            <% ELSE %>
+              <% row.source.name %>
+            <% END %>
+            <span class="text-muted">n=<% row.get_column("count") | commafy %></span>
+          </li>
+        <% END %>
+      </ul>
+
+      <% FOREACH query IN [["Subjects", "subjects"], ["Unique IS", "unique_sites"]] %>
+        <h3>Top 5 Genes by # of <% query.0 %></h3>
+        <% genes = isdb.resultset("SummaryByGene").top_N_by_column(query.1, 5) %>
+        <table class="table table-condensed">
+          <thead>
+            <tr>
+              <th>Gene</th>
+              <th># of Subjects</th>
+              <th>Unique IS</th>
+              <th>Total IS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% FOR gene IN genes.all %>
+            <tr>
+              <td><a href="<% gene.ncbi_gene.uri %>"><% gene.gene %></a></td>
+              <td><% gene.subjects %></td>
+              <td><% gene.unique_sites %></td>
+              <td><% gene.total_in_gene %></td>
+            </tr>
+            <% END %>
+          </tbody>
+        </table>
+      <% END %>
+    </div>
+    <div class="col-md-6">
+      <h2>Downloads</h2>
+      <mark>Coming soon!</mark>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+#!/usr/bin/env perl
+use 5.010;
+use strict;
+use warnings;
+use utf8;
+use open qw< :std :encoding(UTF-8) >;
+use FindBin qw< $Bin >;
+use lib "$Bin/../lib";
+use Getopt::Long::Descriptive;
+use ISDB::Template;
+
+my ($opt, $usage) = describe_options(
+    '%c [template.tt]',
+    [],
+    [ "Renders the provided template and outputs the results on stdout." ],
+    [ "If no filename is given, stdin is read." ],
+    [],
+    [ 'help',     "print usage message and exit" ],
+);
+
+print($usage->text), exit(!$opt->help)
+    if $opt->help or (not @ARGV and -t STDIN);
+
+my $source = shift // \*STDIN;
+print ISDB::Template->fill($source);

@@ -102,6 +102,11 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-21 15:04:21
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:p15tTjrmRkEIWHu2+1yPpg
 
+use URI;
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+sub uri {
+    my $self = shift;
+    return URI->new("https://www.ncbi.nlm.nih.gov/gene/" . $self->id);
+}
+
 1;
