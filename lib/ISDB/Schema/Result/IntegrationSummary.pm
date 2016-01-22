@@ -48,6 +48,11 @@ __PACKAGE__->table("integration_summary");
   data_type: 'text'
   is_nullable: 1
 
+=head2 ncbi_gene_id
+
+  data_type: 'integer'
+  is_nullable: 1
+
 =head2 gene
 
   data_type: 'text'
@@ -85,6 +90,8 @@ __PACKAGE__->add_columns(
   { accessor => "source", data_type => "varchar", is_nullable => 1, size => 255 },
   "subject",
   { data_type => "text", is_nullable => 1 },
+  "ncbi_gene_id",
+  { data_type => "integer", is_nullable => 1 },
   "gene",
   { data_type => "text", is_nullable => 1 },
   "landmark",
@@ -100,9 +107,27 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-21 15:04:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HH16la+p1cROKmIDlGSgsg
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-22 10:03:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FCdl/zFGdTAVitHnONXjYg
 
+=head2 ncbi_gene
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+Type: belongs_to
+
+Related object: L<ISDB::Schema::Result::NCBIGene>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "ncbi_gene",
+  "ISDB::Schema::Result::NCBIGene",
+  { ncbi_gene_id => "ncbi_gene_id" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "NO ACTION",
+    on_update     => "NO ACTION",
+  },
+);
+
 1;

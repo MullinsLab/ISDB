@@ -36,6 +36,11 @@ __PACKAGE__->table("summary_by_gene");
 
 =head1 ACCESSORS
 
+=head2 ncbi_gene_id
+
+  data_type: 'integer'
+  is_nullable: 1
+
 =head2 gene
 
   data_type: 'text'
@@ -59,6 +64,8 @@ __PACKAGE__->table("summary_by_gene");
 =cut
 
 __PACKAGE__->add_columns(
+  "ncbi_gene_id",
+  { data_type => "integer", is_nullable => 1 },
   "gene",
   { data_type => "text", is_nullable => 1 },
   "subjects",
@@ -70,9 +77,27 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-21 15:04:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RUGReo9cIFSiVUSO5DI0eQ
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-22 10:03:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tLCiQUofF36AGkOiqN7Ryg
 
+=head2 ncbi_gene
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+Type: belongs_to
+
+Related object: L<ISDB::Schema::Result::NCBIGene>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "ncbi_gene",
+  "ISDB::Schema::Result::NCBIGene",
+  { ncbi_gene_id => "ncbi_gene_id" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "NO ACTION",
+    on_update     => "NO ACTION",
+  },
+);
+
 1;
