@@ -1,4 +1,4 @@
-requires 'perl', '5.010';
+requires 'perl', '5.014';
 requires 'DBD::Pg', '3.5.1';
 requires 'DBIx::Class';
 requires 'DBIx::Class::InflateColumn';
