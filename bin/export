@@ -1,0 +1,33 @@
+#!/usr/bin/env perl
+use 5.010;
+use strict;
+use warnings;
+use utf8;
+use open qw< :std :encoding(UTF-8) >;
+use FindBin qw< $Bin >;
+use lib "$Bin/../lib";
+use Getopt::Long::Descriptive;
+use Path::Tiny;
+use ISDB::Exporter;
+
+my ($opt, $usage) = describe_options(
+    '%c <output-directory>',
+    [],
+    [ "Exports all datasets known by ISDB::Exporter into the given output" ],
+    [ "directory.  Export metadata sidecar files are also written." ],
+    [],
+    [ 'help',     "print usage message and exit" ],
+);
+
+print($usage->text), exit(!$opt->help)
+    if $opt->help or not @ARGV;
+
+my $output = path(shift);
+$output->mkpath unless $output->exists;
+
+my $exporter = ISDB::Exporter->new( output_path => $output );
+
+for (@{ $exporter->exports }) {
+    print "Exporting: $_->{name}…\n";
+    $exporter->export($_);
+}
