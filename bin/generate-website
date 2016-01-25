@@ -1,0 +1,15 @@
+#!/bin/bash
+set -e -o pipefail
+bin=$(dirname $0)
+output=$1
+
+if [[ -z $output ]]; then
+    echo "usage: $(basename $0) <output-directory>"
+    exit 1
+fi
+
+echo "Exporting data"
+$bin/export $output/exports/
+
+echo "Rendering template"
+$bin/fill-template --output=$output --find-exports=$output/exports/ web/index.tt
