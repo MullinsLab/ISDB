@@ -135,9 +135,33 @@ sub export {
 
     # Write metadata files
     my $meta = path("$basepath.metadata.json");
-    $meta->spew_utf8( $self->_json->encode($exported) );
+    $self->write_metadata($meta, $exported);
 
     return $exported;
+}
+
+# This finds all existing export metadata files in our output path so we
+# can inspect previous export state.  It's intentionally not limited to
+# whatever we might currently be exporting, as that might be different
+# than the past.
+sub find_metadata {
+    my $self = shift;
+    my @exported = map { $self->read_metadata($_) }
+                       $self->output_path->children(qr/\.metadata\.json/);
+    return @exported;
+}
+
+sub read_metadata {
+    my $self = shift;
+    my $file = path(shift);
+    return $self->_json->decode( $file->slurp_utf8 );
+}
+
+sub write_metadata {
+    my $self = shift;
+    my $file = path(shift);
+    my $meta = shift;
+    $file->spew_utf8( $self->_json->encode($meta) );
 }
 
 1;

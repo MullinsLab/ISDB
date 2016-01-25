@@ -80,7 +80,26 @@
     </div>
     <div class="col-md-6">
       <h2>Downloads</h2>
-      <mark>Coming soon!</mark>
+      <p>
+        Last exported: <% exports.0.timestamp %><br>
+      </p>
+      <% FOR dataset IN exports %>
+        <h3><% dataset.name %></h3>
+        <p class="text-lg">
+          Download as:
+          <% FOREACH format IN dataset.formats %>
+            <%- IF loop.last AND NOT loop.first %> or <% END %>
+            <a href="<% format.value.path %>"><% format.key %></a>
+            <%- IF NOT loop.last AND loop.index + 1 != loop.max %>, <% END %>
+          <% END %>
+        </p>
+        <p>This dataset contains the following fields:</p>
+        <ol>
+          <% FOR field IN dataset.fields %>
+            <li><code><% field %></code></li>
+          <% END %>
+        </ol>
+      <% END %>
     </div>
   </div>
 </body>
