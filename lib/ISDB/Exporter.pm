@@ -10,6 +10,7 @@ use Types::Standard qw< :types slurpy >;
 use Path::Tiny;
 use JSON::MaybeXS qw<>;
 use DateTime;
+use Digest::SHA qw<>;
 use ISDB::Schema;
 use ISDB::Exporter::CSV;
 use ISDB::Exporter::JSON;
@@ -132,6 +133,14 @@ sub export {
 
     $_->close or die "Failed to close fh: $!"
         for values %fh;
+
+    # Add checksums for integrity checking and change detection
+    for my $format (values %{ $exported->{formats} }) {
+        my $file = $format->{path};
+        my $sha  = Digest::SHA->new(1);
+        $sha->addfile( $file->openr_raw );
+        $format->{sha1} = $sha->hexdigest;
+    }
 
     # Write metadata files
     my $meta = path("$basepath.metadata.json");

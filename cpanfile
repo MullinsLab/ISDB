@@ -5,6 +5,7 @@ requires 'DBD::Pg', '3.5.1';
 requires 'DBIx::Class';
 requires 'DBIx::Class::InflateColumn';
 requires 'DBIx::Class::Schema::Loader';
+requires 'Digest::SHA';
 requires 'Getopt::Long::Descriptive';
 requires 'Hash::Fold', '0.1.2';
 requires 'Hash::Merge';
