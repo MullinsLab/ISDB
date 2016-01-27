@@ -89,6 +89,9 @@ delete $t->{chromosome}
 delete $t->{location}
     if not $t->{chromosome};
 
+$t->{orientation_in_reference} = $r->{insert_orientation} =~ y/+-/FR/r;
+$t->{orientation_in_gene}      = $r->{gene_orientation}   =~ y/+-/FR/r;
+
 # Convert to zero-origin, interbase coordinates assuming that the reported
 # location is base-numbered and indicates the first chromosomal base outside of
 # the indicated HIV LTR.  If the HIV LTR is not indicated, assume 5' and hence
@@ -96,10 +99,8 @@ delete $t->{location}
 $t->{location} -= 1
     if $t->{location}
    and $t->{ltr}
-   and $t->{ltr} eq "3p";
-
-$t->{orientation_in_reference} = $r->{insert_orientation} =~ y/+-/FR/r;
-$t->{orientation_in_gene}      = $r->{gene_orientation}   =~ y/+-/FR/r;
+   and (   ($t->{ltr} eq "3p" and $t->{orientation_in_reference} eq "F")
+        or ($t->{ltr} eq "5p" and $t->{orientation_in_reference} eq "R"));
 
 $t->{ncbi_gene_id} = $r->{gene_id};
 
