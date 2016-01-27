@@ -103,15 +103,16 @@ sub export {
 
     # Result struct we'll return
     my @formats   = @{ $self->formats };
-    my $basepath  = $self->output_path->child($spec->{filename});
+    my $metafile  = $self->output_path->child("$spec->{filename}.metadata.json");
     my $exported  = {
         name      => $spec->{name},
+        metafile  => $metafile->relative( $self->output_path ),
         timestamp => DateTime->now( formatter => $self->datetime_formatter ) . "",
         fields    => [ $spec->{resultset}->result_class->columns ],
         formats   => {
             map {;
                 $_->extension => {
-                    path => path(join ".", $basepath, $_->extension)
+                    path => $self->output_path->child(join ".", $spec->{filename}, $_->extension),
                 }
             } @formats
         },
@@ -134,17 +135,19 @@ sub export {
     $_->close or die "Failed to close fh: $!"
         for values %fh;
 
-    # Add checksums for integrity checking and change detection
     for my $format (values %{ $exported->{formats} }) {
+        # Add checksums for integrity checking and change detection
         my $file = $format->{path};
         my $sha  = Digest::SHA->new(1);
         $sha->addfile( $file->openr_raw );
         $format->{sha1} = $sha->hexdigest;
+
+        # Translate to relative paths for external consumption
+        $format->{path} = $format->{path}->relative( $self->output_path );
     }
 
     # Write metadata files
-    my $meta = path("$basepath.metadata.json");
-    $self->write_metadata($meta, $exported);
+    $self->write_metadata($metafile, $exported);
 
     return $exported;
 }

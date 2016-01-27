@@ -37,10 +37,13 @@ if ($opt->find_exports) {
     my $exporter = ISDB::Exporter->new( output_path => path($opt->find_exports) );
     my @exports  = $exporter->find_metadata;
 
-    # Turn paths relative for the template
+    # Turn paths relative to the template
     for my $export (@exports) {
         for my $format (values %{ $export->{formats} }) {
-            $format->{path} = path($format->{path})->relative($opt->output)->stringify;
+            $format->{path} = path($format->{path})
+                ->absolute($opt->find_exports)
+                ->relative($opt->output)
+                ->stringify;
         }
     }
     $args->{exports} = \@exports;

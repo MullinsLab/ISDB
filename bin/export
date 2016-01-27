@@ -8,26 +8,66 @@ use FindBin qw< $Bin >;
 use lib "$Bin/../lib";
 use Getopt::Long::Descriptive;
 use Path::Tiny;
+use List::Util qw< first >;
 use ISDB::Exporter;
 
 my ($opt, $usage) = describe_options(
-    '%c <output-directory>',
+    '%c [--compare] <output-directory>',
     [],
     [ "Exports all datasets known by ISDB::Exporter into the given output" ],
     [ "directory.  Export metadata sidecar files are also written." ],
     [],
-    [ 'help',     "print usage message and exit" ],
+    [ 'compare',    "compare output to any existing output and only overwrite if the export has changed" ],
+    [ 'help',       "print usage message and exit" ],
 );
 
 print($usage->text), exit(!$opt->help)
     if $opt->help or not @ARGV;
 
+my $tmp    = $opt->compare ? Path::Tiny->tempdir : undef;
 my $output = path(shift);
 $output->mkpath unless $output->exists;
 
-my $exporter = ISDB::Exporter->new( output_path => $output );
+my $exporter = ISDB::Exporter->new(
+    output_path => $tmp || $output,
+);
 
 for (@{ $exporter->exports }) {
     print "Exporting: $_->{name}…\n";
     $exporter->export($_);
+}
+
+if ($opt->compare) {
+    say "Comparing to existing exports…";
+
+    my @oldmeta = ISDB::Exporter->new( output_path => $output )->find_metadata;
+    my @newmeta = $exporter->find_metadata;
+    my @copied;
+
+    for my $new (@newmeta) {
+        my $old = first {
+               path($_->{metafile})->basename
+            eq path($new->{metafile})->basename
+        } @oldmeta;
+
+        # If no old metadata, make sure new always gets copied.
+        $old ||= {};
+
+        my $changed = 0;
+        for my $format (keys %{ $new->{formats} }) {
+            # If both formats lack a sha1 (?!), consider them different.
+            next if ($new->{formats}{$format}{sha1} // 'A')
+                 eq ($old->{formats}{$format}{sha1} // 'B');
+            $changed++;
+
+            say "  Changed: $new->{name} ($format)";
+            path( $new->{formats}{$format}{path} )->absolute($tmp)->copy( $output );
+        }
+        if ($changed) {
+            path( $new->{metafile} )->absolute($tmp)->copy( $output );
+            push @copied, $new;
+        }
+    }
+    say "Updated: $_->{name}" for @copied;
+    say "Nothing changed, copied nothing" if not @copied;
 }

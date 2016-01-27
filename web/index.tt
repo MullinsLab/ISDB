@@ -80,9 +80,6 @@
     </div>
     <div class="col-md-6">
       <h2>Downloads</h2>
-      <p>
-        Last exported: <% exports.0.timestamp %><br>
-      </p>
       <% FOR dataset IN exports %>
         <h3><% dataset.name %></h3>
         <p class="text-lg">
@@ -99,6 +96,7 @@
             <li><code><% field %></code></li>
           <% END %>
         </ol>
+        <p>Last changed: <% dataset.timestamp %></p>
       <% END %>
     </div>
   </div>

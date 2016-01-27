@@ -1,15 +1,30 @@
 #!/bin/bash
 set -e -o pipefail
 bin=$(dirname $0)
-output=$1
 
+function usage() {
+    echo "usage: $(basename $0) [--compare] <output-directory>"
+}
+
+for arg; do
+    case "$arg" in
+        -h|--help)
+            usage
+            exit 0;;
+        --compare)
+            export_args="--compare"
+            shift;;
+    esac
+done
+
+output=$1
 if [[ -z $output ]]; then
-    echo "usage: $(basename $0) <output-directory>"
+    usage
     exit 1
 fi
 
 echo "Exporting data"
-$bin/export $output/exports/
+$bin/export $export_args $output/exports/
 
 echo "Rendering template"
 $bin/fill-template --output=$output --find-exports=$output/exports/ web/index.tt
