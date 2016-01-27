@@ -20,9 +20,10 @@ my $t = {
 my %sample_extractor = (
     25011556 => qr/^(?<subject>[BLR]1)_/i,                                  # Wagner, et al.
     24968937 => qr/^(?<subject>PT[1-5])(?:_Y(?<years_on_art>[\d.]+))?/i,    # Maldarelli, et al.
-    12843741 => qr/^(?<clone>(?:AL|AD|C)-\d+)_/,                            # Mack, et al.
+    12843741 => qr/^(?<clone>(?:AL|AD|C)-\d+)_/,                            # Mack, et al., and also handled specially below
     15163705 => qr/^(?<subject>\d+)/,                                       # Han, et al.
     17262715 => qr/^(?<genbank>.+?)(?:\.\d+)?$/,                            # Ikeda, et al.
+  # 23953889, Sherrill-Mix, et al, handled specially below
 );
 if (my $re = $sample_extractor{ $t->{sample}{pubmed_id} }) {
     if ($t->{sample}{original_id} =~ $re) {
