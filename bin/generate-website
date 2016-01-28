@@ -18,17 +18,18 @@ for arg; do
 done
 
 output=$1
+exports=$output/exports/latest/
 if [[ -z $output ]]; then
     usage
     exit 1
 fi
 
 echo "Exporting data"
-$bin/export $export_args $output/exports/
+$bin/export $export_args $exports
 
 echo "Caching PubMed info"
 mkdir -p $bin/../cache/
 $bin/cache-pubmed-info > $bin/../cache/pubmed.json
 
 echo "Rendering template"
-$bin/fill-template --output=$output --find-exports=$output/exports/ web/index.tt
+$bin/fill-template --output=$output --find-exports=$exports web/index.tt

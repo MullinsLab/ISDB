@@ -99,17 +99,22 @@
         </table>
       <% END %>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
       <h2>Downloads</h2>
       <% FOR dataset IN exports %>
         <h3><% dataset.name %></h3>
         <p class="text-lg">
-          Download as:
+          Download latest version as:
           <% FOREACH format IN dataset.formats %>
             <%- IF loop.last AND NOT loop.first %> or <% END %>
             <a href="<% format.value.path %>"><% format.key %></a>
             <%- IF NOT loop.last AND loop.index + 1 != loop.max %>, <% END %>
           <% END %>
+        </p>
+        <p>
+          The latest version is from <em><% dataset.timestamp %></em>.
+          You may also download <a href="exports/monthly/">current and previous
+          monthly versions</a>.
         </p>
         <p>This dataset contains the following fields:</p>
         <ol>
@@ -117,7 +122,6 @@
             <li><code><% field %></code></li>
           <% END %>
         </ol>
-        <p>Last changed: <% dataset.timestamp %></p>
       <% END %>
     </div>
   </div>

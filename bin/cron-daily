@@ -1,0 +1,55 @@
+#!/bin/bash
+set -e -o pipefail
+bin=$(dirname $0)
+
+function usage() {
+    echo "usage: $(basename $0) <output-directory>"
+}
+
+for arg; do
+    case "$arg" in
+        -h|--help)
+            usage
+            exit 0;;
+    esac
+done
+
+output=$1
+exports=$output/exports
+monthly=$output/exports/monthly/${2:-$(date +%Y-%m)}
+
+if [[ -z $output ]]; then
+    usage
+    exit 1
+fi
+
+echo "→ Updating website"
+$bin/generate-website --compare $output
+
+if [[ -d $monthly ]]; then
+    echo "→ Monthly archive already exists: $monthly"
+else
+    echo "→ Archiving monthly copy to: $monthly"
+    mkdir -p $monthly
+    rsync -av $exports/latest/ $monthly/
+fi
+
+echo "→ Checking for changes to commit"
+pushd $output >/dev/null
+    if git rev-parse --git-dir >/dev/null 2>&1; then
+        git add -A .
+        if [[ -n $(git status --porcelain) ]]; then
+            echo "→ Committing changes"
+            git status --porcelain
+            git commit --author="archiver <>" -m 'archiving updates'
+            if [[ -n $(git remote) ]]; then
+                echo "→ Pushing changes"
+                git push origin master
+            fi
+        else
+            echo "→ No changes to commit"
+        fi
+    else
+        echo "→ Not a git clone"
+    fi
+popd >/dev/null
