@@ -15,21 +15,73 @@ regenerated from our primary and secondary sources in order to incorporate
 changes and additions.
 
 
-# Types
+# HIV proviral integration
 
-A couple domains (type aliases with constraints/enumerations) are used in the schema:
+The ISDB's representation of data requires some careful understanding of how reverse-transcribed HIV integrates into human genomic DNA.
 
-`ltr_end`
-  ~ A value indicating an end of the HIV genome. One of `5p` (for $5^\prime$), `3p` (for $3^\prime$).
+HIV starts as single-stranded RNA diagramed like so:
 
-`orientation`
-  ~ _Orientation_ is `F` (for _forward_)  when the $5^\prime \rightarrow 3^\prime$ reading direction of the positive strand of integrated HIV matches the reading direction of a surrounding feature, and `R`  when the positive strand is _reversed_.
+     HIV  5ʹLTR~GAG~~~ENV~3ʹLTR
+
+RNA is single-stranded, so when discussing the HIV genome we naturally label the two long terminal repeat (LTR) regions as the _5ʹ LTR_ and _3ʹ LTR_.
+
+When reverse transcribed into double-stranded DNA, it looks like:
+
+     HIV  5ʹLTR~GAG~~~ENV~3ʹLTR
+          5ʹLTR~GAG~~~ENV~3ʹLTR (complementary strand)
+
+There are two orientations this double-stranded HIV DNA may be integrated into
+genomic DNA as a provirus:
+
+                        HIV
+     Chr  1 ---- 5ʹLTR~GAG~~~ENV~3ʹLTR ---- N
+          1 ---- 5ʹLTR~GAG~~~ENV~3ʹLTR ---- N
+     
+                        HIV
+     Chr  1 ---- 3ʹLTR~ENV~~~GAG~5ʹLTR ---- N
+          1 ---- 3ʹLTR~ENV~~~GAG~5ʹLTR ---- N
+
+The following diagrams form a truth table of provirus orientation with respect
+to the chromosome crossed by provirus orientation with respect to the gene.
+Pay careful attention to the location of GAG and ENV (or 5aʹ vs. 5bʹ).
+
+## Provirus is _forward_ with respect to the chromosome…
+
+### …and _forward_ with respect to the gene
+
+             Gene is forward with
+             respect to chromosome
+             |——————→
+     Chr  1 ---- 5ʹLTR~GAG~~~ENV~3ʹLTR ---- N
+          1 ---- 5ʹLTR~GAG~~~ENV~3ʹLTR ---- N
+
+### …and _reverse_ with respect to the gene
+
+     Chr  1 ---- 5ʹLTR~GAG~~~ENV~3ʹLTR ---- N
+          1 ---- 5ʹLTR~GAG~~~ENV~3ʹLTR ---- N
+                                 ←——————| Gene is reverse with
+                                          respect to chromosome
+
+## Provirus is _reverse_ with respect to the chromosome…
+
+### …and _forward_ with respect to the gene
+
+     Chr  1 ---- 3ʹLTR~ENV~~~GAG~5ʹLTR ---- N
+          1 ---- 3ʹLTR~ENV~~~GAG~5ʹLTR ---- N
+                                 ←——————| Gene is reverse with
+                                          respect to chromosome
+
+### …and _reverse_ with respect to the gene
+
+             Gene is forward with
+             respect to chromosome
+             |——————→
+     Chr  1 ---- 3ʹLTR~ENV~~~GAG~5ʹLTR ---- N
+          1 ---- 3ʹLTR~ENV~~~GAG~5ʹLTR ---- N
 
 # Integration Coordinates
 
 ISDB provides the location of integration splice junctions in _zero-origin, interbase coordinates_. This means that a `location` reported by the database identifies a location _between_ two nucleotides, rather than identifying a nucleotide. These locations are numbered starting with reference position 0, which is to the left/$5^\prime$ of nucleotide 1.
-
-TK: illustration, examples.
 
 # Integration Summary
 
@@ -134,6 +186,15 @@ The _total number of independent observations_ of integrations into this gene. T
 # Developer documentation
 
 The remaining sections in this document are less complete, and aimed at the developers of ISDB and tools to load data from outside sources. Directly using the primary `integration` table will be unnecessary for many analysis tasks. Here be dragons, et cetera.
+
+## Types
+
+`ltr_end`
+  ~ An alias of `text` indicating an end of HIV's viral RNA genome. One of `5p` (for the $5^\prime$ LTR), `3p` (for the $3^\prime$ LTR).
+
+`orientation`
+  ~ _Orientation_ is `F` (for _forward_)  when the $5^\prime \rightarrow 3^\prime$ reading direction of the positive strand of integrated HIV matches the reading direction of a surrounding feature, and `R`  when the positive strand is _reversed_.
+
 
 ## The `integration` table
 
