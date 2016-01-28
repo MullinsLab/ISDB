@@ -10,6 +10,8 @@ requires 'Getopt::Long::Descriptive';
 requires 'Hash::Fold', '0.1.2';
 requires 'Hash::Merge';
 requires 'JSON::MaybeXS';
+requires 'LWP::UserAgent';
+requires 'LWP::Protocol::https';
 requires 'Moo';
 requires 'Types::Standard';
 requires 'Type::Params';

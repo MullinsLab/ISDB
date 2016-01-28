@@ -26,5 +26,9 @@ fi
 echo "Exporting data"
 $bin/export $export_args $output/exports/
 
+echo "Caching PubMed info"
+mkdir -p $bin/../cache/
+$bin/cache-pubmed-info > $bin/../cache/pubmed.json
+
 echo "Rendering template"
 $bin/fill-template --output=$output --find-exports=$output/exports/ web/index.tt

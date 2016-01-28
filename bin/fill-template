@@ -10,6 +10,7 @@ use Getopt::Long::Descriptive;
 use ISDB::Template;
 use ISDB::Exporter;
 use Path::Tiny;
+use JSON::MaybeXS;
 
 my ($opt, $usage) = describe_options(
     '%c [--output=directory] [--find-exports=directory] [template.tt]',
@@ -48,5 +49,9 @@ if ($opt->find_exports) {
     }
     $args->{exports} = \@exports;
 }
+
+my $pubmed_cache = path($Bin)->parent->child("cache", "pubmed.json");
+$args->{pubmed_info} = decode_json( $pubmed_cache->slurp_utf8 )
+    if $pubmed_cache->exists;
 
 print { $output } ISDB::Template->fill($source, $args);

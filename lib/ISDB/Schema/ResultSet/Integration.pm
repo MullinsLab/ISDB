@@ -18,6 +18,30 @@ sub counts_by_source {
     });
 }
 
+sub counts_by_publication {
+    my $self   = shift;
+    my $me     = $self->current_source_alias;
+    return $self->publications->search_rs({}, {
+        '+columns' => [ { count => { COUNT => 1 } } ],
+        group_by => \["$me.sample->>'pubmed_id'"],
+        order_by => \["$me.sample->>'pubmed_id'"],
+        distinct => 0,
+    });
+}
+
+sub publications {
+    my $self   = shift;
+    my $me     = $self->current_source_alias;
+    my $pubmed = "$me.sample->>'pubmed_id'";
+    return $self->search_rs(
+        \["$pubmed != ''"],
+        {
+            columns  => [ { pubmed_id => \[$pubmed] } ],
+            distinct => 1,
+        },
+    );
+}
+
 sub count_distinct_genes {
     my $self = shift;
     return $self->search_rs({}, {

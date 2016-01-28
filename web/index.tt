@@ -50,6 +50,26 @@
               <% row.source.name %>
             <% END %>
             <span class="text-muted">n=<% row.get_column("count") | commafy %></span>
+            <% pubs = row.source.related_resultset('integrations').counts_by_publication %>
+            <% IF $(pubs.all) %>
+              <ul>
+                <% FOR pub IN pubs.all %>
+                  <li>
+                    <% id   = pub.get_column("pubmed_id") %>
+                    <% info = pubmed_info.$id %>
+                    <a href="https://www.ncbi.nlm.nih.gov/pubmed/<% id %>">
+                      <% IF info %>
+                        “<% info.title.substr(0, 40) %>…”
+                      <% ELSE %>
+                        PubMed ID: <% id %>
+                      <% END %>
+                    </a>
+                    <% IF info %>by <% info.sortfirstauthor %><% END %>
+                    <span class="text-muted">n=<% pub.get_column("count") | commafy %></span>
+                  </li>
+                <% END %>
+              </ul>
+            <% END %>
           </li>
         <% END %>
       </ul>
