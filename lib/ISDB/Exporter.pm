@@ -111,7 +111,7 @@ sub export {
         fields    => [ $spec->{resultset}->result_class->columns ],
         formats   => {
             map {;
-                $_->extension => {
+                $_->name => {
                     path => $self->output_path->child(join ".", $spec->{filename}, $_->extension),
                 }
             } @formats
@@ -120,7 +120,7 @@ sub export {
 
     # Write out header, data rows, and footer for each format, only looping
     # through the result set once.
-    my %fh = map { $_ => $exported->{formats}{$_->extension}{path}->openw_utf8 } @formats;
+    my %fh = map { $_ => $exported->{formats}{$_->name}{path}->openw_utf8 } @formats;
     $_->write_header($fh{$_}, $exported->{fields})
         for @formats;
 
