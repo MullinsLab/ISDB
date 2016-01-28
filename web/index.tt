@@ -100,7 +100,7 @@
       <% END %>
     </div>
     <div class="col-md-4">
-      <h2>Downloads</h2>
+      <h2>Download datasets</h2>
       <% FOR dataset IN exports %>
         <h3><% dataset.name %></h3>
         <p class="text-lg">
@@ -122,6 +122,19 @@
             <li><code><% field %></code></li>
           <% END %>
         </ol>
+      <% END %>
+      <% IF show_database_connection %>
+        <hr>
+        <h2>Access the database</h2>
+        <p>
+          If you’re handy with code, you may be able to connect to the database
+          directly as a read-only user.  Try:
+        </p>
+        <table class="table table-condensed">
+          <tr><th>Host</th><td><code><% isdb.storage.dbh.pg_host %></code></td></tr>
+          <tr><th>User</th><td><code><% isdb.storage.dbh.pg_user %></code></td></tr>
+          <tr><th>Database name</th><td><code><% isdb.storage.dbh.pg_db %></code></td></tr>
+        </table>
       <% END %>
     </div>
   </div>

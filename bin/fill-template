@@ -20,6 +20,9 @@ my ($opt, $usage) = describe_options(
     [],
     [ 'output|o=s',     "writes the filled template to the given directory as template.html" ],
     [ 'find-exports=s', "looks for exports in the given directory and provides metadata to the template" ],
+    [ 'show-database-connection!',
+                        "flags if the database connection information should be shown or not (default: yes); ".
+                        "may be negated by prefixing with --no-", { default => 1 }],
     [ 'help',           "print usage message and exit" ],
 );
 
@@ -53,5 +56,7 @@ if ($opt->find_exports) {
 my $pubmed_cache = path($Bin)->parent->child("cache", "pubmed.json");
 $args->{pubmed_info} = decode_json( $pubmed_cache->slurp_utf8 )
     if $pubmed_cache->exists;
+
+$args->{show_database_connection} = $opt->show_database_connection;
 
 print { $output } ISDB::Template->fill($source, $args);
