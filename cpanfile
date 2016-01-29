@@ -11,7 +11,7 @@ requires 'Hash::Fold', '0.1.2';
 requires 'Hash::Merge';
 requires 'JSON::MaybeXS';
 requires 'LWP::UserAgent';
-requires 'LWP::Protocol::https';
+requires 'LWP::Protocol::Net::Curl';
 requires 'Moo';
 requires 'Path::Tiny';
 requires 'Types::Standard';

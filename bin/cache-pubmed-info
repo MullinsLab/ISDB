@@ -7,6 +7,7 @@ use open qw< :std :encoding(UTF-8) >;
 use FindBin qw< $Bin >;
 use lib "$Bin/../lib";
 use LWP::UserAgent;
+use LWP::Protocol::Net::Curl;
 use JSON::MaybeXS;
 use ISDB::Schema;
 
