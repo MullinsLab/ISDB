@@ -13,6 +13,7 @@ requires 'JSON::MaybeXS';
 requires 'LWP::UserAgent';
 requires 'LWP::Protocol::https';
 requires 'Moo';
+requires 'Path::Tiny';
 requires 'Types::Standard';
 requires 'Type::Params';
 requires 'namespace::clean';
