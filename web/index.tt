@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <style type="text/css">
     .text-lg { font-size: 1.2em }
+    .help-tip { padding: 0.5em 0.7em }
   </style>
 </head>
 <body class="container">
@@ -123,8 +124,12 @@
           <% END %>
         </ol>
       <% END %>
+      <hr>
+      <p class="bg-info help-tip">
+        More documentation for these datasets is available in the
+        <a href="doc/Manual.html">work-in-progress manual</a>.
+      </p>
       <% IF show_database_connection %>
-        <hr>
         <h2>Access the database</h2>
         <p>
           If you’re handy with code, you may be able to connect to the database
