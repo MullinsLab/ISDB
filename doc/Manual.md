@@ -81,7 +81,9 @@ Pay careful attention to the location of GAG and ENV.
 
 # Integration Coordinates
 
-ISDB provides the location of integration splice junctions in _zero-origin, interbase coordinates_. This means that a `location` reported by the database identifies a location _between_ two nucleotides, rather than identifying a nucleotide. These locations are numbered starting with reference position 0, which is to the left/5ʹ of nucleotide 1.
+ISDB provides the location of integration splice junctions in [_zero-origin, interbase coordinates_][interbase]. This means that a `location` reported by the database identifies a location _between_ two nucleotides, rather than identifying a nucleotide. These locations are numbered starting with reference position 0, which is to the left/5ʹ of nucleotide 1.
+
+[interbase]: http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3383450/#__sec2
 
 # Integration Summary
 
