@@ -33,3 +33,6 @@ $bin/cache-pubmed-info > $bin/../cache/pubmed.json
 
 echo "Rendering template"
 $bin/fill-template --output=$output --find-exports=$exports web/index.tt
+
+echo "Generating documentation"
+$bin/generate-documentation $output

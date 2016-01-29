@@ -1,0 +1,19 @@
+#!/bin/sh
+bin=$(dirname $0)
+
+output=$1
+doc=$bin/../doc
+outdoc=$output/doc
+if [[ -z $output ]]; then
+    echo "Output directory does not exist"
+    exit 1
+fi
+
+mkdir -p $outdoc
+
+cp $doc/*.css $outdoc/
+
+for md in `ls $doc/*.md`; do
+    fn=$(basename -s .md $md).html
+    pandoc -w html  -c https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css -c doc.css -s -o $outdoc/$fn $md
+done
