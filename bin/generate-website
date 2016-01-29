@@ -1,0 +1,38 @@
+#!/bin/bash
+set -e -o pipefail
+bin=$(dirname $0)
+
+function usage() {
+    echo "usage: $(basename $0) [--compare] <output-directory>"
+}
+
+for arg; do
+    case "$arg" in
+        -h|--help)
+            usage
+            exit 0;;
+        --compare)
+            export_args="--compare"
+            shift;;
+    esac
+done
+
+output=$1
+exports=$output/exports/latest/
+if [[ -z $output ]]; then
+    usage
+    exit 1
+fi
+
+echo "Exporting data"
+$bin/export $export_args $exports
+
+echo "Caching PubMed info"
+mkdir -p $bin/../cache/
+$bin/cache-pubmed-info > $bin/../cache/pubmed.json
+
+echo "Rendering template"
+$bin/fill-template --output=$output --find-exports=$exports web/index.tt
+
+echo "Generating documentation"
+$bin/generate-documentation $output

@@ -15,6 +15,18 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<ISDB::Schema::InflateColumn::JSON>
+
+=back
+
+=cut
+
+__PACKAGE__->load_components("+ISDB::Schema::InflateColumn::JSON");
+
 =head1 TABLE: C<source>
 
 =cut
@@ -74,8 +86,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-12-02 17:03:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:W3Xe7lGCIjCrU//y8QhnXg
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-21 15:04:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Xf0GTbLl74edqmm9qgmKzg
 
 __PACKAGE__->add_columns("+source_name" => { accessor => "name" });
 

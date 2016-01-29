@@ -1,0 +1,38 @@
+#!/usr/bin/env perl
+use 5.010;
+use strict;
+use warnings;
+use utf8;
+use open qw< :std :encoding(UTF-8) >;
+use FindBin qw< $Bin >;
+use lib "$Bin/../lib";
+use LWP::UserAgent;
+use JSON::MaybeXS;
+use ISDB::Schema;
+
+my $ua     = LWP::UserAgent->new;
+my $schema = ISDB::Schema->connect_default;
+
+my @pubmed = map { $_->get_column("pubmed_id") }
+    $schema->resultset("Integration")->publications->all;
+
+unless (@pubmed) {
+    say STDERR "No PubMed IDs found in database";
+    say "{}";
+    exit;
+}
+
+say STDERR "Looking up the following PubMed IDs: ";
+say STDERR "  $_" for @pubmed;
+
+my $response = $ua->post("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi", {
+    retmode => "json",
+    db      => "pubmed",
+    id      => join(",", @pubmed),
+});
+
+die "Error talking to PubMed: ", $response->status_line, "\n"
+    unless $response->is_success;
+
+my $json = decode_json($response->decoded_content);
+say JSON->new->utf8->pretty->canonical->encode($json->{result});

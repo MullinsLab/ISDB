@@ -1,0 +1,62 @@
+#!/usr/bin/env perl
+use 5.010;
+use strict;
+use warnings;
+use utf8;
+use open qw< :std :encoding(UTF-8) >;
+use FindBin qw< $Bin >;
+use lib "$Bin/../lib";
+use Getopt::Long::Descriptive;
+use ISDB::Template;
+use ISDB::Exporter;
+use Path::Tiny;
+use JSON::MaybeXS;
+
+my ($opt, $usage) = describe_options(
+    '%c [--output=directory] [--find-exports=directory] [template.tt]',
+    [],
+    [ "Renders the provided template and outputs the results on stdout" ],
+    [ "or the given output directory." ],
+    [],
+    [ 'output|o=s',     "writes the filled template to the given directory as template.html" ],
+    [ 'find-exports=s', "looks for exports in the given directory and provides metadata to the template" ],
+    [ 'show-database-connection!',
+                        "flags if the database connection information should be shown or not (default: yes); ".
+                        "may be negated by prefixing with --no-", { default => 1 }],
+    [ 'help',           "print usage message and exit" ],
+);
+
+print($usage->text), exit(!$opt->help)
+    if $opt->help or not @ARGV;
+die "--find-exports requires the use of --output\n"
+    if $opt->find_exports and not $opt->output;
+
+my $args   = {};
+my $source = shift;
+my $output = $opt->output
+    ? path($opt->output)->child( path($source)->basename(".tt") . ".html" )->openw_utf8
+    : \*STDOUT;
+
+if ($opt->find_exports) {
+    my $exporter = ISDB::Exporter->new( output_path => path($opt->find_exports) );
+    my @exports  = $exporter->find_metadata;
+
+    # Turn paths relative to the template
+    for my $export (@exports) {
+        for my $format (values %{ $export->{formats} }) {
+            $format->{path} = path($format->{path})
+                ->absolute($opt->find_exports)
+                ->relative($opt->output)
+                ->stringify;
+        }
+    }
+    $args->{exports} = \@exports;
+}
+
+my $pubmed_cache = path($Bin)->parent->child("cache", "pubmed.json");
+$args->{pubmed_info} = decode_json( $pubmed_cache->slurp_utf8 )
+    if $pubmed_cache->exists;
+
+$args->{show_database_connection} = $opt->show_database_connection;
+
+print { $output } ISDB::Template->fill($source, $args);

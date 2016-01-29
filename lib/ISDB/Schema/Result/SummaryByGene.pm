@@ -14,6 +14,18 @@ use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
+
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<ISDB::Schema::InflateColumn::JSON>
+
+=back
+
+=cut
+
+__PACKAGE__->load_components("+ISDB::Schema::InflateColumn::JSON");
 __PACKAGE__->table_class("DBIx::Class::ResultSource::View");
 
 =head1 TABLE: C<summary_by_gene>
@@ -23,6 +35,11 @@ __PACKAGE__->table_class("DBIx::Class::ResultSource::View");
 __PACKAGE__->table("summary_by_gene");
 
 =head1 ACCESSORS
+
+=head2 ncbi_gene_id
+
+  data_type: 'integer'
+  is_nullable: 1
 
 =head2 gene
 
@@ -47,6 +64,8 @@ __PACKAGE__->table("summary_by_gene");
 =cut
 
 __PACKAGE__->add_columns(
+  "ncbi_gene_id",
+  { data_type => "integer", is_nullable => 1 },
   "gene",
   { data_type => "text", is_nullable => 1 },
   "subjects",
@@ -58,9 +77,27 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-12-02 17:00:10
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pzenDLyYmmkY1YeWcVtknQ
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-22 10:03:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tLCiQUofF36AGkOiqN7Ryg
 
+=head2 ncbi_gene
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+Type: belongs_to
+
+Related object: L<ISDB::Schema::Result::NCBIGene>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "ncbi_gene",
+  "ISDB::Schema::Result::NCBIGene",
+  { ncbi_gene_id => "ncbi_gene_id" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "NO ACTION",
+    on_update     => "NO ACTION",
+  },
+);
+
 1;

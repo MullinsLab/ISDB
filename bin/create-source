@@ -6,7 +6,7 @@ use open qw< :std :encoding(UTF-8) >;
 use FindBin qw< $Bin >;
 use lib "$Bin/../lib";
 use ISDB::Schema;
-use JSON::PP;
+use JSON::MaybeXS;
 use Types::Standard qw< :types slurpy >;
 use Types::Common::String qw< :types >;
 

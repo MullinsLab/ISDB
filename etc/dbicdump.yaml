@@ -14,3 +14,5 @@ loader_options:
     source_name: source
   rel_collision_map:
     source_name: source
+  components:
+    - +ISDB::Schema::InflateColumn::JSON

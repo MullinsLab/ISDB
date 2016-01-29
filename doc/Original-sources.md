@@ -1,6 +1,7 @@
-% Source data formats for the IS database
+% Original source data file descriptions
 
-This document is descriptive, not prescriptive.
+This document is descriptive, not prescriptive.  It describes the format of
+some original source data files that we considered when building the ISDB.
 
 # Wenjie's IS tool
 

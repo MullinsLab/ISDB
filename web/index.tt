@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Integration Site Database (ISDB)</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <style type="text/css">
+    .text-lg { font-size: 1.2em }
+    .help-tip { padding: 0.5em 0.7em }
+  </style>
+</head>
+<body class="container">
+  <h1>Integration Site Database <small>ISDB</small></h1>
+  <hr>
+  <div class="row">
+    <div class="col-md-6">
+      <p class="lead">
+        The ISDB aims to provide a stable, authoritative, and standardized
+        source of data for analysing HIV-1 integration sites. It seeks to
+        support analyses using the tools of your choice, whether that’s R and
+        ggplot or Excel and Prism.
+      </p>
+
+      <p>
+        The data contained within comes from a variety of sources external and
+        internal to the <a href="https://mullinslab.microbiol.washington.edu">Mullins Lab</a>,
+        <a href="https://www.seattlechildrens.org/research/global-infectious-disease-research/frenkel-lab/">Frenkel Lab</a>,
+        and our collaborators.  The database itself is regularly and
+        automatically regenerated from our primary and secondary sources in
+        order to incorporate changes and additions.
+      </p>
+
+      <% counts_by_source = isdb.resultset("Integration").counts_by_source %>
+      <h3>Sources <small>n=<% isdb.resultset("Source").count %></small></h3>
+      <p>
+        The database contains
+        <strong><% isdb.resultset("Integration").count | commafy %> observations</strong> across
+        <strong><% isdb.resultset("Integration").count_distinct_genes | commafy %> genes</strong>
+        from the following sources:
+      </p>
+      <ul>
+        <% FOR row IN counts_by_source.all %>
+          <li>
+            <% IF row.source.document.uri %>
+              <a href="<% row.source.document.uri %>"><% row.source.name %></a>
+            <% ELSE %>
+              <% row.source.name %>
+            <% END %>
+            <span class="text-muted">n=<% row.get_column("count") | commafy %></span>
+            <% pubs = row.source.related_resultset('integrations').counts_by_publication %>
+            <% IF $(pubs.all) %>
+              <ul>
+                <% FOR pub IN pubs.all %>
+                  <li>
+                    <% id   = pub.get_column("pubmed_id") %>
+                    <% info = pubmed_info.$id %>
+                    <a href="https://www.ncbi.nlm.nih.gov/pubmed/<% id %>">
+                      <% IF info %>
+                        “<% info.title.substr(0, 40) %>…”
+                      <% ELSE %>
+                        PubMed ID: <% id %>
+                      <% END %>
+                    </a>
+                    <% IF info %>by <% info.sortfirstauthor %><% END %>
+                    <span class="text-muted">n=<% pub.get_column("count") | commafy %></span>
+                  </li>
+                <% END %>
+              </ul>
+            <% END %>
+          </li>
+        <% END %>
+      </ul>
+
+      <% FOREACH query IN [["Subjects", "subjects"], ["Unique IS", "unique_sites"]] %>
+        <h3>Top 5 Genes by # of <% query.0 %></h3>
+        <% genes = isdb.resultset("SummaryByGene").top_N_by_column(query.1, 5) %>
+        <table class="table table-condensed">
+          <thead>
+            <tr>
+              <th>Gene</th>
+              <th># of Subjects</th>
+              <th>Unique IS</th>
+              <th>Total IS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% FOR gene IN genes.all %>
+            <tr>
+              <td><a href="<% gene.ncbi_gene.uri %>"><% gene.gene %></a></td>
+              <td><% gene.subjects %></td>
+              <td><% gene.unique_sites %></td>
+              <td><% gene.total_in_gene %></td>
+            </tr>
+            <% END %>
+          </tbody>
+        </table>
+      <% END %>
+    </div>
+    <div class="col-md-4">
+      <h2>Download datasets</h2>
+      <% FOR dataset IN exports %>
+        <h3><% dataset.name %></h3>
+        <p class="text-lg">
+          Download latest version as:
+          <% FOREACH format IN dataset.formats %>
+            <%- IF loop.last AND NOT loop.first %> or <% END %>
+            <a href="<% format.value.path %>"><% format.key %></a>
+            <%- IF NOT loop.last AND loop.index + 1 != loop.max %>, <% END %>
+          <% END %>
+        </p>
+        <p>
+          The latest version is from <em><% parse_timestamp(dataset.timestamp).strftime('%a %b %e %k:%M %Y %Z') %></em>.
+          You may also download <a href="exports/monthly/">current and previous
+          monthly versions</a>.
+        </p>
+        <p>This dataset contains the following fields:</p>
+        <ol>
+          <% FOR field IN dataset.fields %>
+            <li><code><% field %></code></li>
+          <% END %>
+        </ol>
+      <% END %>
+      <hr>
+      <p class="bg-info help-tip">
+        More documentation for these datasets is available in the
+        <a href="doc/Manual.html">work-in-progress manual</a>.
+      </p>
+      <% IF show_database_connection %>
+        <h2>Access the database</h2>
+        <p>
+          If you’re handy with code, you may be able to connect to the database
+          directly as a read-only user.  Try:
+        </p>
+        <table class="table table-condensed">
+          <tr><th>Host</th><td><code><% isdb.storage.dbh.pg_host %></code></td></tr>
+          <tr><th>User</th><td><code><% isdb.storage.dbh.pg_user %></code></td></tr>
+          <tr><th>Database name</th><td><code><% isdb.storage.dbh.pg_db %></code></td></tr>
+        </table>
+      <% END %>
+    </div>
+  </div>
+</body>
+</html>
