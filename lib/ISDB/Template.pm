@@ -7,6 +7,7 @@ package ISDB::Template;
 use Template::Alloy;
 use ISDB::Schema;
 use Hash::Merge qw< merge >;
+use DateTime::Format::RFC3339;
 use namespace::clean;
 
 sub fill {
@@ -16,6 +17,13 @@ sub fill {
     my $isdb     = ISDB::Schema->connect_default;
     my $defaults = {
         isdb => $isdb,
+        parse_timestamp => sub {
+            my $timestamp = shift // return undef;
+            state $rfc3339 = DateTime::Format::RFC3339->new;
+            my $dt = $rfc3339->parse_datetime($timestamp);
+            $dt->set_time_zone('US/Pacific');
+            return $dt;
+        },
     };
     $args = merge($args, $defaults);
 

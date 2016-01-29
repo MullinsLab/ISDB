@@ -112,7 +112,7 @@
           <% END %>
         </p>
         <p>
-          The latest version is from <em><% dataset.timestamp %></em>.
+          The latest version is from <em><% parse_timestamp(dataset.timestamp).strftime('%a %b %e %k:%M %Y %Z') %></em>.
           You may also download <a href="exports/monthly/">current and previous
           monthly versions</a>.
         </p>
