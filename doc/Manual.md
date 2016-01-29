@@ -154,7 +154,7 @@ The annotated gene for which integrations are being summarized.
 
 ### `subjects`
 
-The number of distinct subjects (presumably human HIV+ patients) with latent HIV integrated anywhere in this gene.
+The number of distinct subjects (presumably human HIV+ patients) with HIV integrated anywhere in this gene.
 
 ### `unique_sites`
 
