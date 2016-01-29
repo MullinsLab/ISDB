@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e -o pipefail
 bin=$(dirname $0)
+base=$bin/..
 
 function usage() {
     echo "usage: $(basename $0) [--compare] <output-directory>"
@@ -28,11 +29,11 @@ echo "Exporting data"
 $bin/export $export_args $exports
 
 echo "Caching PubMed info"
-mkdir -p $bin/../cache/
-$bin/cache-pubmed-info > $bin/../cache/pubmed.json
+mkdir -p $base/cache/
+$bin/cache-pubmed-info > $base/cache/pubmed.json
 
 echo "Rendering template"
-$bin/fill-template --output=$output --find-exports=$exports web/index.tt
+$bin/fill-template --output=$output --find-exports=$exports $base/web/index.tt
 
 echo "Generating documentation"
 $bin/generate-documentation $output
