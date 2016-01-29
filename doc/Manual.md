@@ -43,7 +43,7 @@ genomic DNA as a provirus:
 
 The following diagrams form a truth table of provirus orientation with respect
 to the chromosome crossed by provirus orientation with respect to the gene.
-Pay careful attention to the location of GAG and ENV (or 5aʹ vs. 5bʹ).
+Pay careful attention to the location of GAG and ENV.
 
 ## Provirus is _forward_ with respect to the chromosome…
 
@@ -81,7 +81,7 @@ Pay careful attention to the location of GAG and ENV (or 5aʹ vs. 5bʹ).
 
 # Integration Coordinates
 
-ISDB provides the location of integration splice junctions in _zero-origin, interbase coordinates_. This means that a `location` reported by the database identifies a location _between_ two nucleotides, rather than identifying a nucleotide. These locations are numbered starting with reference position 0, which is to the left/$5^\prime$ of nucleotide 1.
+ISDB provides the location of integration splice junctions in _zero-origin, interbase coordinates_. This means that a `location` reported by the database identifies a location _between_ two nucleotides, rather than identifying a nucleotide. These locations are numbered starting with reference position 0, which is to the left/5ʹ of nucleotide 1.
 
 # Integration Summary
 
@@ -178,7 +178,7 @@ The _total number of independent observations_ of integrations into this gene. T
 
 * Orientation must be reported as `F` or `R`.
 
-* The sequence spanning the IS must read $5^\prime$ → $3^\prime$, right to left.
+* The sequence spanning the IS must read 5ʹ → 3ʹ, right to left.
 
 * The location of the HIV/human genome junction in any reported sequence must
   number the space between bases (interbase) and start from 0.
@@ -190,10 +190,10 @@ The remaining sections in this document are less complete, and aimed at the deve
 ## Types
 
 `ltr_end`
-  ~ An alias of `text` indicating an end of HIV's viral RNA genome. One of `5p` (for the $5^\prime$ LTR), `3p` (for the $3^\prime$ LTR).
+  ~ An alias of `text` indicating an end of HIV's viral RNA genome. One of `5p` (for the 5ʹ LTR), `3p` (for the 3ʹ LTR).
 
 `orientation`
-  ~ _Orientation_ is `F` (for _forward_)  when the $5^\prime \rightarrow 3^\prime$ reading direction of the positive strand of integrated HIV matches the reading direction of a surrounding feature, and `R`  when the positive strand is _reversed_.
+  ~ _Orientation_ is `F` (for _forward_)  when the 5ʹ → 3ʹ reading direction of the positive strand of integrated HIV matches the reading direction of a surrounding feature, and `R`  when the positive strand is _reversed_.
 
 
 ## The `integration` table
