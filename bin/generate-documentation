@@ -14,7 +14,7 @@ mkdir -p $outdoc
 
 cp $doc/*.css $outdoc/
 
-for md in `ls $doc/*.md`; do
+for md in $doc/*.md; do
     fn=$(basename -s .md $md).html
     pandoc -w html  -c https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css -c doc.css -s -o $outdoc/$fn $md
 done
