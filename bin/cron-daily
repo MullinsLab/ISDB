@@ -41,7 +41,7 @@ pushd $output >/dev/null
         if [[ -n $(git status --porcelain) ]]; then
             echo "→ Committing changes"
             git status --porcelain
-            git commit --author="archiver <>" -m 'archiving updates'
+            git commit -m 'archiving updates'
             if [[ -n $(git remote) ]]; then
                 echo "→ Pushing changes"
                 git push origin master
