@@ -36,4 +36,6 @@ echo "Rendering template"
 $bin/fill-template --output=$output --find-exports=$exports $base/web/index.tt
 
 echo "Generating documentation"
-$bin/generate-documentation $output
+if ! $bin/generate-documentation $output; then
+    echo "Warning: Couldn't generate documentation, but proceeding anyway"
+fi
