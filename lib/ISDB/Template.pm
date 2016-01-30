@@ -33,6 +33,7 @@ sub fill {
         AUTO_FILTER => 'html',
         ENCODING    => 'UTF-8',
         ABSOLUTE    => 1,
+        RELATIVE    => 1,
         FILTERS     => {
             commafy => sub {
                 my $num = shift // return undef;
