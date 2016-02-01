@@ -6,10 +6,22 @@ use utf8;
 use open qw< :std :encoding(UTF-8) >;
 use FindBin qw< $Bin >;
 use lib "$Bin/../lib";
+use Getopt::Long::Descriptive;
 use LWP::UserAgent;
 use LWP::Protocol::Net::Curl;
 use JSON::MaybeXS;
 use ISDB::Schema;
+
+my ($opt, $usage) = describe_options(
+    '%c [--verbose]',
+    [],
+    [ "Fetches summary JSON documents from NCBI Entrez for all PubMed IDs found in the database." ],
+    [],
+    [ 'verbose', "print additional information to stderr" ],
+    [ 'help',    "print usage message and exit" ],
+);
+print($usage->text), exit
+    if $opt->help;
 
 my $ua     = LWP::UserAgent->new;
 my $schema = ISDB::Schema->connect_default;
@@ -18,13 +30,15 @@ my @pubmed = map { $_->get_column("pubmed_id") }
     $schema->resultset("Integration")->publications->all;
 
 unless (@pubmed) {
-    say STDERR "No PubMed IDs found in database";
+    say STDERR "No PubMed IDs found in database" if $opt->verbose;
     say "{}";
     exit;
 }
 
-say STDERR "Looking up the following PubMed IDs: ";
-say STDERR "  $_" for @pubmed;
+if ($opt->verbose) {
+    say STDERR "Looking up the following PubMed IDs: ";
+    say STDERR "  $_" for @pubmed;
+}
 
 my $response = $ua->post("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi", {
     retmode => "json",
