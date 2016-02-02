@@ -75,9 +75,6 @@ if ($t->{sample}{pubmed_id} == 12843741 and $t->{sample}{clone}) {
     }
 }
 
-$t->{sample}{subject} = "$t->{sample}{pubmed_id}/$t->{sample}{subject}"
-    if $t->{sample}{subject};
-
 $t->{ltr} = { "5LTR" => "5p", "3LTR" => "3p" }->{ $r->{LTR} }
     if $r->{LTR};
 
