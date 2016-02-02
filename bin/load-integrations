@@ -83,13 +83,13 @@ sub normalize {
         hash_delimiter  => '/',
     );
 
+    # Normalize empty strings into NULL
+    $_ = undef for grep { not length } values %$row;
+
     # Reconstitute any flattened structures and encode as JSON.
     $row = $hash->unflatten($row);
     $row->{sample} &&= encode_json($row->{sample});
     $row->{info}   &&= encode_json($row->{info});
-
-    # Normalize empty strings into NULL
-    $_ = undef for grep { not length } values %$row;
 
     $row = normalize_gene($db, $row);
 
