@@ -87,8 +87,19 @@ delete $t->{chromosome}
 delete $t->{location}
     if not $t->{chromosome};
 
+# Refer to doc/Manual.md
+my %orientation_in_gene_from_tuple = (
+    "++" => "F",
+    "+-" => "R",
+    "--" => "F",
+    "-+" => "R",
+);
+my $orientation_tuple = ($r->{insert_orientation} and $r->{gene_orientation})
+    ? $r->{insert_orientation} . $r->{gene_orientation}
+    : undef;
 $t->{orientation_in_reference} = $r->{insert_orientation} =~ y/+-/FR/r;
-$t->{orientation_in_gene}      = $r->{gene_orientation}   =~ y/+-/FR/r;
+$t->{orientation_in_gene}      = $orientation_in_gene_from_tuple{ $orientation_tuple }
+    if $orientation_tuple;
 
 # Convert to zero-origin, interbase coordinates assuming that the reported
 # location is base-numbered and indicates the first chromosomal base outside of

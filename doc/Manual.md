@@ -79,6 +79,22 @@ Pay careful attention to the location of GAG and ENV.
      Chr  1 ---- 3ʹLTR~ENV~~~GAG~5ʹLTR ---- N
           1 ---- 3ʹLTR~ENV~~~GAG~5ʹLTR ---- N
 
+## Orientation tuples of (chromosome, gene) which occur together
+
+The above diagrams encompass all of the possible physical integrations.  For
+any given gene, however, only one of two sets of orientation tuples can be
+true:
+
+1. FF and RR — gene itself is _forward_ with respect to the chromosome
+2. FR and RF — gene itself is _reverse_ with respect to the chromosome
+
+Sets of tuples such as FF and FR aren't possible because they imply
+conflicting orientations of the gene to the chromosome.[^1]  Such combinations
+most likely indicate that the data is bogus or was wrongly interpreted.
+
+[^1]: It's exceedingly unlikely that the gene was actually flipped in human
+      genomic DNA, although it is possible.
+
 # Integration Coordinates
 
 ISDB provides the location of integration splice junctions in [_zero-origin, interbase coordinates_][interbase]. This means that a `location` reported by the database identifies a location _between_ two nucleotides, rather than identifying a nucleotide. These locations are numbered starting with reference position 0, which is to the left/5ʹ of nucleotide 1.
