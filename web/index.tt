@@ -65,7 +65,7 @@
                         PubMed ID: <% id %>
                       <% END %>
                     </a>
-                    <% IF info %>by <% info.sortfirstauthor %><% END %>
+                    <% IF info %>by <% info.sortfirstauthor %>, et al.<% END %>
                     <span class="text-muted">n=<% pub.get_column("count") | commafy %></span>
                   </li>
                 <% END %>
