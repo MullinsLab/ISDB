@@ -49,7 +49,7 @@ sub find_best {
     # Handle LOCNNNNNN specially.  The numeric part is doc'd to be
     # equal to the gene ID:
     #   http://www.ncbi.nlm.nih.gov/books/NBK3840/#genefaq.Conventions
-    $id ||= $1 if $name =~ /^LOC(\d+)$/;
+    $id ||= $1 if $name and $name =~ /^LOC(\d+)$/;
 
     my $by_id   = $self->find({ ncbi_gene_id => $id });
     my @by_name = $self->search_by_name($name);
