@@ -17,7 +17,7 @@
   <h1>Integration Site Database <small>ISDB</small></h1>
   <hr>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-lg-6 col-md-7 col-sm-12">
       <p class="lead">
         The ISDB aims to provide a stable, authoritative, and standardized
         source of data for analysing HIV-1 integration sites. It seeks to
@@ -100,7 +100,7 @@
         </table>
       <% END %>
     </div>
-    <div class="col-md-4">
+    <div class="col-lg-4 col-md-5 col-sm-12">
       <h2>Download datasets</h2>
       <% FOR dataset IN exports %>
         <h3><% dataset.name %></h3>
