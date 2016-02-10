@@ -10,7 +10,24 @@ function query-rid() {
     -d subtypenm[]=all \
     -d host=hg19 \
     -d chr[]=all \
-    -d site_info[]=all
+    -d site_info[]=origin_id \
+    -d site_info[]=chr \
+    -d site_info[]=insert_position \
+    -d site_info[]=LTR \
+    -d site_info[]=insert_orientation \
+    -d site_info[]=count \
+    -d site_info[]=inserted_gene \
+    -d site_info[]=refseq_id \
+    -d site_info[]=gene_id \
+    -d site_info[]=gene_orientation \
+    -d site_info[]=exon_intron \
+    -d site_info[]=nearest_gene \
+    -d site_info[]=nearest_gene_refseq_id \
+    -d site_info[]=nearest_gene_id \
+    -d site_info[]=nearest_gene_orientation \
+    -d site_info[]=nearest_gene_distance \
+    -d site_info[]=comment \
+    -d site_info[]=pubmed_id
 }
 
 echo "Extracting download URL" >&2
