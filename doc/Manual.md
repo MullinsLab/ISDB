@@ -182,7 +182,7 @@ The _total number of independent observations_ of integrations into this gene. T
 
 # Input requirements for the IS database
 
-* All chromosomes and locations must be provided in __GRCh38__ (hg19)
+* All chromosomes and locations must be provided in __GRCh38__ (hg38)
   coordinates and determined without using patch scaffolds (fix or novel) from
   patch releases.  This provides portability and longevity of integration sites
   and makes analysis simpler.  When a new major assembly is released, lifting
