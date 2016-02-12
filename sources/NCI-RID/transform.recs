@@ -78,28 +78,19 @@ if ($t->{sample}{pubmed_id} == 12843741 and $t->{sample}{clone}) {
 $t->{ltr} = { "5LTR" => "5p", "3LTR" => "3p" }->{ $r->{LTR} }
     if $r->{LTR};
 
-$t->{chromosome} = uc $r->{chr} =~ s/^chr//ir;
-$t->{location}   = $r->{insert_position};
+$t->{landmark} = uc $r->{chr} =~ s/^chr//ir;
+$t->{location} = $r->{insert_position};
 
-delete $t->{chromosome}
-    if $t->{chromosome} eq "UN";
+# We don't know which unplaced scaffold it is, so we can't use a RefSeq
+# accession for "chrUn" data.  Luckily, the number of affected rows is in the
+# single digits.
+delete $t->{landmark}
+    if $t->{landmark} eq "UN";
 
 delete $t->{location}
-    if not $t->{chromosome};
+    if not $t->{landmark};
 
-# Refer to doc/Manual.md
-my %orientation_in_gene_from_tuple = (
-    "++" => "F",
-    "+-" => "R",
-    "--" => "F",
-    "-+" => "R",
-);
-my $orientation_tuple = ($r->{insert_orientation} and $r->{gene_orientation})
-    ? $r->{insert_orientation} . $r->{gene_orientation}
-    : undef;
-$t->{orientation_in_reference} = $r->{insert_orientation} =~ y/+-/FR/r;
-$t->{orientation_in_gene}      = $orientation_in_gene_from_tuple{ $orientation_tuple }
-    if $orientation_tuple;
+$t->{orientation_in_landmark} = $r->{insert_orientation} =~ y/+-/FR/r;
 
 # Convert to zero-origin, interbase coordinates assuming that the reported
 # location is base-numbered and indicates the first chromosomal base outside of
@@ -108,15 +99,8 @@ $t->{orientation_in_gene}      = $orientation_in_gene_from_tuple{ $orientation_t
 $t->{location} -= 1
     if $t->{location}
    and $t->{ltr}
-   and (   ($t->{ltr} eq "3p" and $t->{orientation_in_reference} eq "F")
-        or ($t->{ltr} eq "5p" and $t->{orientation_in_reference} eq "R"));
-
-$t->{ncbi_gene_id} = $r->{gene_id};
-
-# For debugging/cross-checking in a subsequent step?
-$t->{gene} = $r->{inserted_gene}
-    if $r->{inserted_gene}
-   and $r->{inserted_gene} ne "not found";
+   and (   ($t->{ltr} eq "3p" and $t->{orientation_in_landmark} eq "F")
+        or ($t->{ltr} eq "5p" and $t->{orientation_in_landmark} eq "R"));
 
 $t->{note} = $r->{comment};
 
