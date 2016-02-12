@@ -100,6 +100,10 @@ sub normalize {
     $row->{landmark}                ||= delete $row->{chromosome};
     $row->{orientation_in_landmark} ||= delete $row->{orientation_in_reference};
 
+    $row->{landmark} = "chr$row->{landmark}"
+        if $row->{landmark}
+       and $row->{landmark} =~ /^(\d+|[XY]|MT)$/;
+
     return $row;
 }
 

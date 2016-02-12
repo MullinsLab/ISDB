@@ -39,7 +39,9 @@ my %refseq2chr =
    grep { not /^#|^$/ }
         $chrmap->lines_utf8;
 
-say sprintf "   %2s  %s", $refseq2chr{$_}, $_
+$_ = "chr$_" for values %refseq2chr;
+
+say sprintf "   %5s  %s", $refseq2chr{$_}, $_
     for sort keys %refseq2chr;
 
 say "Loading gene locations from genome assembly GFF…";
