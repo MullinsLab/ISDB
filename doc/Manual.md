@@ -115,7 +115,7 @@ source.
 | `gene`                     | text                 | `SPG11`    |
 | `landmark`                 | text                 | `chr5`     |
 | `location`                 | non-negative integer | `44642671` |
-| `orientation_in_reference` | orientation          | `F`        |
+| `orientation_in_landmark`  | orientation          | `F`        |
 | `orientation_in_gene`      | orientation          | `R`        |
 | `multiplicity`             | non-negative integer | `1`        |
 

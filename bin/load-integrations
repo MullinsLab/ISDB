@@ -91,28 +91,14 @@ sub normalize {
     $row->{sample} &&= encode_json($row->{sample});
     $row->{info}   &&= encode_json($row->{info});
 
-    $row = normalize_gene($db, $row);
+    # We now look this up in the database by intersecting the IS location with
+    # gene locations.
+    delete $row->{ncbi_gene_id};
+    delete $row->{gene};
+    delete $row->{orientation_in_gene};
 
-    return $row;
-}
-
-sub normalize_gene {
-    my ($db, $row) = @_;
-
-    my $id   = $row->{ncbi_gene_id};
-    my $name = delete $row->{gene};
-
-    # Short-circuit ourselves early, even though find_best would handle it
-    return $row unless $id or $name;
-
-    state $genes = $db->resultset("NCBIGene");
-
-    my $gene = $genes->find_best_cached({
-        ncbi_gene_id => $id,
-        name         => $name,
-    });
-
-    $row->{ncbi_gene_id} = $gene ? $gene->id : undef;
+    $row->{landmark}                ||= delete $row->{chromosome};
+    $row->{orientation_in_landmark} ||= delete $row->{orientation_in_reference};
 
     return $row;
 }

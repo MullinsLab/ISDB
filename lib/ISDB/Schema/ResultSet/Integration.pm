@@ -42,12 +42,4 @@ sub publications {
     );
 }
 
-sub count_distinct_genes {
-    my $self = shift;
-    return $self->search_rs({}, {
-        columns  => [ 'ncbi_gene_id' ],
-        distinct => 1,
-    })->count;
-}
-
 1;

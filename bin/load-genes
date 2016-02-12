@@ -1,0 +1,79 @@
+#!/usr/bin/env perl
+use 5.010;
+use strict;
+use warnings;
+use utf8;
+use open qw< :std :encoding(UTF-8) >;
+use FindBin qw< $Bin >;
+use lib "$Bin/../lib";
+use Getopt::Long::Descriptive;
+use Bio::GFF3::LowLevel qw< gff3_parse_feature >;
+use Path::Tiny;
+use List::Util qw< first >;
+use ISDB::Schema;
+
+my ($opt, $usage) = describe_options(
+    '%c --gff <GRCh38.gff3> --chrmap <chr_accessions_GRCh38>',
+    [],
+    [ "Loads genes and gene locations into the database from the gene features of" ],
+    [ "a human genome assembly." ],
+    [],
+    [ 'gff=s',      "GFF3 for the top-level reference assembly; only 'gene' features are used", { required => 1 } ],
+    [ 'chrmap=s',   "Space-delimited file mapping chromosomes to RefSeq accessions", { required => 1 } ],
+    [],
+    [ 'help', "print usage message and exit" ],
+);
+print($usage->text), exit(!$opt->help)
+    if $opt->help or @ARGV;
+
+my $db    = ISDB::Schema->connect_default;
+my $genes = $db->resultset("NCBIGene");
+my $txn   = $db->txn_scope_guard;
+
+my $gff    = path($opt->gff)->openr_utf8;
+my $chrmap = path($opt->chrmap);
+
+say "Reading chromosome to RefSeq accession map…";
+my %refseq2chr =
+    map { (split ' ', $_)[1,0] }
+   grep { not /^#|^$/ }
+        $chrmap->lines_utf8;
+
+say sprintf "   %2s  %s", $refseq2chr{$_}, $_
+    for sort keys %refseq2chr;
+
+say "Loading gene locations from genome assembly GFF…";
+my %strand2orientation = (
+    "+" => "F",
+    "-" => "R",
+);
+
+my $loaded = 0;
+while (<$gff>) {
+    next if /^#|^$/;
+
+    my $row = gff3_parse_feature($_);
+    next if $row->{type} ne "gene";
+
+    my $gene_id  = first { s/^GeneID:// } @{ $row->{attributes}{Dbxref} };
+    my $landmark = $refseq2chr{ $row->{seq_id} } // $row->{seq_id};
+	my $name     = $row->{attributes}{Name}[0];
+
+	my $gene = $genes->find_or_create({
+		ncbi_gene_id	=> $gene_id,
+		name			=> $name,
+	});
+
+    $gene->add_to_locations({
+        landmark 	     => $landmark,
+        gene_start       => $row->{start} - 1,  # Conversion to interbase, zero-origin
+        gene_end         => $row->{end},
+        gene_orientation => $strand2orientation{ $row->{strand} },
+    });
+
+    $loaded++;
+    say sprintf "  …%d", $loaded
+        if $loaded % 10_000 == 0;
+}
+$txn->commit;
+say "  Total: $loaded gene locations";
