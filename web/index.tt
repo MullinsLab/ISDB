@@ -99,6 +99,13 @@
           </tbody>
         </table>
       <% END %>
+      <h3>Known issues</h3>
+      <p>ISDB is under active development. There are some known issues affecting data quality.</p>
+      <ul>
+        <% FOR issue IN issues %>
+        <li><a href="<% issue.url %>"><%issue.name%></a></li>
+        <% END %>
+      </ul>
     </div>
     <div class="col-lg-4 col-md-5 col-sm-12">
       <h2>Download datasets</h2>

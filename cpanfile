@@ -1,5 +1,6 @@
 requires 'perl', '5.014';
 requires 'Bio::GFF3::LowLevel';
+requires 'Config::Any';
 requires 'DateTime';
 requires 'DateTime::Format::RFC3339';
 requires 'DBD::Pg', '3.5.1';
