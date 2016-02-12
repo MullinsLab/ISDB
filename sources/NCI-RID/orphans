@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e -o pipefail
+
+recs join --left --operation '$d->{matched} = 1' \
+    info/source_line info/source_line \
+    <(recs fromcsv --header $1) \
+    <(recs fromcsv --header $2) \
+    | recs grep 'not {{matched}}' \
+    | ./tocsv
