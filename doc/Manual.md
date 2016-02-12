@@ -103,9 +103,10 @@ ISDB provides the location of integration splice junctions in [_zero-origin, int
 
 # Integration Summary
 
-The _integration summary_ report contains a row for each integration _event_ in
+The _integration summary_ report contains a row for each gene integration _event_ in
 the database, along with that event's _clonal multiplicity_ as reported by the
-source.
+source.  Note that integrations into locations covered by multiple genes (such
+as two in opposite orientations) will be reported once per gene.
 
 | column                     | type                 | example    |
 |----------------------------+----------------------+------------|
