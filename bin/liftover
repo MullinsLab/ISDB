@@ -21,6 +21,11 @@ if [[ ! ( -e $liftOver && -e $chain ) ]]; then
     exit 1
 fi
 
+# XXX TODO: Support the full list of UCSC-style landmark/chromosome names for
+# unplaced, unlocalized, and alternative scaffolds.  See this task for details
+# <https://trello.com/c/Hj7QeUvy>.  Right now this tool is limited to chr1-22,
+# chrX, chrY, and chrMT and filters out anything else.
+# -trs, 12 Feb 2016
 recs fromcsv --header $input \
     | recs assert -v '{{info/source_line}}' \
     | recs grep '{{landmark}} and {{location}}' \
@@ -33,6 +38,7 @@ recs fromcsv --header $input \
         /dev/stdout \
         $(dirname $input)/orphaned.bed \
     | recs fromcsv -d $'\t' -k landmark,location,location_end,info/source_line \
+    | recs grep '{{landmark}} =~ /^chr(\d+|[XY]|MT)$/' \
     | recs join \
         --operation '@$d{qw[ landmark location ]} = @$i{qw[ landmark location ]}' \
         info/source_line \
