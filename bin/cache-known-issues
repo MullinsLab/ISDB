@@ -19,15 +19,16 @@ use Config::Any;
 #   visit https://trello.com/app-key
 # To get your app token:
 #   visit https://trello.com/1/authorize?key=YOUR_PUBLIC_KEY&name=cache-known-isuses&response_type=token&scope=read&expiration=never
-# Put the credentials in the "auth_local.whatever" as top level items called
-# "public_key" and "app_token" respectively.
+# Put the credentials in the "issues_local.{yaml,conf,xml,json}" as top level items called
+# "public_key" and "app_token" respectively.  Then put a Trello list ID in the
+# top level item "list_id".
 
-my (undef, $auth) = %{ (Config::Any->load_stems({stems => ['auth_local'], use_ext => 1}))->[0] };
+my (undef, $auth) = %{ (Config::Any->load_stems({stems => ['issues_local'], use_ext => 1}))->[0] };
 my $ua = LWP::UserAgent->new;
 my $key = $auth->{public_key};
 my $token = $auth->{app_token};
 
-my $url = "https://api.trello.com/1/lists/56bc2abf3d5a7c09763064d0/cards?key=$key&token=$token";
+my $url = "https://api.trello.com/1/lists/$auth->{list_id}/cards?key=$key&token=$token";
 my $res = $ua->get($url);
 
 if ($res->is_success) {
