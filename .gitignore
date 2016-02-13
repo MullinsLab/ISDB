@@ -1,3 +1,4 @@
 /cache
 /bin/liftOver.Darwin
 /bin/liftOver.Linux
+/auth_local.*
