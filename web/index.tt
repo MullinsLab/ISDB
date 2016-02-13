@@ -39,7 +39,7 @@
       <p>
         The database contains
         <strong><% isdb.resultset("Integration").count | commafy %> observations</strong> across
-        <strong><% isdb.resultset("Integration").count_distinct_genes | commafy %> genes</strong>
+        <strong><% isdb.resultset("IntegrationGene").count_distinct_genes | commafy %> genes</strong>
         from the following sources:
       </p>
       <ul>

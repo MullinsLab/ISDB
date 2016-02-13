@@ -53,15 +53,9 @@ __PACKAGE__->table("integration");
   data_type: 'ltr_end'
   is_nullable: 1
 
-=head2 refseq_accession
+=head2 landmark
 
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 255
-
-=head2 chromosome
-
-  data_type: 'human_chromosome'
+  data_type: 'landmark'
   is_nullable: 1
 
 =head2 location
@@ -69,20 +63,9 @@ __PACKAGE__->table("integration");
   data_type: 'integer'
   is_nullable: 1
 
-=head2 orientation_in_reference
+=head2 orientation_in_landmark
 
   data_type: 'orientation'
-  is_nullable: 1
-
-=head2 orientation_in_gene
-
-  data_type: 'orientation'
-  is_nullable: 1
-
-=head2 ncbi_gene_id
-
-  data_type: 'integer'
-  is_foreign_key: 1
   is_nullable: 1
 
 =head2 sequence
@@ -121,18 +104,12 @@ __PACKAGE__->add_columns(
   { data_type => "jsonb", is_nullable => 1 },
   "ltr",
   { data_type => "ltr_end", is_nullable => 1 },
-  "refseq_accession",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
-  "chromosome",
-  { data_type => "human_chromosome", is_nullable => 1 },
+  "landmark",
+  { data_type => "landmark", is_nullable => 1 },
   "location",
   { data_type => "integer", is_nullable => 1 },
-  "orientation_in_reference",
+  "orientation_in_landmark",
   { data_type => "orientation", is_nullable => 1 },
-  "orientation_in_gene",
-  { data_type => "orientation", is_nullable => 1 },
-  "ncbi_gene_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "sequence",
   { accessor => "seq", data_type => "text", is_nullable => 1 },
   "sequence_junction",
@@ -144,26 +121,6 @@ __PACKAGE__->add_columns(
 );
 
 =head1 RELATIONS
-
-=head2 ncbi_gene
-
-Type: belongs_to
-
-Related object: L<ISDB::Schema::Result::NCBIGene>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "ncbi_gene",
-  "ISDB::Schema::Result::NCBIGene",
-  { ncbi_gene_id => "ncbi_gene_id" },
-  {
-    is_deferrable => 0,
-    join_type     => "LEFT",
-    on_delete     => "NO ACTION",
-    on_update     => "NO ACTION",
-  },
-);
 
 =head2 source
 
@@ -181,8 +138,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-21 15:04:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8kfdb3hoGqcgLFTY1zg/9Q
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-02-11 22:50:26
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yUoWN0Y12Q52+ZnT2DaVlA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

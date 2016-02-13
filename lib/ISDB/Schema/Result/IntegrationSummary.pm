@@ -60,7 +60,7 @@ __PACKAGE__->table("integration_summary");
 
 =head2 landmark
 
-  data_type: 'text'
+  data_type: 'landmark'
   is_nullable: 1
 
 =head2 location
@@ -68,14 +68,14 @@ __PACKAGE__->table("integration_summary");
   data_type: 'integer'
   is_nullable: 1
 
-=head2 orientation_in_reference
+=head2 orientation_in_landmark
 
   data_type: 'orientation'
   is_nullable: 1
 
 =head2 orientation_in_gene
 
-  data_type: 'orientation'
+  data_type: 'text'
   is_nullable: 1
 
 =head2 multiplicity
@@ -95,20 +95,20 @@ __PACKAGE__->add_columns(
   "gene",
   { data_type => "text", is_nullable => 1 },
   "landmark",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "landmark", is_nullable => 1 },
   "location",
   { data_type => "integer", is_nullable => 1 },
-  "orientation_in_reference",
+  "orientation_in_landmark",
   { data_type => "orientation", is_nullable => 1 },
   "orientation_in_gene",
-  { data_type => "orientation", is_nullable => 1 },
+  { data_type => "text", is_nullable => 1 },
   "multiplicity",
   { data_type => "bigint", is_nullable => 1 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-22 10:03:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FCdl/zFGdTAVitHnONXjYg
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-02-11 22:50:26
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rQ5lBz9iDLPgLbgZZOBBnA
 
 =head2 ncbi_gene
 

@@ -103,9 +103,10 @@ ISDB provides the location of integration splice junctions in [_zero-origin, int
 
 # Integration Summary
 
-The _integration summary_ report contains a row for each integration _event_ in
+The _integration summary_ report contains a row for each gene integration _event_ in
 the database, along with that event's _clonal multiplicity_ as reported by the
-source.
+source.  Note that integrations into locations covered by multiple genes (such
+as two in opposite orientations) will be reported once per gene.
 
 | column                     | type                 | example    |
 |----------------------------+----------------------+------------|
@@ -115,7 +116,7 @@ source.
 | `gene`                     | text                 | `SPG11`    |
 | `landmark`                 | text                 | `chr5`     |
 | `location`                 | non-negative integer | `44642671` |
-| `orientation_in_reference` | orientation          | `F`        |
+| `orientation_in_landmark`  | orientation          | `F`        |
 | `orientation_in_gene`      | orientation          | `R`        |
 | `multiplicity`             | non-negative integer | `1`        |
 
@@ -186,7 +187,9 @@ The _total number of independent observations_ of integrations into this gene. T
   coordinates and determined without using patch scaffolds (fix or novel) from
   patch releases.  This provides portability and longevity of integration sites
   and makes analysis simpler.  When a new major assembly is released, lifting
-  over coordinates will be easier without the use of patch scaffolds.
+  over coordinates will be easier without the use of patch scaffolds.  Note
+  that patch *releases* of the GRCh38 assembly are fine, as long as patch
+  *scaffolds* are not consulted when determining IS locations.
 
 * Locations must number the space between bases (interbase) and start from 0,
   to the left of the first base.

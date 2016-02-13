@@ -68,39 +68,24 @@ __PACKAGE__->set_primary_key("ncbi_gene_id");
 
 =head1 RELATIONS
 
-=head2 aliases
+=head2 locations
 
 Type: has_many
 
-Related object: L<ISDB::Schema::Result::NCBIGeneAlias>
+Related object: L<ISDB::Schema::Result::NCBIGeneLocation>
 
 =cut
 
 __PACKAGE__->has_many(
-  "aliases",
-  "ISDB::Schema::Result::NCBIGeneAlias",
-  { "foreign.ncbi_gene_id" => "self.ncbi_gene_id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-=head2 integrations
-
-Type: has_many
-
-Related object: L<ISDB::Schema::Result::Integration>
-
-=cut
-
-__PACKAGE__->has_many(
-  "integrations",
-  "ISDB::Schema::Result::Integration",
+  "locations",
+  "ISDB::Schema::Result::NCBIGeneLocation",
   { "foreign.ncbi_gene_id" => "self.ncbi_gene_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-21 15:04:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:p15tTjrmRkEIWHu2+1yPpg
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-02-11 16:34:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hFGbqURkx777LHRrTFHhFQ
 
 use URI;
 

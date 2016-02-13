@@ -9,4 +9,6 @@ createdb $dbname -E UTF-8
 $psql < $isdb/schema/tables.sql
 $psql < $isdb/schema/views.sql
 $psql < $isdb/schema/acl.sql
-$isdb/bin/load-ncbi-genes <(gunzip -qc $isdb/schema/data/Homo_sapiens.gene_info.gz)
+$isdb/bin/load-genes \
+    --gff <(gunzip -qc $isdb/schema/data/ref_GRCh38.p2_top_level.gff3.gz) \
+    --chrmap $isdb/schema/data/chr_accessions_GRCh38.p2
