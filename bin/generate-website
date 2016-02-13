@@ -32,6 +32,9 @@ echo "Caching PubMed info"
 mkdir -p $base/cache/
 $bin/cache-pubmed-info > $base/cache/pubmed.json
 
+echo "Caching current Known Issues"
+$bin/cache-known-issues > $base/cache/issues.json
+
 echo "Rendering template"
 $bin/fill-template --output=$output --find-exports=$exports $base/web/index.tt
 

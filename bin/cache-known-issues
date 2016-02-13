@@ -1,0 +1,44 @@
+#!/usr/bin/env perl
+use 5.010;
+use strict;
+use warnings;
+use utf8;
+use open qw< :std :encoding(UTF-8) >;
+use FindBin qw< $Bin >;
+use lib "$Bin/../lib";
+use LWP::UserAgent;
+use LWP::Protocol::Net::Curl;
+use JSON::MaybeXS;
+use Config::Any;
+
+# This script requires you to do a brief dance to get a scoped
+# basic auth token for Trello with your own permissions, and then
+# put your credentials into a config file.
+#
+# To get your public key:
+#   visit https://trello.com/app-key
+# To get your app token:
+#   visit https://trello.com/1/authorize?key=YOUR_PUBLIC_KEY&name=cache-known-isuses&response_type=token&scope=read&expiration=never
+# Put the credentials in the "issues_local.{yaml,conf,xml,json}" as top level items called
+# "public_key" and "app_token" respectively.  Then put a Trello list ID in the
+# top level item "list_id".
+
+my (undef, $auth) = %{ (Config::Any->load_stems({stems => ['issues_local'], use_ext => 1}))->[0] };
+my $ua = LWP::UserAgent->new;
+my $key = $auth->{public_key};
+my $token = $auth->{app_token};
+
+my $url = "https://api.trello.com/1/lists/$auth->{list_id}/cards?key=$key&token=$token";
+my $res = $ua->get($url);
+
+if ($res->is_success) {
+    my $cards = decode_json($res->decoded_content);
+    my @out;
+    for my $card (@$cards) {
+        push @out, {
+            name => $card->{name},
+            url => $card->{shortUrl},
+        };
+    }
+    say JSON->new->utf8->pretty->canonical->encode(\@out);
+}
