@@ -23,7 +23,8 @@ use Config::Any;
 # "public_key" and "app_token" respectively.  Then put a Trello list ID in the
 # top level item "list_id".
 
-my (undef, $auth) = %{ (Config::Any->load_stems({stems => ['issues_local'], use_ext => 1}) || [])->[0] || {} };
+my $stem = "$Bin/../issues_local";
+my (undef, $auth) = %{ (Config::Any->load_stems({stems => [$stem], use_ext => 1}) || [])->[0] || {} };
 
 die "Can't locate config file at «$stem.{yaml,conf,json,xml}», at"
     unless $auth;
