@@ -100,7 +100,7 @@
           </tbody>
         </table>
       <% END %>
-      <h3>Known issues</h3>
+      <h3 id="issues">Known issues</h3>
       <p>
         ISDB is under active development.
         <% IF issues.size %>
