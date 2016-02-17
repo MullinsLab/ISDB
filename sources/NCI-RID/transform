@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e -o pipefail
 recs fromcsv -d $'\t' --header source.tsv \
+    | recs grep -v '{{pubmed_id}} == 25011556' \
     | recs xform -E transform.recs \
     | ./Ikeda-17262715/annotate-samples \
     | recs xform '{{sample/subject}} = join "/", {{sample/pubmed_id}}, {{sample/subject}} if {{sample/subject}}' \
