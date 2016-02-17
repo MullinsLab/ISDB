@@ -1,0 +1,20 @@
+{
+    "name": "Wagner-2014-Science",
+    "uri": "https://mullinslab.microbiol.washington.edu/publications/wagner_2014_science/",
+    "pubmed": "25011556",
+    "citation": {
+        "_type":    "@article",
+        "_citekey": "Wagner-2014-Science",
+        "author":   "Wagner, Thor A. and McLaughlin, Sherry and Garg, Kavita and Cheung, Charles Y. K. and Larsen, Brendan B. and Styrchak, Sheila and Huang, Hannah C. and Edlefsen, Paul T. and Mullins, James I. and Frenkel, Lisa M.",
+        "title":    "Proliferation of cells with HIV integrated into cancer genes contributes to persistent infection",
+        "journal":  "Science",
+        "volume":   "345",
+        "number":   "6196",
+        "pages":    "570-573",
+        "year":     "2014",
+        "issn":     "0036-8075",
+        "doi":      "10.1126/science.1256304",
+        "URL":      "http://science.sciencemag.org/content/345/6196/570",
+        "eprint":   "http://science.sciencemag.org/content/345/6196/570.full.pdf"
+    }
+}
