@@ -7,7 +7,8 @@ if [[ -z $1 ]]; then
     exit 1
 fi
 source=$1
-name=$(basename $1)
+[[ $source == . || $source == ./ ]] && source=$PWD
+name=$(basename $source)
 
 set -o nounset
 
