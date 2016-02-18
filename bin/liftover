@@ -29,7 +29,7 @@ fi
 recs fromcsv --header $input \
     | recs assert -v '{{info/source_line}}' \
     | recs grep '{{landmark}} and {{location}}' \
-    | recs eval 'join "\t", "chr$r->{landmark}", $r->{location}, $r->{location} + 1, $r->{info}{source_line}' \
+    | recs eval 'join "\t", $r->{landmark}, $r->{location}, $r->{location} + 1, $r->{info}{source_line}' \
     | uniq \
     | $liftOver \
         -minMatch=1 \
@@ -43,5 +43,4 @@ recs fromcsv --header $input \
         --operation '@$d{qw[ landmark location ]} = @$i{qw[ landmark location ]}' \
         info/source_line \
         info/source_line \
-        <(recs fromcsv --header $input) \
-    | recs xform '{{landmark}} =~ s/^chr//'
+        <(recs fromcsv --header $input)
