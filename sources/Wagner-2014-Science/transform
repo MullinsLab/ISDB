@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e -o pipefail
+recs fromcsv --header --fk file "$@" \
+    | recs grep '{{CHROMOSOMAL}}' \
+    | recs xform -E transform.recs \
+    | ./tocsv

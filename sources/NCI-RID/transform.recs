@@ -18,7 +18,6 @@ my $t = {
 
 # Named captures get copied into the sample document.
 my %sample_extractor = (
-    25011556 => qr/^(?<subject>[BLR]1)_/i,                                  # Wagner, et al.
     24968937 => qr/^(?<subject>PT[1-5])(?:_Y(?<years_on_art>[\d.]+))?/i,    # Maldarelli, et al.
     12843741 => qr/^(?<clone>(?:AL|AD|C)-\d+)_/,                            # Mack, et al., and also handled specially below
     15163705 => qr/^(?<subject>\d+)/,                                       # Han, et al.
@@ -78,14 +77,14 @@ if ($t->{sample}{pubmed_id} == 12843741 and $t->{sample}{clone}) {
 $t->{ltr} = { "5LTR" => "5p", "3LTR" => "3p" }->{ $r->{LTR} }
     if $r->{LTR};
 
-$t->{landmark} = uc $r->{chr} =~ s/^chr//ir;
+$t->{landmark} = uc($r->{chr}) =~ s/^CHR/chr/ir;
 $t->{location} = $r->{insert_position};
 
 # We don't know which unplaced scaffold it is, so we can't use a RefSeq
 # accession for "chrUn" data.  Luckily, the number of affected rows is in the
 # single digits.
 delete $t->{landmark}
-    if $t->{landmark} eq "UN";
+    if $t->{landmark} eq "chrUN";
 
 delete $t->{location}
     if not $t->{landmark};
