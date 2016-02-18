@@ -1,0 +1,40 @@
+# This is a recs <https://recs.pl> snippet for use with `recs xform`.
+# vim: set ft=perl :
+use strict;
+use warnings;
+use 5.014;
+our $line;  # from recs
+
+my $t = {
+    source_name => "Wagner-2014-Science",
+    sample => {
+        subject      => "25011556/$r->{PARTICIPANT}",
+        pubmed_id    => 25011556,
+        pcr          => $r->{"PCR ID"},
+        years_on_art => $r->{"SAMPLING TIME INTERVAL (YEARS ON ART)"},
+    },
+    info => {
+        source_file => $r->{file},
+        source_line => $line + 1,   # header isn't counted
+    },
+};
+
+# Method used was ISLA, which always goes from 3p LTR
+$t->{ltr} = "3p";
+
+($t->{landmark}, $t->{location}) =
+    $r->{"CHROMOSOMAL COORDINATES (hg19)"} =~ /^(chr(?:[1-9]|1[0-9]|2[0-2]|[XY]|MT)):(\d+)/;
+
+$t->{orientation_in_landmark} = $r->{STRAND} =~ y/+-/FR/r;
+
+# Convert location to zero-origin, interbase coordinates.  The reported
+# location is base-numbered and indicates the first chromosomal base outside of
+# the 3' HIV LTR.
+$t->{location}--
+    if $t->{orientation_in_landmark} eq "R";
+
+my ($hiv, $human) = @$r{"HIV 3'LTR JUNCTION SEQUENCE*", "HUMAN JUNCTION SEQUENCE"};
+$t->{sequence}          = $hiv . $human;
+$t->{sequence_junction} = length $hiv;
+
+push_output($t);
