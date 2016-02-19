@@ -21,6 +21,7 @@ my ($opt, $usage) = describe_options(
     [],
     [ 'output|o=s',     "writes the filled template to the given directory as template.html" ],
     [ 'find-exports=s', "looks for exports in the given directory and provides metadata to the template" ],
+    [ 'var=s@',         "define a template variable like «--var foo=bar» for simple values or «--var foo\@bar.json» to read JSON for complex values" ],
     [ 'help',           "print usage message and exit" ],
 );
 
@@ -60,5 +61,13 @@ $args->{issues} = decode_json( $issues_cache->slurp_raw )
     if $issues_cache->exists;
 
 $args->{config} = ISDB::Config->new->conf->{web};
+
+# Read in passed template vars
+for my $var (@{ $opt->var || [] }) {
+    my ($name, $op, $value) = split /([=@])/, $var, 2;
+    $value = decode_json( path($value)->slurp_raw )
+        if $op eq "@";
+    $args->{$name} = $value;
+}
 
 print { $output } ISDB::Template->fill($source, $args);
