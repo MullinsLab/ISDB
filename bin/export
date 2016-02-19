@@ -11,18 +11,33 @@ use Path::Tiny;
 use List::Util qw< first >;
 use ISDB::Exporter;
 
+my $default_exporter = ISDB::Exporter->new( output_path => Path::Tiny->tempdir );
+
 my ($opt, $usage) = describe_options(
     '%c [--compare] <output-directory>',
     [],
     [ "Exports all datasets known by ISDB::Exporter into the given output" ],
     [ "directory.  Export metadata sidecar files are also written." ],
     [],
-    [ 'compare',    "compare output to any existing output and only overwrite if the export has changed" ],
-    [ 'help',       "print usage message and exit" ],
+    [ "Give one or more --dataset options to prevent the default of --all-datasets." ],
+    [],
+    [ "Known datasets are:" ], (map {
+    [ "   • $_->{name}" ]
+    } @{ $default_exporter->exports }),
+    [],
+    [ 'all-datasets', "export all known datasets; this is the default", { default => 1 } ],
+    [ 'dataset=s@',   "export only the named dataset(s); may be specified more than once" ],
+    [ 'compare',      "compare output to any existing output and only overwrite if the export has changed" ],
+    [ 'help',         "print usage message and exit" ],
 );
 
 print($usage->text), exit(!$opt->help)
     if $opt->help or not @ARGV;
+
+my %datasets = map { $_ => 1 }
+    $opt->dataset
+        ? @{ $opt->dataset }
+        : map { $_->{name} } @{ $default_exporter->exports };
 
 my $tmp    = $opt->compare ? Path::Tiny->tempdir : undef;
 my $output = path(shift);
@@ -30,6 +45,7 @@ $output->mkpath unless $output->exists;
 
 my $exporter = ISDB::Exporter->new(
     output_path => $tmp || $output,
+    exports     => [ grep { $datasets{ $_->{name} } } @{ $default_exporter->exports } ],
 );
 
 for (@{ $exporter->exports }) {
