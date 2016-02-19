@@ -1,0 +1,66 @@
+#!/usr/bin/env perl
+use 5.010;
+use strict;
+use warnings;
+use utf8;
+use open qw< :std :encoding(UTF-8) >;
+use FindBin qw< $Bin >;
+use lib "$Bin/../lib";
+use Path::Tiny;
+use ISDB::Schema;
+
+my $schema       = ISDB::Schema->connect_default;
+my $integrations = $schema->resultset('IntegrationSummary')->search(
+    {
+        landmark => { '!=', undef },
+        location => { '!=', undef },
+        subject  => { '!=', undef },
+    },
+    {
+        order_by => ['landmark', 'location', 'source_name'],
+    }
+);
+
+my $most_interesting = $schema
+    ->resultset('SummaryByGene')
+    ->with_interestingness
+    ->search_rs({}, { rows => 1 })
+    ->first;
+
+my $most_interesting_loc = $most_interesting
+    ->related_resultset('gene_locations')
+    ->first;
+
+my $position = sprintf "%s:%d-%d",
+    $most_interesting_loc->landmark,
+    $most_interesting_loc->gene_start + 1,
+    $most_interesting_loc->gene_end;
+
+say <<HEADER;
+# Position of most "interesting" integrated gene: @{[ $most_interesting->gene ]}
+browser position $position
+browser hide all
+browser full refGene
+browser full ISDB
+track name=ISDB description="Integration Site Database" visibility=full colorByStrand="0,0,255 255,0,0" useScore=0 db=hg38 group=genes priority=0
+HEADER
+while (my $is = $integrations->next) {
+    say join "\t",
+        $is->landmark,
+        $is->location,
+        $is->location + 1,
+        join("/", $is->source, $is->subject) =~ s/\s+/_/gr,
+        score($is->multiplicity),
+        ($is->orientation_in_landmark // 'U') =~ y/UFR/.+-/r;
+}
+
+sub score {
+    my $multiplicity = shift;
+
+    state $max_multiplicity = $integrations->search({}, {
+        columns  => [{ max => { MAX => 'multiplicity' } }],
+        order_by => [],
+    })->first->get_column("max");
+
+    return int(1000 / $max_multiplicity * $multiplicity);
+}

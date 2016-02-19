@@ -12,6 +12,7 @@ requires 'Getopt::Long::Descriptive';
 requires 'Hash::Fold', '0.1.2';
 requires 'Hash::Merge';
 requires 'JSON::MaybeXS';
+requires 'List::Util', '1.29';
 requires 'LWP::UserAgent';
 requires 'LWP::Protocol::Net::Curl';
 requires 'Moo';

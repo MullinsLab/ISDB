@@ -50,4 +50,4 @@ die "Error talking to PubMed: ", $response->status_line, "\n"
     unless $response->is_success;
 
 my $json = decode_json($response->decoded_content);
-say JSON->new->utf8->pretty->canonical->encode($json->{result});
+say JSON->new->pretty->canonical->encode($json->{result});

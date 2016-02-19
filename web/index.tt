@@ -122,6 +122,15 @@
       </p>
     </div>
     <div class="col-lg-4 col-md-5 col-sm-12">
+      <h2>Genome Browser</h2>
+      <p>
+        If you’re interested in a specific region of the human genome, such as
+        a gene, the <a href="https://genome.ucsc.edu">UCSC Genome Browser</a>
+        is a great way to start visualizing the ISDB data.  We provide a custom
+        track which you can
+        <a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgt.customText=<% config.base_url | uri | html %>exports/latest/tracks/isdb.bed"
+           id="load-custom-track">load into the genome browser</a>.
+      </p>
       <h2>Download datasets</h2>
       <% FOR dataset IN exports %>
         <h3><% dataset.name %></h3>
@@ -150,7 +159,7 @@
         More documentation for these datasets is available in the
         <a href="doc/Manual.html">work-in-progress manual</a>.
       </p>
-      <% IF show_database_connection %>
+      <% IF config.show_database_connection %>
         <h2>Access the database</h2>
         <p>
           If you’re handy with code, you may be able to connect to the database

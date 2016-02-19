@@ -100,4 +100,19 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 gene_locations
+
+Type: has_many
+
+Related object: L<ISDB::Schema::Result::NCBIGeneLocation>
+
+=cut
+
+__PACKAGE__->has_many(
+  "gene_locations",
+  "ISDB::Schema::Result::NCBIGeneLocation",
+  { "foreign.ncbi_gene_id" => "self.ncbi_gene_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 1;

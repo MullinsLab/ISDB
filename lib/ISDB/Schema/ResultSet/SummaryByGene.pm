@@ -22,4 +22,26 @@ sub top_N_by_column {
     );
 }
 
+sub with_interestingness {
+    my $self = shift;
+    my $me   = $self->current_source_alias;
+    return $self->search_rs(
+        {
+            gene     => { '!=', undef },
+            subjects => { '!=', 0 },
+        },
+        {
+            '+columns'  => [{
+                interestingness => \["$me.total_in_gene / $me.unique_sites / $me.subjects AS interestingness"],
+            }],
+            order_by    => [
+                'interestingness',
+                'subjects      DESC',
+                'unique_sites  DESC',
+                'total_in_gene DESC',
+            ],
+        }
+    );
+}
+
 1;

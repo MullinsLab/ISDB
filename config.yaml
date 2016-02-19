@@ -1,0 +1,19 @@
+# This is an example config file documenting what options are available.  To
+# change values, you should make a copy of this file as config_local.yaml and
+# then edit it.
+---
+web:
+  # The fully-qualified, internet-accessible location of where you plan to
+  # publish the ISDB website.
+  base_url: ""
+
+  # Should the active database connection info be shown in the ISDB web page
+  # for users to connect to?
+  show_database_connection: 1
+
+issues:
+  # Embed a Trello list into the web page to show known issues with the ISDB.
+  # See the top of bin/cache-known-issues for more information.
+  public_key: ~
+  app_token: ~
+  list_id: ~

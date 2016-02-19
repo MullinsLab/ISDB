@@ -28,6 +28,10 @@ fi
 echo "Exporting data"
 $bin/export $export_args $exports
 
+echo "Exporting BED for Genome Browser"
+mkdir -p $exports/tracks
+$bin/export-bed > $exports/tracks/isdb.bed
+
 echo "Caching PubMed info"
 mkdir -p $base/cache/
 $bin/cache-pubmed-info > $base/cache/pubmed.json
