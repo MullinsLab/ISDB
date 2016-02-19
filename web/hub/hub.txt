@@ -1,0 +1,5 @@
+hub hub
+shortLabel ISDB Hub
+longLabel Integration Site Database genome browser hub
+genomesFile genomes.txt
+email mullspt@uw.edu

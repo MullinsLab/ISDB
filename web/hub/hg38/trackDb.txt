@@ -1,0 +1,10 @@
+<% FOR track IN tracks %>
+track <% track.name %>
+bigDataUrl <% track.name %>.bigBed
+shortLabel <% track.label %>
+longLabel HIV-1 proviral integration sites from the <% track.source_name %> source in the ISDB
+type bigBed 3 .
+visibility pack
+colorByStrand blue red
+noScoreFilter on
+<% END %>
