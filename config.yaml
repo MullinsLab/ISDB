@@ -1,0 +1,10 @@
+# This is an example config file documenting what options are available.  To
+# change values, you should make a copy of this file as config_local.yaml and
+# then edit it.
+---
+issues:
+  # Embed a Trello list into the web page to show known issues with the ISDB.
+  # See the top of bin/cache-known-issues for more information.
+  public_key: ~
+  app_token: ~
+  list_id: ~

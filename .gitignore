@@ -1,4 +1,4 @@
 /cache
 /bin/liftOver.Darwin
 /bin/liftOver.Linux
-/issues_local.*
+/config_local.*

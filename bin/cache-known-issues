@@ -9,7 +9,7 @@ use lib "$Bin/../lib";
 use LWP::UserAgent;
 use LWP::Protocol::Net::Curl;
 use JSON::MaybeXS;
-use Config::Any;
+use ISDB::Config;
 
 # This script requires you to do a brief dance to get a scoped
 # basic auth token for Trello with your own permissions, and then
@@ -19,15 +19,12 @@ use Config::Any;
 #   visit https://trello.com/app-key
 # To get your app token:
 #   visit https://trello.com/1/authorize?key=YOUR_PUBLIC_KEY&name=cache-known-isuses&response_type=token&scope=read&expiration=never
-# Put the credentials in the "issues_local.{yaml,conf,xml,json}" as top level items called
-# "public_key" and "app_token" respectively.  Then put a Trello list ID in the
-# top level item "list_id".
+# Put the credentials in the "config_local.{yaml,conf,xml,json}" under the
+# top-level item "issues", as items called "public_key" and "app_token"
+# respectively.  Then put a Trello list ID in another item "list_id", also
+# under "issues".
 
-my $stem = "$Bin/../issues_local";
-my (undef, $auth) = %{ (Config::Any->load_stems({stems => [$stem], use_ext => 1}) || [])->[0] || {} };
-
-die "Can't locate config file at «$stem.{yaml,conf,json,xml}», at"
-    unless $auth;
+my $auth = ISDB::Config->new->conf->{issues};
 
 my $ua = LWP::UserAgent->new;
 my $key = $auth->{public_key};
