@@ -51,7 +51,8 @@ while (my $is = $integrations->next) {
         $is->location + 1,
         join("/", $is->source, $is->subject) =~ s/\s+/_/gr,
         score($is->multiplicity),
-        ($is->orientation_in_landmark // 'U') =~ y/UFR/.+-/r;
+        ($is->orientation_in_landmark // 'U') =~ y/UFR/.+-/r,
+        ($is->location) x 2;    # Thick start and end
 }
 
 sub score {
