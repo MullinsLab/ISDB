@@ -150,7 +150,7 @@
         More documentation for these datasets is available in the
         <a href="doc/Manual.html">work-in-progress manual</a>.
       </p>
-      <% IF show_database_connection %>
+      <% IF config.show_database_connection %>
         <h2>Access the database</h2>
         <p>
           If you’re handy with code, you may be able to connect to the database
