@@ -45,5 +45,5 @@ if ($res->is_success) {
             url => $card->{shortUrl},
         };
     }
-    say JSON->new->utf8->pretty->canonical->encode(\@out);
+    say JSON->new->pretty->canonical->encode(\@out);
 }

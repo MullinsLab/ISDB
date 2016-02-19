@@ -54,11 +54,11 @@ if ($opt->find_exports) {
 }
 
 my $pubmed_cache = path($Bin)->parent->child("cache", "pubmed.json");
-$args->{pubmed_info} = decode_json( $pubmed_cache->slurp_utf8 )
+$args->{pubmed_info} = decode_json( $pubmed_cache->slurp_raw )
     if $pubmed_cache->exists;
 
 my $issues_cache = path($Bin)->parent->child("cache", "issues.json");
-$args->{issues} = decode_json( $issues_cache->slurp_utf8 )
+$args->{issues} = decode_json( $issues_cache->slurp_raw )
     if $issues_cache->exists;
 
 $args->{show_database_connection} = $opt->show_database_connection;
