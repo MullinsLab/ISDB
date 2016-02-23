@@ -166,6 +166,7 @@
           directly as a read-only user.  Try:
         </p>
         <table class="table table-condensed">
+          <tr><th>Type</th><td>PostgreSQL</td></tr>
           <tr><th>Host</th><td><code><% isdb.storage.dbh.pg_host %></code></td></tr>
           <tr><th>User</th><td><code><% isdb.storage.dbh.pg_user %></code></td></tr>
           <tr><th>Database name</th><td><code><% isdb.storage.dbh.pg_db %></code></td></tr>
