@@ -3,10 +3,11 @@ set -e -o pipefail
 isdb=$(dirname $0)/..
 
 if [[ -z $1 ]]; then
-    echo "usage: $(basename $0) source-name|source-path"
+    echo "usage: $(basename $0) source-name|source-path [additional opts for load-integrations]"
     exit 1
 fi
 source=$1
+shift
 [[ $source == . || $source == ./ ]] && source=$PWD
 name=$(basename $source)
 
@@ -23,4 +24,4 @@ fi
 
 $isdb/bin/drop-source $name
 $isdb/bin/create-source $source/metadata.json
-$isdb/bin/load-integrations $source/transformed.csv
+$isdb/bin/load-integrations "$@" $source/transformed.csv
