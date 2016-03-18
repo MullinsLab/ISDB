@@ -12,6 +12,7 @@ my $t = {
         pubmed_id    => 25011556,
         pcr          => $r->{"PCR ID"},
         years_on_art => $r->{"SAMPLING TIME INTERVAL (YEARS ON ART)"},
+        integration_environment => "in vivo",
     },
     info => {
         source_file => $r->{file},
