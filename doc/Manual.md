@@ -21,11 +21,11 @@ The ISDB's representation of data requires some careful understanding of how rev
 
 HIV starts as single-stranded RNA diagramed like so:
 
-     HIV  5ʹLTR~GAG~~~ENV~3ʹLTR
+     HIV  5ʹ R-U5~GAG~~~ENV~U3-R 3ʹ
 
-RNA is single-stranded, so when discussing the HIV genome we naturally label the two long terminal repeat (LTR) regions as the _5ʹ LTR_ and _3ʹ LTR_.
-
-When reverse transcribed into double-stranded DNA, it looks like:
+The R, U5, and U3 regions form the building blocks of the two long terminal
+repeat (LTR) regions (composed of U3-R-U5) in the double-stranded DNA produced
+by reverse transcriptase:
 
      HIV  5ʹLTR~GAG~~~ENV~3ʹLTR
           5ʹLTR~GAG~~~ENV~3ʹLTR (complementary strand)
