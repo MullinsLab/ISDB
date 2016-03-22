@@ -22,6 +22,6 @@ if ! test -d $source; then
     exit 2
 fi
 
-$isdb/bin/drop-source $name
+$isdb/bin/drop-source $source/metadata.json
 $isdb/bin/create-source $source/metadata.json
 $isdb/bin/load-integrations "$@" $source/transformed.csv

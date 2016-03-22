@@ -6,11 +6,21 @@ use open qw< :std :encoding(UTF-8) >;
 use FindBin qw< $Bin $Script >;
 use lib "$Bin/../lib";
 use ISDB::Schema;
+use JSON::MaybeXS;
+use Path::Tiny;
 
 $|++;
 
-my $source = shift
-    or die "usage: $Script source-name\n";
+my $source_metadata = shift
+    or die "usage: $Script source-metadata.json\n";
+
+$source_metadata = path($source_metadata);
+
+die "No such file $source_metadata\n"
+    unless $source_metadata->is_file;
+
+my $source = (decode_json($source_metadata->slurp_raw) || {})->{name}
+    or die "Cannot read source name from $source_metadata.  Is it JSON?\n";
 
 print "Dropping all data from source $source... ";
 
