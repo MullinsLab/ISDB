@@ -39,7 +39,9 @@
       <h3>Sources <small>n=<% isdb.resultset("Source").count %></small></h3>
       <p>
         The database contains
-        <strong><% isdb.resultset("Integration").count | commafy %> observations</strong> across
+        <strong><% isdb.resultset("Integration").in_vivo.count | commafy %> <em>in vivo</em></strong> and
+        <strong><% isdb.resultset("Integration").in_vitro.count | commafy %> <em>in vitro</em> observations</strong>
+        across
         <strong><% isdb.resultset("IntegrationGene").count_distinct_genes | commafy %> genes</strong>
         from the following sources:
       </p>

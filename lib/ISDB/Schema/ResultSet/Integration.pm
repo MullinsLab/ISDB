@@ -42,4 +42,16 @@ sub publications {
     );
 }
 
+sub in_vivo {
+    my $self = shift;
+    my $me   = $self->current_source_alias;
+    return $self->search_rs( \["$me.sample->>'integration_environment' IN ('in vivo', '')"] );
+}
+
+sub in_vitro {
+    my $self = shift;
+    my $me   = $self->current_source_alias;
+    return $self->search_rs( \["$me.sample->>'integration_environment' IN ('in vitro')"] );
+}
+
 1;
