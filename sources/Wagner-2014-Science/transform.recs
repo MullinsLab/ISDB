@@ -8,7 +8,7 @@ our $line;  # from recs
 my $t = {
     source_name => "Wagner-2014-Science",
     sample => {
-        subject      => "25011556/$r->{PARTICIPANT}",
+        subject      => "25011556_$r->{PARTICIPANT}",
         pubmed_id    => 25011556,
         pcr          => $r->{"PCR ID"},
         years_on_art => $r->{"SAMPLING TIME INTERVAL (YEARS ON ART)"},
