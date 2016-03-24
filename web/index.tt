@@ -12,6 +12,7 @@
     body { padding-bottom: 10em }
     .text-lg { font-size: 1.2em }
     .help-tip { padding: 0.5em 0.7em }
+    .col > h1:first-child, .col > h2:first-child, .col > h3:first-child, .col > h4:first-child { margin-top: 0 }
   </style>
 </head>
 <body class="container">
@@ -123,7 +124,7 @@
         maintain high quality data ready to be used in analysis.
       </p>
     </div>
-    <div class="col-md-5 col-sm-12">
+    <div class="col col-md-5 col-sm-12">
       <h2>Genome Browser</h2>
       <p>
         If you’re interested in a specific region of the human genome, such as
