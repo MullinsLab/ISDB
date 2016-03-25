@@ -33,6 +33,7 @@ $t->{ltr} = $r->{sequence_name} =~ /-Avr-/ ?  "5p" :
             $r->{sequence_name} =~ /-Mse-/ ?  "3p" :
                                              undef ;
 
+$t->{landmark} = $r->{chr};
 $t->{orientation_in_landmark} = $r->{strand} =~ y/+-/FR/r;
 
 # The start and end locations indicate the first and last chromosomal base that
