@@ -12,7 +12,7 @@ use ISDB::Schema;
 my $schema       = ISDB::Schema->connect_default;
 my $integrations = $schema->resultset('IntegrationSummary')->search(
     {
-        landmark => { '!=', undef },
+        landmark => { 'LIKE', 'chr%' },
         location => { '!=', undef },
         subject  => { '!=', undef },
     },
