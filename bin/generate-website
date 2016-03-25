@@ -4,8 +4,10 @@ bin=$(dirname $0)
 base=$bin/..
 
 function usage() {
-    echo "usage: $(basename $0) [--compare] <output-directory>"
+    echo "usage: $(basename $0) [--compare] [--freeze-as name] <output-directory>"
 }
+
+version_name=latest
 
 for arg; do
     case "$arg" in
@@ -15,15 +17,33 @@ for arg; do
         --compare)
             export_args="--compare"
             shift;;
+        --freeze-as)
+            version_name="$2"
+            version_args="--frozen"
+            shift 2;;
     esac
 done
 
 output=$1
-exports=$output/exports/latest/
 if [[ -z $output ]]; then
     usage
     exit 1
 fi
+
+if [[ $version_name == latest ]]; then
+    template_args="--find-versions=$output/frozen"
+else
+    output=$output/frozen/$version_name
+fi
+
+exports=$output/exports/
+
+mkdir -p $output
+
+echo "Output to: $output"
+
+echo "Writing version metadata: $version_name"
+$bin/version-metadata --name $version_name $version_args > $output/version.json
 
 echo "Exporting data"
 $bin/export $export_args $exports
@@ -40,7 +60,12 @@ echo "Caching current Known Issues"
 $bin/cache-known-issues > $base/cache/issues.json
 
 echo "Rendering template"
-$bin/fill-template --output=$output --find-exports=$exports $base/web/index.tt
+$bin/fill-template \
+    --output=$output \
+    --find-exports=$exports \
+    $template_args \
+    --var version@$output/version.json \
+    $base/web/index.tt
 
 echo "Generating documentation"
 if ! $bin/generate-documentation $output; then

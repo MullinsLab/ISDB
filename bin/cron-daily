@@ -19,8 +19,6 @@ for arg; do
 done
 
 output=$1
-exports=$output/exports
-monthly=$output/exports/monthly/${2:-$(date +%Y-%m)}
 
 if [[ -z $output ]]; then
     usage
@@ -29,14 +27,6 @@ fi
 
 echo "→ Updating website"
 $bin/generate-website --compare $output
-
-if [[ -d $monthly ]]; then
-    echo "→ Monthly archive already exists: $monthly"
-else
-    echo "→ Archiving monthly copy to: $monthly"
-    mkdir -p $monthly
-    rsync -av $exports/latest/ $monthly/
-fi
 
 if [[ $commit == yes ]]; then
     echo "→ Checking for changes to commit"

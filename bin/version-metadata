@@ -1,0 +1,35 @@
+#!/usr/bin/env perl
+use 5.010;
+use strict;
+use warnings;
+use utf8;
+use open qw< :std :encoding(UTF-8) >;
+use FindBin qw< $Bin >;
+use lib "$Bin/../lib";
+use Getopt::Long::Descriptive;
+use JSON::MaybeXS;
+use DateTime;
+use DateTime::Format::RFC3339;
+use Encode qw< decode_utf8 >;
+
+my ($opt, $usage) = describe_options(
+    '%c --name ... [--frozen]',
+    [],
+    [ "Outputs a version metadata document (as JSON) for the given" ],
+    [ "options and flags." ],
+    [],
+    [ 'name=s',    "Version name as a freeform string.  Required.",    { required => 1 } ],
+    [ 'frozen!',   "Declares this version frozen.  False by default.", { default  => 0 } ],
+    [ 'help',      "Print usage message and exit" ],
+);
+
+print($usage->text), exit(!$opt->help)
+    if $opt->help;
+
+my $metadata = {
+    name      => decode_utf8($opt->name),
+    frozen    => ($opt->frozen ? JSON->true : JSON->false),
+    timestamp => DateTime->now( formatter => DateTime::Format::RFC3339->new ) . "",
+};
+
+print JSON->new->pretty->canonical->encode($metadata);

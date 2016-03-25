@@ -21,14 +21,15 @@ my ($opt, $usage) = describe_options(
     [],
     [ 'output|o=s',     "writes the filled template to the given directory as template.html" ],
     [ 'find-exports=s', "looks for exports in the given directory and provides metadata to the template" ],
+    [ 'find-versions=s',"looks for all version.json files underneath the given directory and provides metadata to the template" ],
     [ 'var=s@',         "define a template variable like «--var foo=bar» for simple values or «--var foo\@bar.json» to read JSON for complex values" ],
     [ 'help',           "print usage message and exit" ],
 );
 
 print($usage->text), exit(!$opt->help)
     if $opt->help or not @ARGV;
-die "--find-exports requires the use of --output\n"
-    if $opt->find_exports and not $opt->output;
+die "--find-exports and --find-versions require the use of --output\n"
+    if ($opt->find_exports or $opt->find_versions) and not $opt->output;
 
 my $args   = {};
 my $source = shift;
@@ -50,6 +51,19 @@ if ($opt->find_exports) {
         }
     }
     $args->{exports} = \@exports;
+}
+
+if ($opt->find_versions) {
+    my $versions = path($opt->find_versions)->visit(
+        sub {
+            my ($path, $versions) = @_;
+            $versions->{$path} = decode_json($path->slurp_raw)
+                if $path->is_file
+               and $path->basename eq "version.json";
+        },
+        { recurse => 1 },
+    );
+    $args->{versions} = [ values %$versions ];
 }
 
 my $pubmed_cache = path($Bin)->parent->child("cache", "pubmed.json");
