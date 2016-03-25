@@ -1,0 +1,60 @@
+# This is a recs <https://recs.pl> snippet for use with `recs xform`.
+# vim: set ft=perl :
+use strict;
+use warnings;
+use 5.014;
+our $line;  # from recs
+
+my $t = {
+    source_name => "Wang-2007",
+    sample => {
+        pubmed_id => 17545577,
+        tissue    => "Jurkat cells",
+        integration_environment => "in vitro",
+    },
+    info => {
+        source_line   => $line + 1,   # header isn't counted
+        sequence_name => $r->{sequence_name},
+    },
+};
+
+# From Supplemental Data S3:
+#   Two methods are used to recover the sites. In the Wang-VSVGgfp-Jurkat-454-Avr
+#   subset, a cocktail of enzymes (AvrII,SpeI,NheI) is used to digest DNA and
+#   sequencing is from the HIV U3 end, while in the Wang-VSVGgfp-Jurkat-454-Mse
+#   subset, the MSEI enzyme is used to digest DNA and sequencing is from the HIV U5
+#   end.
+#
+# Since the LTRs are composed of U3-R-U5, that makes Avr / U3 end as the 5' LTR
+# and Mse / U5 end as the 3' LTR.
+#
+# -trs, 24 March 2016 with concurrence from Jim
+$t->{ltr} = $r->{sequence_name} =~ /-Avr-/ ?  "5p" :
+            $r->{sequence_name} =~ /-Mse-/ ?  "3p" :
+                                             undef ;
+
+$t->{orientation_in_landmark} = $r->{strand} =~ y/+-/FR/r;
+
+# The start and end locations indicate the first and last chromosomal base that
+# was mapped.  Which HIV LTR was sequenced out of and the orientation of the
+# provirus in combination determine which side of the human sequence the
+# provirus was on.
+my %location_key = (
+    "5p-F" => "end",
+    "5p-R" => "start",
+    "3p-F" => "start",
+    "3p-R" => "end",
+);
+
+$t->{location} = $r->{ $location_key{ "$t->{ltr}-$t->{orientation_in_landmark}" } };
+
+# Convert to zero-origin, interbase coordinates from the reported base-numbered
+# location indicating the first chromosomal base outside of the indicated HIV
+# LTR.
+$t->{location} -= 1
+    if $t->{location}
+   and $t->{ltr}
+   and (   ($t->{ltr} eq "3p" and $t->{orientation_in_landmark} eq "F")
+        or ($t->{ltr} eq "5p" and $t->{orientation_in_landmark} eq "R"));
+
+push_output($t);

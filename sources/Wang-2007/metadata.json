@@ -1,0 +1,19 @@
+{
+    "name": "Wang-2007",
+    "uri": "http://genome.cshlp.org/content/17/8/1186",
+    "pubmed": 17545577,
+    "citation": {
+        "_type":    "@article",
+        "_citekey": "Wang-2007",
+        "author":   "Wang, Gary P. and Ciuffi, Angela and Leipzig, Jeremy and Berry, Charles C. and Bushman, Frederic D.", 
+        "title":    "HIV integration site selection: Analysis by massively parallel pyrosequencing reveals association with epigenetic modifications",
+        "journal":  "Genome Research",
+        "volume":   "17", 
+        "number":   "8", 
+        "pages":    "1186-1194", 
+        "year":     "2007", 
+        "doi":      "10.1101/gr.6286907", 
+        "URL":      "http://genome.cshlp.org/content/17/8/1186.abstract", 
+        "eprint":   "http://genome.cshlp.org/content/17/8/1186.full.pdf+html"
+    }
+}
