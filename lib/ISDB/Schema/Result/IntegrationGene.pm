@@ -43,6 +43,11 @@ __PACKAGE__->table("integration_genes");
   is_nullable: 1
   size: 255
 
+=head2 environment
+
+  data_type: 'integration_environment'
+  is_nullable: 1
+
 =head2 sample
 
   data_type: 'jsonb'
@@ -109,6 +114,8 @@ __PACKAGE__->table("integration_genes");
 __PACKAGE__->add_columns(
   "source_name",
   { accessor => "source", data_type => "varchar", is_nullable => 1, size => 255 },
+  "environment",
+  { data_type => "integration_environment", is_nullable => 1 },
   "sample",
   { data_type => "jsonb", is_nullable => 1 },
   "ltr",
@@ -136,8 +143,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-02-11 22:50:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:DpOwk79RRX7fIEbcY4ANwQ
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-04-06 11:16:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PjJ3vNy6WxpmthSCl3lPhw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

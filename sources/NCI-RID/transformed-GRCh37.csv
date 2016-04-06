@@ -1,4 +1,4 @@
-landmark,info/source_line,location,ltr,note,orientation_in_landmark,sample/original_id,sample/pubmed_id,sample/subject,sample/years_on_art,sample/clone,sample/tissue,sample/tissue_url,sample/disease,sample/genbank,sample/integration_environment,source_name
+landmark,info/source_line,location,ltr,note,orientation_in_landmark,sample/original_id,sample/pubmed_id,sample/subject,sample/years_on_art,sample/clone,sample/tissue,sample/tissue_url,sample/disease,sample/genbank,environment,source_name
 chr1,2,8448583,5p,,F,21,15163705,15163705_21,,,,,,,"in vivo",NCI-RID
 chr1,3,10034649,5p,,F,21,15163705,15163705_21,,,,,,,"in vivo",NCI-RID
 chr1,4,23891195,5p,,,149,15163705,15163705_149,,,,,,,"in vivo",NCI-RID

@@ -7,10 +7,10 @@ our $line;  # from recs
 
 my $t = {
     source_name => "NCI-RID",
+    environment => "in vivo", # default, overwritten by some sources below
     sample => {
         original_id => $r->{origin_id},
         pubmed_id   => $r->{pubmed_id},
-        integration_environment => "in vivo", # default, overwritten by some sources below
     },
     info => {
         source_line => $line + 1,   # header isn't counted
@@ -35,7 +35,7 @@ if (my $re = $sample_extractor{ $t->{sample}{pubmed_id} }) {
 # 23953889, Sherrill-Mix, et al.
 if ($t->{sample}{pubmed_id} == 23953889) {
     $t->{sample}{tissue} = "cell culture";
-    $t->{sample}{integration_environment} = "in vitro";
+    $t->{environment} = "in vitro";
 }
 
 # 12843741, Mack, et al.
@@ -59,7 +59,7 @@ if ($t->{sample}{pubmed_id} == 12843741 and $t->{sample}{clone}) {
     for (map { "C-$_" } 1 .. 3) {
         $clones{$_}{tissue}     = "OM-10 cell line";
         $clones{$_}{tissue_url} = "https://www.aidsreagent.org/pdfs/ds1319_011.pdf";
-        $clones{$_}{integration_environment} = "in vitro";
+        $clones{$_}{environment} = "in vitro";
     }
 
     # Disease
@@ -72,6 +72,9 @@ if ($t->{sample}{pubmed_id} == 12843741 and $t->{sample}{clone}) {
 
     # Copy properties on our IS record
     if (my $clone = $clones{ $t->{sample}{clone} }) {
+        $t->{environment} = delete $clone->{environment}
+            if $clone->{environment};
+
         $t->{sample}{$_} = $clone->{$_}
             for keys %$clone;
     }
