@@ -58,48 +58,52 @@
         order to incorporate changes and additions.
       </p>
 
-      <% counts_by_source = isdb.resultset("Integration").counts_by_source %>
-      <h3>Sources <small>n=<% isdb.resultset("Source").count %></small></h3>
+      <h3>Sources</h3>
       <p>
         The database contains
         <strong><% isdb.resultset("Integration").in_vivo.count | commafy %> <em>in vivo</em></strong> and
         <strong><% isdb.resultset("Integration").in_vitro.count | commafy %> <em>in vitro</em> observations</strong>
         across
         <strong><% isdb.resultset("IntegrationGene").count_distinct_genes | commafy %> genes</strong>
-        from the following sources:
+        from the following sources.
       </p>
-      <ul>
-        <% FOR row IN counts_by_source.all %>
-          <li>
-            <% IF row.source.document.uri %>
-              <a href="<% row.source.document.uri %>"><% row.source.name %></a>
-            <% ELSE %>
-              <% row.source.name %>
-            <% END %>
-            <span class="text-muted">n=<% row.get_column("count") | commafy %></span>
-            <% pubs = row.source.related_resultset('integrations').counts_by_publication %>
-            <% IF $(pubs.all) %>
-              <ul>
-                <% FOR pub IN pubs.all %>
-                  <li>
-                    <% id   = pub.get_column("pubmed_id") %>
-                    <% info = pubmed_info.$id %>
-                    <a href="https://www.ncbi.nlm.nih.gov/pubmed/<% id %>">
-                      <% IF info %>
-                        “<% info.title.substr(0, 40) %>…”
-                      <% ELSE %>
-                        PubMed ID: <% id %>
-                      <% END %>
-                    </a>
-                    <% IF info %>by <% info.sortfirstauthor %>, et al.<% END %>
-                    <span class="text-muted">n=<% pub.get_column("count") | commafy %></span>
-                  </li>
+
+      <h4><em>In vivo</em> datasets</h4>
+      <% INCLUDE 'source_list', resultset = isdb.resultset("Integration").in_vivo %>
+
+      <h4><em>In vitro</em> datasets</h4>
+      <% INCLUDE 'source_list', resultset = isdb.resultset("Integration").in_vitro %>
+
+      <% BLOCK source_list %>
+        <% counts = resultset.counts_by_source_and_publication %>
+        <ul>
+          <% FOR row IN counts.all %>
+            <li>
+              <% IF row.get_column("pubmed_id") %>
+                <% id   = row.get_column("pubmed_id") %>
+                <% info = pubmed_info.$id %>
+                <a href="https://www.ncbi.nlm.nih.gov/pubmed/<% id %>">
+                  <%- IF info -%>
+                    <% info.sortfirstauthor %>.
+                  <%- ELSE -%>
+                    PubMed ID: <% id %>
+                  <%- END -%>
+                </a>
+                <% IF info %>
+                  “<abbr title="“<% info.title %>”"><% info.title.substr(0, 40) %>…</abbr>”
                 <% END %>
-              </ul>
-            <% END %>
-          </li>
-        <% END %>
-      </ul>
+                via
+              <% END %>
+              <% IF row.source.document.uri %>
+                <a href="<% row.source.document.uri %>"><% row.source.name %></a>
+              <% ELSE %>
+                <% row.source.name %>
+              <% END %>
+              <span class="text-muted">n=<% row.get_column("count") | commafy %></span>
+            </li>
+          <% END %>
+        </ul>
+      <% END %>
 
       <% FOREACH query IN [["Subjects", "subjects"], ["Unique IS", "unique_sites"]] %>
         <h3>Top 5 Genes by # of <% query.0 %></h3>
