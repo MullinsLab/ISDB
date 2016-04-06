@@ -4,10 +4,11 @@ bin=$(dirname $0)
 base=$bin/..
 
 function usage() {
-    echo "usage: $(basename $0) [--compare] [--freeze-as name] <output-directory>"
+    echo "usage: $(basename $0) [--compare] [--freeze-as name] [--skip-exports] <output-directory>"
 }
 
 version_name=latest
+run_exports=yes
 
 for arg; do
     case "$arg" in
@@ -21,6 +22,12 @@ for arg; do
             version_name="$2"
             version_args="--frozen"
             shift 2;;
+        --skip-exports)
+            run_exports=no
+            shift;;
+        --)
+            shift;
+            break;;
     esac
 done
 
@@ -45,12 +52,14 @@ echo "Output to: $output"
 echo "Writing version metadata: $version_name"
 $bin/version-metadata --name $version_name $version_args > $output/version.json
 
-echo "Exporting data"
-$bin/export $export_args $exports
+if [[ $run_exports == yes ]]; then
+    echo "Exporting data"
+    $bin/export $export_args $exports
 
-echo "Exporting BED for Genome Browser"
-mkdir -p $exports/tracks
-$bin/export-bed > $exports/tracks/isdb.bed
+    echo "Exporting BED for Genome Browser"
+    mkdir -p $exports/tracks
+    $bin/export-bed > $exports/tracks/isdb.bed
+fi
 
 echo "Caching PubMed info"
 mkdir -p $base/cache/
