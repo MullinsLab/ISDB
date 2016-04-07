@@ -43,6 +43,11 @@ __PACKAGE__->table("integration_summary");
   is_nullable: 1
   size: 255
 
+=head2 environment
+
+  data_type: 'integration_environment'
+  is_nullable: 1
+
 =head2 subject
 
   data_type: 'text'
@@ -88,6 +93,8 @@ __PACKAGE__->table("integration_summary");
 __PACKAGE__->add_columns(
   "source_name",
   { accessor => "source", data_type => "varchar", is_nullable => 1, size => 255 },
+  "environment",
+  { data_type => "integration_environment", is_nullable => 1 },
   "subject",
   { data_type => "text", is_nullable => 1 },
   "ncbi_gene_id",
@@ -107,8 +114,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-02-11 22:50:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rQ5lBz9iDLPgLbgZZOBBnA
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-04-07 16:44:35
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5G8+HwlN6qJ4DEO09lt49A
 
 =head2 ncbi_gene
 

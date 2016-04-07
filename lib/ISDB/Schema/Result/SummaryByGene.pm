@@ -56,9 +56,19 @@ __PACKAGE__->table("summary_by_gene");
   data_type: 'bigint'
   is_nullable: 1
 
+=head2 proliferating_sites
+
+  data_type: 'bigint'
+  is_nullable: 1
+
 =head2 total_in_gene
 
   data_type: 'numeric'
+  is_nullable: 1
+
+=head2 environments
+
+  data_type: 'text'
   is_nullable: 1
 
 =cut
@@ -72,13 +82,17 @@ __PACKAGE__->add_columns(
   { data_type => "bigint", is_nullable => 1 },
   "unique_sites",
   { data_type => "bigint", is_nullable => 1 },
+  "proliferating_sites",
+  { data_type => "bigint", is_nullable => 1 },
   "total_in_gene",
   { data_type => "numeric", is_nullable => 1 },
+  "environments",
+  { data_type => "text", is_nullable => 1 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-22 10:03:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tLCiQUofF36AGkOiqN7Ryg
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-04-07 16:44:35
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ty0x04IFni+g1UFr/v+ocQ
 
 =head2 ncbi_gene
 
