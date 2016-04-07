@@ -42,6 +42,8 @@ CREATE VIEW summary_by_gene AS
            gene                                     AS gene,
            COUNT(DISTINCT subject)                  AS subjects,
            COUNT(DISTINCT (landmark, location))     AS unique_sites,
+           COUNT(DISTINCT (landmark, location))
+                 FILTER (WHERE multiplicity >= 2)   AS proliferating_sites,
            SUM(multiplicity)                        AS total_in_gene,
            STRING_AGG(DISTINCT environment, '/' ORDER BY environment)
                                                     AS environments
