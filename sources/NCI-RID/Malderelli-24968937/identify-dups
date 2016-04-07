@@ -1,0 +1,72 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use 5.010;
+
+use JSON::MaybeXS;
+use List::Util qw< reduce >;
+use Getopt::Long;
+
+my $DEBUG = 0;
+GetOptions("debug|d" => \$DEBUG);
+
+my @expecting;
+my @clump;
+
+while (<STDIN>) {
+    my $r = decode_json($_);
+    my @nearby_loc = split /; /, $r->{nearby_loc};
+
+    if (@expecting) {
+        # Check if our clump has changed
+        if (not contained($r->{location}, @expecting)
+            and not grep { contained($_, @expecting) } @nearby_loc)
+        {
+            output_best(@clump);
+
+            # Clean slate for next clump
+            @clump = ();
+            @expecting = ();
+        }
+    }
+
+    push @clump, $r;
+    push @expecting, $r->{location}, @nearby_loc;
+}
+output_best(@clump);
+
+sub output_best {
+    return unless @_;
+
+    # Process clump and output location with highest multiplicity or
+    # lowest location, if multiplicity is the same.
+    my @ranked = sort {
+        $b->{multiplicity} <=> $a->{multiplicity} ||
+            $a->{location} <=> $b->{location}
+    } @_;
+
+    if ($DEBUG) {
+        printf STDERR "%s %-5s %12d %3s %s %3d\n",
+            @$_{qw[ subject landmark location ltr orient multiplicity ]}
+                for @ranked;
+        say STDERR "---";
+    }
+
+    die "Clump should always have both LTRs represented"
+        unless grep { $_->{ltr} eq "5p" } @ranked
+           and grep { $_->{ltr} eq "3p" } @ranked;
+
+    say encode_json( $ranked[$_] )
+        for 1 .. $#ranked;
+}
+
+sub uniq {
+    my %seen;
+    my @uniq = grep { not $seen{$_}++ } @_;
+    return @uniq;
+}
+
+sub contained {
+    my $item = shift;
+    return scalar grep { $_ == $item } @_;
+}

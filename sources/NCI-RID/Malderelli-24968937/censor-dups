@@ -1,0 +1,63 @@
+#!/usr/bin/env perl
+use 5.010;
+use strict;
+use warnings;
+use utf8;
+use open qw< :std :encoding(UTF-8) >;
+use FindBin qw< $Bin >;
+use lib "$Bin/../../../lib";
+use Getopt::Long::Descriptive;
+use ISDB::Schema;
+use Text::CSV;
+use Try::Tiny;
+
+my ($opt, $usage) = describe_options(
+    '%c [--commit] < dups.csv',
+    [],
+    [ 'commit',   "actually commit the transaction" ],
+    [ 'help',     "print usage message and exit" ],
+);
+
+print($usage->text), exit(!$opt->help)
+    if $opt->help or -t STDIN;
+
+main();
+
+sub main {
+    my $db    = ISDB::Schema->connect_default;
+    my $txn   = $db->txn_scope_guard;
+    my $is    = $db->resultset("Integration");
+    my $line  = 0;
+    my $deleted = 0;
+
+    say "Deleting integration sites... ";
+
+    my $csv  = Text::CSV->new({ binary => 1 })
+        or die "Can't create new Text::CSV: " . Text::CSV->error_diag . "\n";
+
+    my $header = $csv->getline(*STDIN);
+    $csv->column_names(@$header);
+
+    while (my $r = $csv->getline_hr(*STDIN)) {
+        $line++;
+
+        my $dups = $is->search({
+            -and => [
+                \[ "sample->>'subject' = ?", $r->{subject} ],
+                landmark => $r->{landmark},
+                location => $r->{location},
+                ltr      => $r->{ltr},
+                orientation_in_landmark => $r->{orient},
+            ],
+        });
+        my $n = $dups->delete;
+
+        die "Expected to delete $r->{multiplicity} rows, but deleted $n\n"
+            unless $n == $r->{multiplicity};
+
+        $deleted += $n;
+    }
+    say "$deleted records deleted";
+
+    $txn->commit if $opt->commit;
+}
