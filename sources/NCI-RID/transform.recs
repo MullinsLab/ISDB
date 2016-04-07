@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 use 5.014;
+use Clone qw< clone >;
 our $line;  # from recs
 
 my $t = {
@@ -14,6 +15,7 @@ my $t = {
     },
     info => {
         source_line => $line + 1,   # header isn't counted
+        replicates  => $r->{count} || 1,
     },
 };
 
@@ -112,5 +114,8 @@ $t->{note} = $r->{comment};
 # Normalizing empty strings to undef/NULL should be handled by the loading
 # step.
 
-push_output($t)
-    for 1 .. ($r->{count} || 1);
+for my $replicate (1 .. $t->{info}{replicates}) {
+    my $tprime = clone($t);
+    $tprime->{info}{replicate} = $replicate;
+    push_output($tprime);
+}
