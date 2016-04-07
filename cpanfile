@@ -1,5 +1,6 @@
 requires 'perl', '5.014';
 requires 'Bio::GFF3::LowLevel';
+requires 'Clone';
 requires 'Config::Any';
 requires 'DateTime';
 requires 'DateTime::Format::RFC3339';
