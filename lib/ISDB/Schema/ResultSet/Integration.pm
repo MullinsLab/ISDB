@@ -33,12 +33,12 @@ sub publications {
 
 sub in_vivo {
     my $self = shift;
-    return $self->search_rs( environment => 'in vivo' );
+    return $self->search_rs({ environment => 'in vivo' });
 }
 
 sub in_vitro {
     my $self = shift;
-    return $self->search_rs( environment => 'in vitro' );
+    return $self->search_rs({ environment => 'in vitro' });
 }
 
 1;
