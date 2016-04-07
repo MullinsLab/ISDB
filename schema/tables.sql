@@ -1,5 +1,9 @@
 BEGIN;
 
+CREATE DOMAIN integration_environment AS text CHECK (
+    VALUE IN ('in vivo', 'in vitro')
+);
+
 CREATE DOMAIN ltr_end AS text CHECK (
     VALUE IN ('5p', '3p')
 );
@@ -59,6 +63,7 @@ CREATE INDEX source_document ON source USING gin (document);
 
 CREATE TABLE integration (
     source_name                         varchar(255) NOT NULL,
+    environment                         integration_environment NOT NULL,
     sample                              jsonb,
     ltr                                 ltr_end,
     landmark                            landmark,
@@ -73,6 +78,7 @@ CREATE TABLE integration (
 );
 
 CREATE INDEX integration_source_name_idx          ON integration(source_name);
+CREATE INDEX integration_environment_idx          ON integration(environment);
 CREATE INDEX integration_sample_idx               ON integration USING gin (sample);
 CREATE INDEX integration_landmark_location_idx    ON integration(landmark, location);
 CREATE INDEX integration_ltr_idx                  ON integration(ltr);

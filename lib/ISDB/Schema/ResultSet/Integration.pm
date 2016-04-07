@@ -44,14 +44,12 @@ sub publications {
 
 sub in_vivo {
     my $self = shift;
-    my $me   = $self->current_source_alias;
-    return $self->search_rs( \["$me.sample->>'integration_environment' IN ('in vivo', '')"] );
+    return $self->search_rs( environment => 'in vivo' );
 }
 
 sub in_vitro {
     my $self = shift;
-    my $me   = $self->current_source_alias;
-    return $self->search_rs( \["$me.sample->>'integration_environment' IN ('in vitro')"] );
+    return $self->search_rs( environment => 'in vitro' );
 }
 
 1;

@@ -7,12 +7,12 @@ our $line;  # from recs
 
 my $t = {
     source_name => "Wagner-2014-Science",
+    environment => "in vivo",
     sample => {
         subject      => "25011556_$r->{PARTICIPANT}",
         pubmed_id    => 25011556,
         pcr          => $r->{"PCR ID"},
         years_on_art => $r->{"SAMPLING TIME INTERVAL (YEARS ON ART)"},
-        integration_environment => "in vivo",
     },
     info => {
         source_file => $r->{file},

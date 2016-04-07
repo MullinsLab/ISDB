@@ -43,6 +43,11 @@ __PACKAGE__->table("integration");
   is_nullable: 0
   size: 255
 
+=head2 environment
+
+  data_type: 'integration_environment'
+  is_nullable: 0
+
 =head2 sample
 
   data_type: 'jsonb'
@@ -100,6 +105,8 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 255,
   },
+  "environment",
+  { data_type => "integration_environment", is_nullable => 0 },
   "sample",
   { data_type => "jsonb", is_nullable => 1 },
   "ltr",
@@ -138,8 +145,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-02-11 22:50:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yUoWN0Y12Q52+ZnT2DaVlA
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-04-06 11:16:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fzlzaU8Q3S5RDnSWfA5B7w
 
 use JSON::MaybeXS;
 

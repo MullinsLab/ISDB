@@ -49,8 +49,7 @@ sub main {
             $row = normalize($db, $row);
 
             return 0 if $opt->no_in_vitro
-                 and $row->{sample}{integration_environment}
-                 and $row->{sample}{integration_environment} eq "in vitro";
+                    and $row->{environment} eq "in vitro";
 
             $is->create($row)
                 unless $opt->validate;
