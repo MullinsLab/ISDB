@@ -7,10 +7,10 @@ our $line;  # from recs
 
 my $t = {
     source_name => "Wang-2007",
+    environment => "in vitro",
     sample => {
         pubmed_id => 17545577,
         tissue    => "Jurkat cells",
-        integration_environment => "in vitro",
     },
     info => {
         source_line   => $line + 1,   # header isn't counted
