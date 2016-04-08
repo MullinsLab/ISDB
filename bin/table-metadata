@@ -1,0 +1,44 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use utf8;
+use 5.010;
+use open qw< :std :encoding(UTF-8) >;
+use FindBin qw< $Bin >;
+use lib "$Bin/../lib";
+use ISDB::Schema;
+use JSON::MaybeXS;
+use List::Util qw< pairgrep >;
+
+my $db = ISDB::Schema->connect_default;
+my @tables =
+    map { table_metadata($_) }
+   sort { lc($a->table) cmp lc($b->table) }
+    map { $_->new_result({}) }
+    map { $db->resultset($_) or die "Unknown result class '$_'\n" }
+        $db->sources;
+
+say JSON->new->canonical->pretty->encode(\@tables);
+exit;
+
+sub table_metadata {
+    my $model   = shift;
+    my $colmeta = $model->columns_info;
+    return {
+        name    => $model->table,
+        type    => ($model->table_class =~ /View/ ? 'view' : 'table'),
+        columns => [
+            map { column_metadata($_, $colmeta->{$_}) }
+                $model->columns
+        ],
+    };
+}
+
+sub column_metadata {
+    my $col  = shift;
+    my $meta = shift;
+    return {
+        name => $col,
+        pairgrep { $a !~ /^_/ } %$meta, # skip private keys
+    };
+}

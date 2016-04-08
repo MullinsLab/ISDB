@@ -2,3 +2,47 @@ body {
     width: 800px;
     margin: 40px;
 }
+
+body.container-fluid {
+    width: auto;
+    margin-left: 25px;  /* Bootstrap adds 15px padding */
+    margin-right: 25px;
+}
+
+#header .title {
+    font-size: 36px;
+}
+
+#header .author, #header .date {
+    font-size: 18px;
+    font-weight: normal;
+    color: #777;
+    margin: 0;
+}
+
+/* Scale headers down a notch.  Largest Bootstrap header is normally 36px. */
+h1 { font-size: 30px }
+h2 { font-size: 24px }
+h3 { font-size: 18px }
+h4 { font-size: 14px }
+h5 { font-size: 14px }
+h6 { font-size: 14px }
+
+/* Fancier footnotes */
+.footnoteRef sup {
+    border: 1px solid #777;
+    padding: 1px 4px;
+    border-radius: 100%;
+}
+
+.footnoteRef:hover sup {
+    border-color: #337ab7; /* match link color */
+}
+
+dt code {
+    font-weight: normal;
+}
+
+dd {
+    margin-bottom: 0.65em;
+}
