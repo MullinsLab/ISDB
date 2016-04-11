@@ -16,5 +16,17 @@ cp $doc/*.css $outdoc/
 
 for md in $doc/*.md; do
     fn=$(basename $md .md).html
-    pandoc -w html  -c https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css -c doc.css -s -o $outdoc/$fn $md
+    pandoc --smart -w html -c https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css -c doc.css -s -o $outdoc/$fn $md
+
+    # Style Markdown tables with Bootstrap
+    perl -pi -e 's/<table>/<table class="table table-condensed table-striped">/' $outdoc/$fn
 done
+
+cache=$bin/../cache
+mkdir -p $cache
+
+$bin/table-metadata > $cache/table-metadata.json
+$bin/fill-template \
+    --var tables@$cache/table-metadata.json \
+    --output $outdoc \
+    $doc/Tables.tt

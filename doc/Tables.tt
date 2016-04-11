@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Integration Site Database (ISDB)</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="doc.css" type="text/css" />
+</head>
+<body class="container-fluid">
+  <div class="row">
+    <div class="col-lg-5 col-md-8 col-sm-12">
+      <h1>Tables</h1>
+      <p>
+        The columns of the primary data tables in the ISDB are described below.
+        These tables make up the backbone of the database.
+      </p>
+      <% FOR table IN tables.grep(->{ this.type == 'table' }) %>
+        <% INCLUDE 'show_table' %>
+      <% END %>
+
+      <h1>Views</h1>
+      <p>
+        Views are different representations of the data contained within the tables
+        above.  They pull together data from multiple tables in order to summarize
+        it or make it easier to analyze.  The ISDB also uses views to produce the
+        <a href="Manual.html#downloadable-datasets">downloadable datasets</a>.
+      </p>
+			<p>
+				Note that integration sites which are covered by multiple genes will be
+				reported <strong>once per gene</strong> in these views. 
+			</p>
+      <% FOR table IN tables.grep(->{ this.type == 'view' }) %>
+        <% INCLUDE 'show_table' %>
+      <% END %>
+
+      <% BLOCK show_table %>
+        <h2><% table.name %></h2>
+        <% IF table.name == 'integration' %>
+          <p>
+            The primary fact table in the ISDB.  Each row records <em>a single
+            occurrence</em> of an HIV provirus detected at the given integration
+            site in the given subject by the given source data.  Sites which are
+            detected multiple times in a given subject are represented as
+            multiple rows.  Technical replicates are excluded if they're from
+            single genome sequencing rather than bulk consensus sequencing.
+          </p>
+        <% ELSIF table.name == 'integration_summary' %>
+					<p>
+						The basis for the
+						<a href="Manual.html#integration-summary">"Integration Summary"</a>
+						downloadable dataset.
+          </p>
+        <% ELSIF table.name == 'summary_by_gene' %>
+					<p>
+						The basis for the
+						<a href="Manual.html#summary-by-gene">"Summary by Gene"</a>
+						downloadable dataset.
+          </p>
+        <% END %>
+        <table class="table table-striped table-condensed">
+          <thead>
+            <tr>
+              <th>Column name</th>
+              <th>Data type</th>
+              <th>Attributes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% FOR column IN table.columns %>
+              <tr>
+                <td><tt><% column.name %></tt></td>
+                <td><a href="#data-type-<% column.data_type %>"><code><% column.data_type %></code></a></td>
+                <td>
+                  <% IF NOT column.is_nullable %>
+                    <a class="label label-warning" href="#not-null">not null</a>
+                  <% END %>
+                  <% IF column.is_foreign_key %>
+                    <a class="label label-info" href="#foreign-key">refers to another table</a>
+                  <% END %>
+                </td>
+              </tr>
+            <% END %>
+          </tbody>
+        </table>
+      <% END %>
+    </div>
+    <div class="col-lg-5 col-lg-offset-1 col-md-8 col-sm-12">
+      <h1>Glossary</h1>
+      <p>
+        Data type and attribute terms are defined below.  You should also refer
+        to the <a href="Manual.html#data-usage-guidelines">Data usage
+        guidelines</a> in the <a href="Manual.html">manual</a> for more
+        information.
+      </p>
+      <dl class="dl-horizontal">
+        <dt id="data-type-landmark"><code>landmark</code></dt>
+        <dd>
+          The chromosome or RefSeq accession in which the reported integration site
+          is found.  See the <a href="Manual.html#landmarks-are-usually-chromosomes-chr-but-not-always">section on landmarks</a>
+          in the <a href="Manual.html">manual</a>.
+        </dd>
+
+        <dt id="data-type-orientation"><code>orientation</code></dt>
+        <dd>
+          Either <code>F</code> or <code>R</code> (forward or reverse) to indicate
+          the direction of the provirus with respect to the chromosome/landmark
+        </dd>
+
+        <dt id="data-type-ltr_end"><code>ltr_end</code></dt>
+        <dd>
+          Either <code>5p</code> or <code>3p</code> to indicate which HIV LTR was
+          sequenced out of to determine the IS
+        </dd>
+
+        <dt id="data-type-integration_environment"><code>integration_environment</code></dt>
+        <dd>
+          Either <code>in vivo</code> or <code>in vitro</code> indicating where
+          the integration event took place.  Refer to the <a
+          href="Manual.html#data-usage-guidelines">Data usage guidelines</a> in
+          the <a href="Manual.html">manual</a> for more information.
+        </dd>
+
+        <dt id="data-type-text"><code>text</code></dt>
+        <dd>
+          An arbitrary blob of text, which may be very short or very long
+        </dd>
+
+        <dt id="data-type-varchar"><code>varchar</code></dt>
+        <dd>
+          A short bit of text, usually limited in length
+        </dd>
+
+        <dt id="data-type-integer"><code>integer</code></dt>
+        <dd>
+          A whole number
+        </dd>
+
+        <dt id="data-type-bigint"><code>bigint</code></dt>
+        <dd>
+          A whole number which may be very large
+        </dd>
+
+        <dt id="data-type-jsonb"><code>jsonb</code></dt>
+        <dd>
+          A <a href="https://en.wikipedia.org/wiki/JSON">JSON</a> document, which
+          can store many optional fields and values.  These are used to record
+          information which varies from source to source.  Subject and PubMed ID
+          (if any) are stored in a <code>jsonb</code> column, for example.
+        </dd>
+
+        <dt id="not-null">
+          <span class="label label-warning">not null</span>
+        </dt>
+        <dd>
+          Indicates a column which may not be empty.  All rows will have a value
+          for the column.
+        </dd>
+        
+        <dt id="foreign-key">
+          <span class="label label-info">refers to another table</span>
+        </dt>
+        <dd>
+          Indicates a column whose value refers to a row in another table.  These
+          form the <em>relationships</em> between rows and tables in a relational
+          database.
+        </dd>
+      </dl>
+
+      <h1>Extracting fields from a JSON document</h1>
+      <p>
+        If you're writing SQL to query the ISDB, you're likely going to want to
+        extract data fields out of the <code>sample</code> JSON document
+        associated with each integration site observation.  The document
+        contains optional fields such as <code>subject</code>,
+        <code>pcr</code>, <code>pubmed_id</code>.  Below is an example query
+        which demonstrates how to extract those fields into a column in a
+        custom SQL query:
+      </p>
+      <pre>SELECT *,
+       sample-&gt;&gt;'subject'   as subject,
+       sample-&gt;&gt;'pcr'       as pcr,
+       sample-&gt;&gt;'pubmed_id' as pubid
+  FROM integration</pre>
+    </div>
+  </div>
+</body>
+</html>
