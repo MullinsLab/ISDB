@@ -152,6 +152,12 @@
       </p>
     </div>
     <div class="col col-md-5 col-sm-12">
+      <h2>Documentation</h2>
+      <p class="notice bg-info">
+        Please read <a href="doc/Manual.html">our manual</a> for using the ISDB
+        and the data contained within.
+      </p>
+
       <% frozen_versions = versions.grep(->{ this.frozen }).sort('timestamp').reverse %>
       <% IF frozen_versions.size %>
         <h2>Frozen versions</h2>
@@ -207,11 +213,6 @@
           <% END %>
         </ol>
       <% END %>
-      <hr>
-      <p class="notice bg-info">
-        More documentation for these datasets is available in the
-        <a href="doc/Manual.html">work-in-progress manual</a>.
-      </p>
       <% IF config.show_database_connection %>
         <h2>Access the database</h2>
         <p>
