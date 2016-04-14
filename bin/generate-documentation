@@ -1,6 +1,7 @@
 #!/bin/sh
 set -e -o pipefail
 bin=$(dirname $0)
+failed=0
 
 output=$1
 doc=$bin/../doc
@@ -16,17 +17,30 @@ cp $doc/*.css $outdoc/
 
 for md in $doc/*.md; do
     fn=$(basename $md .md).html
-    pandoc --smart -w html -c https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css -c doc.css -s -o $outdoc/$fn $md
+
+    echo "Converting $(basename $md)"
+
+    set +e
+    if ! pandoc --smart -w html -c https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css -c doc.css -s -o $outdoc/$fn $md; then
+        echo "Error: pandoc failed" >&2
+        failed=1
+    fi
 
     # Style Markdown tables with Bootstrap
-    perl -pi -e 's/<table>/<table class="table table-condensed table-striped">/' $outdoc/$fn
+    if [[ -e $outdoc/$fn ]]; then
+        perl -pi -e 's/<table>/<table class="table table-condensed table-striped">/' $outdoc/$fn
+    fi
+    set -e
 done
 
 cache=$bin/../cache
 mkdir -p $cache
 
+echo "Generating table documentation"
 $bin/table-metadata > $cache/table-metadata.json
 $bin/fill-template \
     --var tables@$cache/table-metadata.json \
     --output $outdoc \
     $doc/Tables.tt
+
+exit $failed
