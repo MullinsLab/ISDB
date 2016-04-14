@@ -3,6 +3,7 @@ BEGIN;
 DROP VIEW IF EXISTS summary_by_gene;
 DROP VIEW IF EXISTS integration_summary;
 DROP VIEW IF EXISTS integration_genes;
+DROP VIEW IF EXISTS sample_fields_metadata;
 
 CREATE VIEW integration_genes AS
     SELECT integration.*,
@@ -49,6 +50,19 @@ CREATE VIEW summary_by_gene AS
                                                     AS environments
       FROM integration_summary
      GROUP BY ncbi_gene_id, gene
+;
+
+CREATE VIEW sample_fields_metadata AS
+	SELECT field,
+		   count(1),
+		   count(DISTINCT sample->>field)        as values,
+		   array_agg(DISTINCT source_name)       as sources,
+		   array_agg(DISTINCT environment::text) as environments
+	  FROM (SELECT DISTINCT jsonb_object_keys(sample) AS field FROM integration)
+		AS sample_fields
+	  JOIN integration ON (sample ? field AND sample->>field != '')
+	 GROUP BY field
+	 ORDER BY count(DISTINCT source_name) DESC, count DESC
 ;
 
 COMMIT;

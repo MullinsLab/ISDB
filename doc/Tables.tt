@@ -170,7 +170,7 @@
         </dd>
       </dl>
 
-      <h1>Extracting fields from a JSON document</h1>
+      <h1>Sample document fields</h1>
       <p>
         If you're writing SQL to query the ISDB, you're likely going to want to
         extract data fields out of the <code>sample</code> JSON document
@@ -185,6 +185,40 @@
        sample-&gt;&gt;'pcr'       as pcr,
        sample-&gt;&gt;'pubmed_id' as pubid
   FROM integration</pre>
+      <p>
+        The following table summarizes what <code>sample</code> fields are
+        currently in use:
+      </p>
+      <table class="table table-striped table-condensed">
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>Sources</th>
+            <th>Environments</th>
+            <th># of times present</th>
+            <th># of unique values</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% FOR f IN isdb.resultset("SampleFieldsMetadata").all %>
+            <tr>
+              <td><tt><% f.field %></tt></td>
+              <td>
+                <ul class="list-unstyled">
+                  <% FOR s IN f.sources %><li><% s %></li><% END %>
+                </ul>
+              </td>
+              <td>
+                <ul class="list-unstyled">
+                  <% FOR e IN f.environments %><li><% e %></li><% END %>
+                </ul>
+              </td>
+              <td><% f.count | commafy %></td>
+              <td><% f.values | commafy %></td>
+            </tr>
+          <% END %>
+        </tbody>
+      </table>
     </div>
   </div>
 </body>
