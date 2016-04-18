@@ -146,7 +146,7 @@
         <% END %>
       </ul>
       <p>
-        If you spot a problem in the ISDB<% IF issues.size %> that you don't see here<% END %>,
+        If you spot a problem in the ISDB<% IF issues.size %> that you don’t see here<% END %>,
         <a href="mailto:mullspt@uw.edu">please let us know</a>.  We strive to
         maintain high quality data ready to be used in analysis.
       </p>
