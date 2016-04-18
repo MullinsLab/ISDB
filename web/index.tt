@@ -225,6 +225,10 @@
           <tr><th>User</th><td><code><% isdb.storage.dbh.pg_user %></code></td></tr>
           <tr><th>Database name</th><td><code><% isdb.storage.dbh.pg_db %></code></td></tr>
         </table>
+        <p>
+          You may also find our <a href="doc/Tables.html">reference of
+          available tables</a> handy.
+        </p>
       <% END %>
     </div>
   </div>
