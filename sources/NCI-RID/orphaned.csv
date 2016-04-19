@@ -56,8 +56,3 @@ landmark,info/source_line,location,ltr,note,orientation_in_landmark,sample/origi
 ,1650,,3p,,R,PT1_Y11.4,24968937,24968937_PT1,11.4,,,,,,"in vivo",36,36,NCI-RID
 ,2035,,3p,,R,PT3_Y7.2,24968937,24968937_PT3,7.2,,,,,,"in vivo",1,2,NCI-RID
 ,2035,,3p,,R,PT3_Y7.2,24968937,24968937_PT3,7.2,,,,,,"in vivo",2,2,NCI-RID
-chr1,3054,142539610,3p,,F,G13FKHM01A4IK1,23953889,,,,"cell culture",,,,"in vitro",1,1,NCI-RID
-chr1,3055,142872941,3p,,F,5O55L:02515:02304,23953889,,,,"cell culture",,,,"in vitro",1,1,NCI-RID
-chr14,5994,106557081,3p,,F,5O55L:02561:01205,23953889,,,,"cell culture",,,,"in vitro",1,1,NCI-RID
-chr7,13201,74311043,3p,,F,5O55L:02328:00835,23953889,,,,"cell culture",,,,"in vitro",1,1,NCI-RID
-chr7,13415,142214668,3p,,F,IBB4G04,23953889,,,,"cell culture",,,,"in vitro",1,1,NCI-RID
