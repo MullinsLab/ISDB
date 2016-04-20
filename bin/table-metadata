@@ -37,8 +37,13 @@ sub table_metadata {
 sub column_metadata {
     my $col  = shift;
     my $meta = shift;
-    return {
+    $meta = {
         name => $col,
         pairgrep { $a !~ /^_/ } %$meta, # skip private keys
     };
+
+    # Unify "character varying" and "varchar" for consistency
+    $meta->{data_type} =~ s/character varying/varchar/;
+
+    return $meta;
 }

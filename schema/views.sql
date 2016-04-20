@@ -33,9 +33,10 @@ CREATE VIEW integration_summary AS
            orientation_in_landmark                          AS orientation_in_landmark,
            orientation_in_gene                              AS orientation_in_gene,
            COUNT(1)                                         AS multiplicity,
-           STRING_AGG(DISTINCT source_name, '; ' ORDER BY source_name)
+           ARRAY_AGG(DISTINCT source_name ORDER BY source_name)
                                                             AS source_names,
-           STRING_AGG(DISTINCT sample->>'pubmed_id', '; ' ORDER BY sample->>'pubmed_id')
+           ARRAY_AGG(DISTINCT (sample->>'pubmed_id')::int ORDER BY (sample->>'pubmed_id')::int)
+               FILTER (WHERE (sample->>'pubmed_id') IS NOT NULL)
                                                             AS pubmed_ids
       FROM integration_genes
      GROUP BY environment, subject, ncbi_gene_id, gene, landmark, location, orientation_in_landmark, orientation_in_gene
@@ -49,7 +50,7 @@ CREATE VIEW summary_by_gene AS
            COUNT(DISTINCT (landmark, location))
                  FILTER (WHERE multiplicity >= 2)   AS proliferating_sites,
            SUM(multiplicity)                        AS total_in_gene,
-           STRING_AGG(DISTINCT environment, '/' ORDER BY environment)
+           ARRAY_AGG(DISTINCT environment::text ORDER BY environment::text)
                                                     AS environments
       FROM integration_summary
      GROUP BY ncbi_gene_id, gene
