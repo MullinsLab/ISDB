@@ -34,7 +34,9 @@ CREATE VIEW integration_summary AS
            orientation_in_gene                              AS orientation_in_gene,
            COUNT(1)                                         AS multiplicity,
            STRING_AGG(DISTINCT source_name, '; ' ORDER BY source_name)
-                                                            AS source_names
+                                                            AS source_names,
+           STRING_AGG(DISTINCT sample->>'pubmed_id', '; ' ORDER BY sample->>'pubmed_id')
+                                                            AS pubmed_ids
       FROM integration_genes
      GROUP BY environment, subject, ncbi_gene_id, gene, landmark, location, orientation_in_landmark, orientation_in_gene
 ;
