@@ -53,12 +53,12 @@ __PACKAGE__->table("sample_fields_metadata");
 
 =head2 sources
 
-  data_type: 'text'
+  data_type: 'character varying[]'
   is_nullable: 1
 
 =head2 environments
 
-  data_type: 'text'
+  data_type: 'text[]'
   is_nullable: 1
 
 =cut
@@ -71,14 +71,14 @@ __PACKAGE__->add_columns(
   "values",
   { data_type => "bigint", is_nullable => 1 },
   "sources",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "character varying[]", is_nullable => 1 },
   "environments",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "text[]", is_nullable => 1 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-04-14 12:53:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Qhg4mVGm63QWLhKOHkSv4Q
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-04-20 15:53:37
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vKkExsWtZED9aCA2sUNv6g
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
