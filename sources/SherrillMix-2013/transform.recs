@@ -1,0 +1,97 @@
+# This is a recs <https://recs.pl> snippet for use with `recs xform`.
+# vim: set ft=perl :
+use strict;
+use warnings;
+use 5.014;
+our $line;  # from recs
+
+# all reads used were aligned by Sherrill-Mix et al to hg19, so
+# that doesn't vary by upstream.
+my $subsources = {
+    'Active' => {
+        pubmed_id     => 22911005,
+        ltr           => '3p', # confirmed in paper (matching reads to 3'LTR terminal)
+        not_expressed => 'silent',
+        tissue        => 'Primary active CD4+ T cells',
+    },
+    'Bcl-2 transduced' => {
+        pubmed_id     => 21430059,
+        ltr           => '5p', # confirmed explicitly in paper
+        not_expressed => 'inducible',
+        tissue        => 'Primary CD4+ T cells (Bcl-2 transduced)',
+    },
+    'Central Memory' => {
+        pubmed_id     => 23953889,
+        ltr           => '3p', # seems correct based on upstream methods
+        not_expressed => 'inducible',
+        tissue        => 'Primary central memory CD4+ T cells',
+    },
+    'Jurkat' => {
+        pubmed_id     => 15890899,
+        ltr           => '3p', # according to NCI-RID
+        not_expressed => 'inducible',
+        tissue        => 'Jurkat cells',
+        tissue_url    => 'http://web.expasy.org/cellosaurus/CVCL_0065',
+    },
+    'Resting' => {
+        pubmed_id => 22911005,
+        ltr           => '3p', # confirmed in paper (matching reads to 3'LTR terminal)
+        not_expressed => 'silent',
+        tissue        => 'Primary resting CD4+ T cells',
+    },
+};
+
+my $meta = $subsources->{$r->{sample}};
+
+my $t = {
+    source_name => "SherrillMix-2013",
+    environment => "in vitro",
+    sample => {
+        original_id => $r->{id},
+        tissue      => $meta->{tissue},
+        tissue_url  => $meta->{tissue_url},
+        pubmed_id   => $meta->{pubmed_id},
+    },
+    info => {
+        source_line => $line + 1,   # header isn't counted
+    },
+    ltr  => $meta->{ltr},
+};
+
+# Bcl-transduced, 5p ltr, Shan et al
+# everything else 3p ltr, apparently
+
+$t->{orientation_in_landmark} = $r->{strand} =~ y/+-/FR/r;
+
+# All records are classified by Sherrill-Mix et al by whether the provirus was
+# found to be expressed in the model by them or their upstream. Some cells they
+# described latent integrations as "inducible" and others as "silent":
+#
+#    In three of the datasets, Jurkat, Central Memory CD4 + and Bcl-2
+#    transduced CD4 +, the proviruses were sorted based on inducibility. In the
+#    Resting CD4 + and Active CD4 + datasets, cells were sorted only based on
+#    proviral expression. Previous studies have shown that most silent
+#    proviruses in this model system are inducible
+#
+# In the data file, non-expressed integrations are grouped together as "latent".
+$t->{sample}->{provirus_activity} = $r->{isLatent} eq "TRUE"
+                                  ? $meta->{not_expressed}
+                                  : "expressed";
+
+# No IS analyzed in Sherrill-Mix et al are labeled in non-chromosomal landmarks
+# (Should eventually investigate if this was data they removed from upstream
+# sources or the whole truth of what they started with.)
+$t->{landmark} = $r->{chr};
+$t->{location} = $r->{pos};
+
+# Convert to zero-origin, interbase coordinates assuming that the reported
+# location is base-numbered and indicates the first chromosomal base outside of
+# the indicated HIV LTR.  If the HIV LTR is not indicated, assume 5' and hence
+# no conversion necessary.
+$t->{location} -= 1
+    if $t->{location}
+   and $t->{ltr}
+   and (   ($t->{ltr} eq "3p" and $t->{orientation_in_landmark} eq "F")
+        or ($t->{ltr} eq "5p" and $t->{orientation_in_landmark} eq "R"));
+
+push_output($t);

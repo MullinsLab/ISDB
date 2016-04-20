@@ -1,0 +1,20 @@
+{
+    "name": "SherrillMix-2013",
+    "uri":  "http://journals.plos.org/plospathogens/article?id=10.1371/journal.ppat.1002818",
+    "pubmed": 23953889,
+    "citation": {
+        "_type": "article",
+        "_citekey": "SherrillMix-2013",
+        "author": "Pace, Matthew J. AND Graf, Erin H. AND Agosto, Luis M. AND Mexas, Angela M. AND Male, Frances AND Brady, Troy AND Bushman, Frederic D. AND O'Doherty, Una",
+        "journal": "PLoS Pathog",
+        "publisher": "Public Library of Science",
+        "title": "Directly Infected Resting CD4+T Cells Can Produce HIV Gag without Spreading Infection in a Model of HIV Latency",
+        "year": "2012",
+        "month": "07",
+        "volume": "8",
+        "url": "http://dx.doi.org/10.1371%2Fjournal.ppat.1002818",
+        "pages": "1-15",
+        "number": "7",
+        "doi": "10.1371/journal.ppat.1002818"
+    }
+}

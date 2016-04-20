@@ -1,0 +1,5 @@
+#!/bin/bash
+set -e -o pipefail
+recs fromcsv --header "$@" \
+    | recs xform -E transform.recs \
+    | ./tocsv
