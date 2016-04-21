@@ -60,8 +60,10 @@ CREATE VIEW sample_fields_metadata AS
 	SELECT field,
 		   count(1),
 		   count(DISTINCT sample->>field)        as values,
-		   array_agg(DISTINCT source_name)       as sources,
-		   array_agg(DISTINCT environment::text) as environments
+		   array_agg(DISTINCT source_name
+                     ORDER BY source_name)       as sources,
+		   array_agg(DISTINCT environment::text
+                     ORDER BY environment::text) as environments
 	  FROM (SELECT DISTINCT jsonb_object_keys(sample) AS field FROM integration)
 		AS sample_fields
 	  JOIN integration ON (sample ? field AND sample->>field != '')
