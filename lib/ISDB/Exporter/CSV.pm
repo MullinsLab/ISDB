@@ -34,9 +34,17 @@ sub write_header {
 
 sub write_row {
     my ($self, $fh, $fields, $row) = @_;
-    $self->_csv->print($fh, [ @$row{ @$fields } ]);
+    $self->_csv->print($fh, [ map { $self->format_value($_) } @$row{ @$fields } ]);
 }
 
 sub write_footer { }
+
+sub format_value {
+    my $self  = shift;
+    my $value = shift;
+    $value = join "|", grep { defined } @$value
+        if ref $value eq "ARRAY";
+    return $value;
+}
 
 1;

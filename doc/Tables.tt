@@ -73,7 +73,7 @@
             <% FOR column IN table.columns %>
               <tr>
                 <td><tt><% column.name %></tt></td>
-                <td><a href="#data-type-<% column.data_type %>"><code><% column.data_type %></code></a></td>
+                <td><a href="#data-type-<% column.data_type | uri %>"><code><% column.data_type %></code></a></td>
                 <td>
                   <% IF NOT column.is_nullable %>
                     <a class="label label-warning" href="#not-null">not null</a>
@@ -150,6 +150,22 @@
           can store many optional fields and values.  These are used to record
           information which varies from source to source.  Subject and PubMed ID
           (if any) are stored in a <code>jsonb</code> column, for example.
+        </dd>
+
+        <a id="data-type-text[]"></a>
+        <a id="data-type-varchar[]"></a>
+        <a id="data-type-integer[]"></a>
+        <dt><code>text[]</code></dt>
+        <dt><code>varchar[]</code></dt>
+        <dt><code>integer[]</code></dt>
+        <dd>
+          An array (or list) of
+          <a href="#data-type-text"><code>text</code></a>,
+          <a href="#data-type-varchar"><code>varchar</code></a>, or
+          <a href="#data-type-integer"><code>integer</code></a>
+          values, respectively.  For tables exported as
+          CSV files, values will be separated by a pipe character
+          <code>|</code>.
         </dd>
 
         <dt id="not-null">

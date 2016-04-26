@@ -68,7 +68,7 @@ __PACKAGE__->table("summary_by_gene");
 
 =head2 environments
 
-  data_type: 'text'
+  data_type: 'text[]'
   is_nullable: 1
 
 =cut
@@ -87,12 +87,12 @@ __PACKAGE__->add_columns(
   "total_in_gene",
   { data_type => "numeric", is_nullable => 1 },
   "environments",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "text[]", is_nullable => 1 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-04-07 16:44:35
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ty0x04IFni+g1UFr/v+ocQ
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-04-20 16:01:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IL/CyL6JUNObqyN7AvqfJQ
 
 =head2 ncbi_gene
 

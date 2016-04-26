@@ -24,8 +24,7 @@ CREATE VIEW integration_genes AS
 ;
 
 CREATE VIEW integration_summary AS
-    SELECT source_name                                      AS source_name,
-           environment                                      AS environment,
+    SELECT environment                                      AS environment,
            sample->>'subject'                               AS subject,
            ncbi_gene_id                                     AS ncbi_gene_id,
            gene                                             AS gene,
@@ -33,9 +32,14 @@ CREATE VIEW integration_summary AS
            location                                         AS location,
            orientation_in_landmark                          AS orientation_in_landmark,
            orientation_in_gene                              AS orientation_in_gene,
-           COUNT(1)                                         AS multiplicity
+           COUNT(1)                                         AS multiplicity,
+           ARRAY_AGG(DISTINCT source_name ORDER BY source_name)
+                                                            AS source_names,
+           ARRAY_AGG(DISTINCT (sample->>'pubmed_id')::int ORDER BY (sample->>'pubmed_id')::int)
+               FILTER (WHERE (sample->>'pubmed_id') IS NOT NULL)
+                                                            AS pubmed_ids
       FROM integration_genes
-     GROUP BY source_name, environment, subject, ncbi_gene_id, gene, landmark, location, orientation_in_landmark, orientation_in_gene
+     GROUP BY environment, subject, ncbi_gene_id, gene, landmark, location, orientation_in_landmark, orientation_in_gene
 ;
 
 CREATE VIEW summary_by_gene AS
@@ -46,7 +50,7 @@ CREATE VIEW summary_by_gene AS
            COUNT(DISTINCT (landmark, location))
                  FILTER (WHERE multiplicity >= 2)   AS proliferating_sites,
            SUM(multiplicity)                        AS total_in_gene,
-           STRING_AGG(DISTINCT environment, '/' ORDER BY environment)
+           ARRAY_AGG(DISTINCT environment::text ORDER BY environment::text)
                                                     AS environments
       FROM integration_summary
      GROUP BY ncbi_gene_id, gene
@@ -56,8 +60,10 @@ CREATE VIEW sample_fields_metadata AS
 	SELECT field,
 		   count(1),
 		   count(DISTINCT sample->>field)        as values,
-		   array_agg(DISTINCT source_name)       as sources,
-		   array_agg(DISTINCT environment::text) as environments
+		   array_agg(DISTINCT source_name
+                     ORDER BY source_name)       as sources,
+		   array_agg(DISTINCT environment::text
+                     ORDER BY environment::text) as environments
 	  FROM (SELECT DISTINCT jsonb_object_keys(sample) AS field FROM integration)
 		AS sample_fields
 	  JOIN integration ON (sample ? field AND sample->>field != '')

@@ -36,13 +36,6 @@ __PACKAGE__->table("integration_summary");
 
 =head1 ACCESSORS
 
-=head2 source_name
-
-  accessor: 'source'
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 255
-
 =head2 environment
 
   data_type: 'integration_environment'
@@ -88,11 +81,19 @@ __PACKAGE__->table("integration_summary");
   data_type: 'bigint'
   is_nullable: 1
 
+=head2 source_names
+
+  data_type: 'character varying[]'
+  is_nullable: 1
+
+=head2 pubmed_ids
+
+  data_type: 'integer[]'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
-  "source_name",
-  { accessor => "source", data_type => "varchar", is_nullable => 1, size => 255 },
   "environment",
   { data_type => "integration_environment", is_nullable => 1 },
   "subject",
@@ -111,11 +112,15 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "multiplicity",
   { data_type => "bigint", is_nullable => 1 },
+  "source_names",
+  { data_type => "character varying[]", is_nullable => 1 },
+  "pubmed_ids",
+  { data_type => "integer[]", is_nullable => 1 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-04-07 16:44:35
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5G8+HwlN6qJ4DEO09lt49A
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-04-20 16:01:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uZW3OnxewWCA0JIRdG6e3A
 
 =head2 ncbi_gene
 
