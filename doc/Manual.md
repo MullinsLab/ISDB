@@ -174,9 +174,12 @@ the database, along with that event's _clonal multiplicity_ as reported by the
 source.  Note that integrations into **locations covered by multiple genes** (such
 as two in opposite orientations) **will be reported once per gene**.
 
+Individual integration site observations that share the same values for all
+columns before `multiplicity` are collapsed and counted towards the final
+`multiplicity`.
+
 | column                     | type                 | example    |
 |----------------------------+----------------------+------------|
-| `source_name`              | text                 | `NCI-RID`  |
 | `environment`              | text                 | `in vivo`  |
 | `subject`                  | text                 | `25011556_R1` |
 | `ncbi_gene_id`             | integer              | `80208`    |
@@ -186,12 +189,10 @@ as two in opposite orientations) **will be reported once per gene**.
 | `orientation_in_landmark`  | orientation          | `F`        |
 | `orientation_in_gene`      | orientation          | `R`        |
 | `multiplicity`             | non-negative integer | `1`        |
+| `source_names`             | text                 | `NCI-RID`  |
+| `pubmed_ids`               | text                 | `25011556` |
 
 ### Fields
-
-#### `source_name`
-
-A label identifying the source documenting the integration event in this row.
 
 #### `environment`
 
@@ -223,6 +224,17 @@ The location of the integration splice junction, in 0-origin, interbase coordina
 
 The _number of independent observations_ of this integration event within this source. Generally, we expect that if an event is observed more than once, the method used suggests clonal proliferation of a cell with integrated provirus at that site. We will endeavor _not_ to count technical replicates identifying the same integration site as an indication of multiplicity. For instance, if the ISLA reaction were performed in triplicate on cells from a single ICE culture, finding the same IS in all replicates, that data contributes a multiplicity of 1 rather than 3 due to the nature of the ICE protocol.
 
+#### `source_names`
+
+One or more labels identifying the source documenting the integration events in
+this row.  Source names are separated by pipes `|`.
+
+#### `pubmed_ids`
+
+One or more numeric PubMed IDs identifying the paper which published or
+analyzed the integration events in this row.  Multiple IDs are separated by
+pipes `|`.
+
 ## Summary by Gene
 
 The _summary by gene_ report counts integration sites appearing in annotated genes across various subjects, sources, and locations.  Currently it **lumps all _in vivo_ and _in vitro_ data together** when counting.
@@ -235,7 +247,7 @@ The _summary by gene_ report counts integration sites appearing in annotated gen
 | `unique_sites`         | integer | `14`    |
 | `proliferating_sites`  | integer | `2`     |
 | `total_in_gene`        | integer | `29`    |
-| `environments`         | text    | `in vivo; in vitro` |
+| `environments`         | text    | `in vivo|in vitro` |
 
 ### Fields
 
@@ -265,7 +277,7 @@ The _total number of independent observations_ of integrations into this gene. T
 
 #### `environments`
 
-A semi-colon separated string of the environments in which the integration
+A pipe `|` separated string of the environments in which the integration
 event took place.  Refer to the [data usage guidelines](#data-usage-guidelines)
 above.
 
