@@ -6,6 +6,7 @@ dbname=${PGDATABASE:-isdb}
 psql="psql --set ON_ERROR_STOP=1 $dbname"
 
 createdb $dbname -E UTF-8
+$psql <<<"REVOKE CREATE ON SCHEMA public FROM PUBLIC;"
 $psql < $isdb/schema/tables.sql
 $psql < $isdb/schema/views.sql
 $psql < $isdb/schema/acl.sql
