@@ -1,20 +1,19 @@
 {
     "name": "SherrillMix-2013",
-    "uri":  "http://journals.plos.org/plospathogens/article?id=10.1371/journal.ppat.1002818",
+    "uri":  "http://retrovirology.biomedcentral.com/articles/10.1186/1742-4690-10-90",
     "pubmed": 23953889,
     "citation": {
-        "_type": "article",
+        "_type":    "article",
         "_citekey": "SherrillMix-2013",
-        "author": "Pace, Matthew J. AND Graf, Erin H. AND Agosto, Luis M. AND Mexas, Angela M. AND Male, Frances AND Brady, Troy AND Bushman, Frederic D. AND O'Doherty, Una",
-        "journal": "PLoS Pathog",
-        "publisher": "Public Library of Science",
-        "title": "Directly Infected Resting CD4+T Cells Can Produce HIV Gag without Spreading Infection in a Model of HIV Latency",
-        "year": "2012",
-        "month": "07",
-        "volume": "8",
-        "url": "http://dx.doi.org/10.1371%2Fjournal.ppat.1002818",
-        "pages": "1-15",
-        "number": "7",
-        "doi": "10.1371/journal.ppat.1002818"
+        "author":   "Sherrill-Mix, Scott and Lewinski, Mary K. and Famiglietti, Marylinda and Bosque, Alberto and Malani, Nirav and Ocwieja, Karen E. and Berry, Charles C. and Looney, David and Shan, Liang and Agosto, Luis M. and Pace, Matthew J. and Siliciano, Robert F. and O'Doherty, Una and Guatelli, John and Planelles, Vicente and Bushman, Frederic D.",
+        "title":    "HIV latency and integration site placement in five cell-based models",
+        "journal":  "Retrovirology",
+        "year":     "2013",
+        "volume":   "10",
+        "number":   "1",
+        "pages":    "1-14",
+        "issn":     "1742-4690",
+        "doi":      "10.1186/1742-4690-10-90",
+        "URL":      "http://dx.doi.org/10.1186/1742-4690-10-90"
     }
 }
