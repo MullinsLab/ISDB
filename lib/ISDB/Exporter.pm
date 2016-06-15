@@ -55,6 +55,7 @@ has formats => (
     isa     => ArrayRef[ ClassDoes['ISDB::Exporter::Formatter'] ],
     default => sub {
         [qw[ ISDB::Exporter::CSV
+             ISDB::Exporter::Excel
              ISDB::Exporter::JSON ]]
     },
 );

@@ -31,7 +31,8 @@ has extension => (
     default => 'csv',
 );
 
-with 'ISDB::Exporter::Formatter';
+with 'ISDB::Exporter::Formatter',
+     'ISDB::Exporter::Formatter::FormatValue';
 
 sub write_header {
     my ($self, $fields) = @_;
@@ -44,13 +45,5 @@ sub write_row {
 }
 
 sub write_footer { }
-
-sub format_value {
-    my $self  = shift;
-    my $value = shift;
-    $value = join "|", grep { defined } @$value
-        if ref $value eq "ARRAY";
-    return $value;
-}
 
 1;
