@@ -45,6 +45,6 @@ sub write_row {
     print { $fh } $self->_json->encode($row);
 }
 
-sub write_footer { print { $_[1] } "]" }
+sub write_footer { print { $_[1] } "]\n" }
 
 1;
