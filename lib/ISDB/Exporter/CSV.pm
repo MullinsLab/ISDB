@@ -19,6 +19,12 @@ has _csv => (
     },
 );
 
+has _fh => (
+    is      => 'lazy',
+    isa     => FileHandle,
+    builder => sub { $_[0]->filename->openw_utf8 },
+);
+
 has extension => (
     is      => 'ro',
     isa     => Str,
@@ -28,13 +34,13 @@ has extension => (
 with 'ISDB::Exporter::Formatter';
 
 sub write_header {
-    my ($self, $fh, $fields) = @_;
-    $self->_csv->print($fh, $fields);
+    my ($self, $fields) = @_;
+    $self->_csv->print($self->_fh, $fields);
 }
 
 sub write_row {
-    my ($self, $fh, $fields, $row) = @_;
-    $self->_csv->print($fh, [ map { $self->format_value($_) } @$row{ @$fields } ]);
+    my ($self, $fields, $row) = @_;
+    $self->_csv->print($self->_fh, [ map { $self->format_value($_) } @$row{ @$fields } ]);
 }
 
 sub write_footer { }

@@ -18,6 +18,7 @@ requires 'LWP::UserAgent';
 requires 'LWP::Protocol::Net::Curl';
 requires 'Moo';
 requires 'Path::Tiny';
+requires 'Types::LoadableClass';
 requires 'Types::Standard';
 requires 'Type::Params';
 requires 'namespace::clean';

@@ -7,13 +7,12 @@ package ISDB::Exporter;
 use Moo;
 use Type::Params qw< compile Invocant >;
 use Types::Standard qw< :types slurpy >;
+use Types::LoadableClass qw< :types >;
 use Path::Tiny;
 use JSON::MaybeXS qw<>;
 use DateTime;
 use Digest::SHA qw<>;
 use ISDB::Schema;
-use ISDB::Exporter::CSV;
-use ISDB::Exporter::JSON;
 use namespace::clean;
 
 has _json => (
@@ -52,8 +51,12 @@ has exports => (
 );
 
 has formats => (
-    is  => 'lazy',
-    isa => ArrayRef[ ConsumerOf['ISDB::Exporter::Formatter'] ],
+    is      => 'ro',
+    isa     => ArrayRef[ ClassDoes['ISDB::Exporter::Formatter'] ],
+    default => sub {
+        [qw[ ISDB::Exporter::CSV
+             ISDB::Exporter::JSON ]]
+    },
 );
 
 has datetime_formatter => (
@@ -88,20 +91,18 @@ sub _build_exports {
     ];
 }
 
-sub _build_formats {
-    my $self = shift;
-    return [
-        ISDB::Exporter::CSV->new,
-        ISDB::Exporter::JSON->new,
-    ];
-}
-
 sub export {
     state $params = compile(Invocant, $ExportSpec);
     my ($self, $spec) = $params->(@_);
 
+    my @formats = map {
+        $_->new(
+            output_path => $self->output_path,
+            basename    => $spec->{filename},
+        )
+    } @{ $self->formats };
+
     # Result struct we'll return
-    my @formats   = @{ $self->formats };
     my $metafile  = $self->output_path->child("$spec->{filename}.metadata.json");
     my $exported  = {
         name      => $spec->{name},
@@ -111,7 +112,7 @@ sub export {
         formats   => {
             map {;
                 $_->name => {
-                    path => $self->output_path->child(join ".", $spec->{filename}, $_->extension),
+                    path => $_->filename
                 }
             } @formats
         },
@@ -119,20 +120,19 @@ sub export {
 
     # Write out header, data rows, and footer for each format, only looping
     # through the result set once.
-    my %fh = map { $_ => $exported->{formats}{$_->name}{path}->openw_utf8 } @formats;
-    $_->write_header($fh{$_}, $exported->{fields})
+    $_->write_header($exported->{fields})
         for @formats;
 
     while (my $row = $spec->{resultset}->next) {
-        $_->write_row($fh{$_}, $exported->{fields}, { $row->get_columns })
+        $_->write_row($exported->{fields}, { $row->get_columns })
             for @formats;
     }
 
-    $_->write_footer($fh{$_}, $exported->{fields})
+    $_->write_footer($exported->{fields})
         for @formats;
 
-    $_->close or die "Failed to close fh: $!"
-        for values %fh;
+    # Destroy formatter objects to close open filehandles, etc.
+    undef @formats;
 
     for my $format (values %{ $exported->{formats} }) {
         # Add checksums for integrity checking and change detection
