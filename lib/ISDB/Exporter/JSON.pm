@@ -12,7 +12,7 @@ use namespace::clean;
 has _json => (
     is      => 'ro',
     isa     => Object,
-    default => sub { JSON->new->utf8->canonical },
+    default => sub { JSON->new->canonical },
 );
 
 has extension => (

@@ -21,7 +21,6 @@ has _json => (
     isa     => Object,
     default => sub {
         JSON::MaybeXS->new
-            ->utf8
             ->canonical
             ->convert_blessed
             ->pretty
