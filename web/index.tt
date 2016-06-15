@@ -200,7 +200,7 @@
           <% FOREACH format IN dataset.formats %>
             <%- IF loop.last AND NOT loop.first %> or <% END %>
             <a href="<% format.value.path %>"><% format.key %></a>
-            <%- IF NOT loop.last AND loop.index + 1 != loop.max %>, <% END %>
+            <%- IF NOT loop.last AND loop.size > 2 %>, <% END %>
           <% END %>
         </p>
         <p>
