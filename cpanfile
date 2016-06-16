@@ -1,4 +1,5 @@
 requires 'perl', '5.014';
+requires 'Archive::Zip';
 requires 'Bio::GFF3::LowLevel';
 requires 'Clone';
 requires 'Config::Any';
