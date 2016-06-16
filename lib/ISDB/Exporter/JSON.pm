@@ -12,7 +12,13 @@ use namespace::clean;
 has _json => (
     is      => 'ro',
     isa     => Object,
-    default => sub { JSON->new->utf8->canonical },
+    default => sub { JSON->new->canonical },
+);
+
+has _fh => (
+    is      => 'lazy',
+    isa     => FileHandle,
+    builder => sub { $_[0]->filename->openw_utf8 },
 );
 
 has extension => (
@@ -30,21 +36,24 @@ has _first_row => (
 with 'ISDB::Exporter::Formatter';
 
 sub write_header {
-    my ($self, $fh) = @_;
-    print { $fh } "[";
+    my ($self) = @_;
+    print { $self->_fh } "[";
     $self->_first_row(1);
 }
 
 sub write_row {
-    my ($self, $fh, $fields, $row) = @_;
+    my ($self, $fields, $row) = @_;
     if ($self->_first_row) {
         $self->_first_row(0);
     } else {
-        print { $fh } "\n,";
+        print { $self->_fh } "\n,";
     }
-    print { $fh } $self->_json->encode($row);
+    print { $self->_fh } $self->_json->encode($row);
 }
 
-sub write_footer { print { $_[1] } "]" }
+sub write_footer {
+    my ($self) = @_;
+    print { $self->_fh } "]\n";
+}
 
 1;
