@@ -104,14 +104,16 @@ sub DESTROY {
     #   https://github.com/jmcnamara/excel-writer-xlsx/pull/166
     # -trs, 16 June 2016
     #
-    # Set last modification times to a static value inside the zip file so the
-    # file's digest remains stable modulo content changes.
+    # Set last modification times and file permissions to static values inside
+    # the zip file so the file's digest remains stable modulo content changes.
     my $zip = Archive::Zip->new;
     $zip->read( $self->filename->stringify ) == AZ_OK
         or die "Error reading zipfile: $!";
 
-    $_->setLastModFileDateTimeFromUnix( BOGUS_TIMESTAMP )
-        for $zip->members;
+    for my $member ($zip->members) {
+        $member->setLastModFileDateTimeFromUnix( BOGUS_TIMESTAMP );
+        $member->unixFileAttributes( 0644 );
+    }
 
     $zip->overwrite == AZ_OK
         or die "Error updating zipfile: $!";
