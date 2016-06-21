@@ -153,9 +153,25 @@
     </div>
     <div class="col col-md-5 col-sm-12">
       <h2>Documentation</h2>
-      <p class="notice bg-info">
-        Please read <a href="doc/Manual.html">our manual</a> for using the ISDB
-        and the data contained within.
+      <h4>About data analysis</h4>
+      <ul>
+        <li><a href="doc/Manual.html">General usage manual</a></li>
+        <li><a href="doc/Tables.html">Table and sample document reference</a></li>
+      </ul>
+
+      <h4>About data curation</h4>
+      <ul>
+        <li><a href="doc/Sources.html">Organization of data sources</a></li>
+        <li><a href="doc/Freezing.html">Freezing database versions</a></li>
+      </ul>
+
+      <p>
+        We try to document as many parts of the ISDB as we can in brief and
+        clear language intended for a wide research audience.  Still, there are
+        always missing pieces, so if you can’t find the information you need
+        about the ISDB within the topics above, please
+        <a href="mailto:mullspt@uw.edu?subject=ISDB%20documentation">drop us a line</a>
+        with your question.
       </p>
 
       <% frozen_versions = versions.grep(->{ this.frozen }).sort('timestamp').reverse %>
@@ -193,6 +209,19 @@
            id="load-custom-track">load into the genome browser</a>.
       </p>
       <h2>Download <% version.name %> datasets</h2>
+      <p class="notice bg-info">
+        Please read <a href="doc/Manual.html">our manual</a> for guidelines on
+        using the ISDB and the data contained within.
+      </p>
+
+      <p>
+        These downloadable datasets are broad summaries of the full data
+        contained within the ISDB.  Many questions are best answered by
+        querying the database directly.  If you’re unfamiliar with SQL
+        databases, we encourage you to collaborate with your local
+        bioinformatics practitioner.
+      </p>
+
       <% FOR dataset IN exports %>
         <h3><% dataset.name %></h3>
         <p class="text-lg">
@@ -212,6 +241,10 @@
             <li><code><% field %></code></li>
           <% END %>
         </ol>
+        <p>
+          The manual contains
+          <a href="doc/Manual.html#<% dataset.name.lower.replace('\s+', '-') %>">more information on this downloadable dataset</a>.
+        </p>
       <% END %>
       <% IF config.show_database_connection %>
         <h2>Access the database</h2>
