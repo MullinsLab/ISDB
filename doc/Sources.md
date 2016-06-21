@@ -116,7 +116,7 @@ The following fields are supported:
 
 For more information on how these fields are used and what values they should
 contain (paying particular attention to coordinate systems), please read the
-["Data usage guidelines" in the Manual](Manual.html#Data-usage-guidelines).
+["Data usage guidelines" in the Manual](Manual.html#data-usage-guidelines).
 
 Two fields, _sample_ and _info_, are JSON documents which can have arbitrary
 structure.  These structured documents are reconstructed from the flat CSV
