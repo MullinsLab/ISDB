@@ -1,0 +1,39 @@
+#!/bin/bash
+# Filters and collapses the raw sites data into observed events by:
+#
+#   • Filtering to reads with a mapping quality greater than 20 (i.e. the
+#     probability of a correct mapping is >99%)
+#
+#   • Keeping only one of the highest quality mapped sites for reads with
+#     multiple possible sites (rare, but present)
+#
+#   • Collapsing reads of the same IS into one record, crucially distinguishing
+#     by virus_pos/virus_end (depending on orientation) so as not to incorrectly
+#     collapse.
+#
+# This is mostly a port of the logic in scripts/check-virusinfo.R from the
+# https://github.com/hbc/li_hiv repo which goes along with the paper.
+#
+# Noteable differences from the R script:
+# 
+# This massaging corrects a bug regarding multiple site calls for the same read
+# when the mapping quality is the same for each site.
+#
+# The source "orientation" field, which indicates which LTR of HIV was
+# sequenced, is renamed to "ltr" to be less confusing.
+#
+# The orientation of the virus with respect to the chromosome is determined by
+# comparing the strand of the HIV-mapped segment and the human-mapped segment.
+# If they match, the virus is forward, otherwise it is reverse.
+
+set -e -o pipefail
+recs grep '{{mapq}} > 20' \
+    | recs sort -k mapq=-n \
+    | recs collate -k file,read_name -a recs \
+    | recs xform 'push_output( $r->{recs}[0] )' \
+    | recs xform '$r->rename("orientation", "ltr")' \
+    | recs xform '({{virus_strand}}) = {{code}} =~ /([-+])$/' \
+    | recs collate -k file,chrom,pos,ltr,insertion_end,seqcode \
+                --dlk 'virus_start= << {{ltr}} eq "5prime" ? {{virus_pos}} : {{virus_end}} >>' \
+                --dlk 'orientation= << $r->{strand} eq $r->{virus_strand} ? "F" : "R" >>' \
+                   -a reads=records
