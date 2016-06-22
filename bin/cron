@@ -10,7 +10,7 @@ popd >/dev/null
 
 function usage() {
     cat <<.
-usage: $(basename $0) [--auto-update] [--commit] <output-directory>
+usage: $(basename $0) [--auto-update] [--commit [--push]] <output-directory>
        $(basename $0) --help
 
   --auto-update     Pulls the ISDB source repo itself before
@@ -18,6 +18,11 @@ usage: $(basename $0) [--auto-update] [--commit] <output-directory>
 
   --commit          Commits changes to the output directory,
                     assuming it's a git repo
+
+  --push            Pushes any new commit in the output directory
+                    out to the remote.  Pulls from the output
+                    directory's remote at the beginning to ensure
+                    a clean push later.  Requires --commit.
 
 See $isdb/etc/crontab.example for how you might
 run this command.
@@ -62,10 +67,14 @@ for arg; do
 done
 
 commit=no
+push=no
 for arg; do
     case "$arg" in
         --commit)
             commit=yes
+            shift;;
+        --push)
+            push=yes
             shift;;
         -h|--help)
             usage
@@ -83,7 +92,7 @@ if [[ -z $output ]]; then
     exit 1
 fi
 
-if [[ $commit == yes ]]; then
+if [[ $commit == yes && $push == yes ]]; then
     pushd $output >/dev/null
         if git rev-parse --git-dir >/dev/null 2>&1; then
             if [[ -n $(git remote) ]]; then
@@ -106,11 +115,15 @@ if [[ $commit == yes ]]; then
                 echo "→ Committing changes"
                 git status --porcelain
                 git commit -m 'archiving updates'
-                if [[ -n $(git remote) ]]; then
-                    echo "→ Pushing changes"
-                    git push origin HEAD
+                if [[ $push == yes ]]; then
+                    if [[ -n $(git remote) ]]; then
+                        echo "→ Pushing changes"
+                        git push origin HEAD
+                    else
+                        echo "× No remote"
+                    fi
                 else
-                    echo "× No remote"
+                    echo "→ Not pushing changes (use --push to do so)"
                 fi
             else
                 echo "→ No changes to commit"
