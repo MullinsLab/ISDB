@@ -1,10 +1,58 @@
 #!/bin/bash
 set -e -o pipefail
 bin=$(dirname $0)
+isdb=$bin/../
 
 function usage() {
-    echo "usage: $(basename $0) <output-directory>"
+    cat <<.
+usage: $(basename $0) [--auto-update] [--commit] <output-directory>
+       $(basename $0) --help
+
+  --auto-update     Pulls the ISDB source repo itself before
+                    regenerating the website
+
+  --commit          Commits changes to the output directory,
+                    assuming it's a git repo
+
+.
 }
+
+function auto_update() {
+    pushd $isdb >/dev/null
+        if git rev-parse --git-dir >/dev/null 2>&1; then
+            if [[ -n $(git remote) ]]; then
+                # shasum is provided by Digest::SHA, which is a dependency
+                sha="$(shasum $0)"
+
+                echo "→ Pulling ISDB repo"
+                git pull --rebase
+
+                # Re-exec ourselves if our source changed with the pull
+                if shasum -c <<<"$sha" >/dev/null 2>&1; then
+                    echo "→ No need to re-run"
+                elif [[ -x $0 ]]; then
+                    echo "→ Re-running: $0" "$@"
+                    popd >/dev/null     # restore cwd
+                    exec "$0" "$@"
+                else
+                    echo "× $0 disappeared, aborting!" >&2
+                    exit 1
+                fi
+            fi
+        fi
+    popd >/dev/null
+}
+
+# We check if we need to auto update first, so that $@ is preserved for
+# potential re-exec.
+for arg; do
+    case "$arg" in
+        --auto-update)
+            shift
+            auto_update "$@"
+            ;;
+    esac
+done
 
 commit=no
 for arg; do
