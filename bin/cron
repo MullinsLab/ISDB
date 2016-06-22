@@ -1,0 +1,165 @@
+#!/bin/bash
+set -e -o pipefail
+bin=$(dirname $0)
+isdb=$bin/../
+
+# Make our path absolute
+pushd $isdb >/dev/null
+isdb=$(pwd)
+popd >/dev/null
+
+function usage() {
+    cat <<.
+usage: $(basename $0) [--auto-update] [--commit [--push]] <output-directory>
+       $(basename $0) --help
+
+  --auto-update     Pulls the ISDB source repo itself before
+                    regenerating the website
+
+  --commit          Commits changes to the output directory,
+                    assuming it's a git repo
+
+  --push            Pushes any new commit in the output directory
+                    out to the remote.  Pulls from the output
+                    directory's remote at the beginning to ensure
+                    a clean push later.  Requires --commit.
+
+See $isdb/etc/crontab.example for how you might
+run this command.
+.
+}
+
+function auto_update() {
+    pushd $isdb >/dev/null
+        if git rev-parse --git-dir >/dev/null 2>&1; then
+            if [[ -n $(git remote) ]]; then
+                # shasum is provided by Digest::SHA, which is a dependency
+                sha="$(shasum $0)"
+
+                echo "→ Pulling ISDB repo"
+                git pull --rebase
+
+                # Re-exec ourselves if our source changed with the pull
+                if shasum -c <<<"$sha" >/dev/null 2>&1; then
+                    echo "→ No need to re-run"
+                elif [[ -x $0 ]]; then
+                    echo "→ Re-running: $0" "$@"
+                    popd >/dev/null     # restore cwd
+                    exec "$0" "$@"
+                else
+                    echo "× $0 disappeared, aborting!" >&2
+                    exit 1
+                fi
+            fi
+        fi
+    popd >/dev/null
+}
+
+# We check if we need to auto update first, so that $@ is preserved for
+# potential re-exec.
+for arg; do
+    case "$arg" in
+        --auto-update)
+            shift
+            auto_update "$@"
+            ;;
+    esac
+done
+
+commit=no
+push=no
+for arg; do
+    case "$arg" in
+        --commit)
+            commit=yes
+            shift;;
+        --push)
+            push=yes
+            shift;;
+        -h|--help)
+            usage
+            exit 0;;
+        --)
+            shift
+            break;;
+    esac
+done
+
+output=$1
+
+if [[ -z $output ]]; then
+    usage
+    exit 1
+fi
+
+# Figure out ISDB "version"
+pushd $isdb >/dev/null
+    if git rev-parse --git-dir >/dev/null 2>&1; then
+        isdb_version=$(git describe --tags --always HEAD)
+        if [[ -n $(git status --porcelain --untracked-files=no) ]]; then
+            isdb_version="${isdb_version}-dirty"
+        fi
+    else
+        isdb_version=unknown
+    fi
+popd >/dev/null
+
+if [[ $commit == yes && $push == yes ]]; then
+    pushd $output >/dev/null
+        if git rev-parse --git-dir >/dev/null 2>&1; then
+            if [[ -n $(git remote) ]]; then
+                echo "→ Pulling web repo"
+                git pull --rebase origin
+            fi
+        fi
+    popd >/dev/null
+fi
+
+echo "→ Regenerating website"
+$bin/generate-website --compare $output
+
+if [[ $commit == yes ]]; then
+    echo "→ Checking for changes to commit"
+    pushd $output >/dev/null
+        if git rev-parse --git-dir >/dev/null 2>&1; then
+            git add -A .
+            if [[ -n $(git status --porcelain) ]]; then
+                echo "→ Committing changes"
+                git status --porcelain
+                git commit -F - <<COMMIT
+Regenerate site with latest data
+
+ISDB tools:
+
+  Hostname: $(hostname -f)
+  User: $USER
+  Path: $isdb
+  Version: $isdb_version
+
+Connection parameters:
+
+  PGHOST=$PGHOST
+  PGUSER=$PGUSER
+  PGDATABASE=${PGDATABASE:-isdb}
+  PGSERVICE=$PGSERVICE
+COMMIT
+                if [[ $push == yes ]]; then
+                    if [[ -n $(git remote) ]]; then
+                        echo "→ Pushing changes"
+                        git push origin HEAD
+                    else
+                        echo "× No remote"
+                    fi
+                else
+                    echo "→ Not pushing changes (use --push to do so)"
+                fi
+            else
+                echo "→ No changes to commit"
+            fi
+        else
+            echo "× Not a git clone"
+        fi
+    popd >/dev/null
+else
+    echo "→ Not committing changes (use --commit to do so)"
+fi
