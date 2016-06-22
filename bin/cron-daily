@@ -25,6 +25,17 @@ if [[ -z $output ]]; then
     exit 1
 fi
 
+if [[ $commit == yes ]]; then
+    pushd $output >/dev/null
+        if git rev-parse --git-dir >/dev/null 2>&1; then
+            if [[ -n $(git remote) ]]; then
+                echo "→ Pulling web repo"
+                git pull --rebase origin master
+            fi
+        fi
+    popd >/dev/null
+fi
+
 echo "→ Updating website"
 $bin/generate-website --compare $output
 
