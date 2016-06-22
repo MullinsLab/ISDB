@@ -88,7 +88,7 @@ if [[ $commit == yes ]]; then
         if git rev-parse --git-dir >/dev/null 2>&1; then
             if [[ -n $(git remote) ]]; then
                 echo "→ Pulling web repo"
-                git pull --rebase origin master
+                git pull --rebase origin
             fi
         fi
     popd >/dev/null
@@ -108,7 +108,7 @@ if [[ $commit == yes ]]; then
                 git commit -m 'archiving updates'
                 if [[ -n $(git remote) ]]; then
                     echo "→ Pushing changes"
-                    git push origin master
+                    git push origin HEAD
                 else
                     echo "× No remote"
                 fi
