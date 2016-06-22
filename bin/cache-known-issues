@@ -5,7 +5,7 @@ use warnings;
 use utf8;
 use open qw< :std :encoding(UTF-8) >;
 use FindBin qw< $Bin >;
-use lib "$Bin/../lib";
+use lib "$Bin/../lib", "$Bin/../local/lib/perl5";
 use LWP::UserAgent;
 use LWP::Protocol::Net::Curl;
 use JSON::MaybeXS;
