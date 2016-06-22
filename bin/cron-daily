@@ -84,7 +84,7 @@ if [[ $commit == yes ]]; then
     popd >/dev/null
 fi
 
-echo "→ Updating website"
+echo "→ Regenerating website"
 $bin/generate-website --compare $output
 
 if [[ $commit == yes ]]; then
