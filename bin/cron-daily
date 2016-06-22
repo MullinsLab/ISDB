@@ -51,12 +51,14 @@ if [[ $commit == yes ]]; then
                 if [[ -n $(git remote) ]]; then
                     echo "→ Pushing changes"
                     git push origin master
+                else
+                    echo "× No remote"
                 fi
             else
                 echo "→ No changes to commit"
             fi
         else
-            echo "→ Not a git clone"
+            echo "× Not a git clone"
         fi
     popd >/dev/null
 else
