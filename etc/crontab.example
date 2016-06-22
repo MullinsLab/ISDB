@@ -1,0 +1,1 @@
+0 7 * * * source /home/isdb/perl5/perlbrew/etc/bashrc && /usr/local/bin/chronic env PGUSER=isdb_r PGHOST=ireland /home/isdb/isdb/bin/cron --commit /home/isdb/isdb-web-internal/

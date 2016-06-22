@@ -3,6 +3,11 @@ set -e -o pipefail
 bin=$(dirname $0)
 isdb=$bin/../
 
+# Make our path absolute
+pushd $isdb >/dev/null
+isdb=$(pwd)
+popd >/dev/null
+
 function usage() {
     cat <<.
 usage: $(basename $0) [--auto-update] [--commit] <output-directory>
@@ -14,6 +19,8 @@ usage: $(basename $0) [--auto-update] [--commit] <output-directory>
   --commit          Commits changes to the output directory,
                     assuming it's a git repo
 
+See $isdb/etc/crontab.example for how you might
+run this command.
 .
 }
 
