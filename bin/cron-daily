@@ -63,6 +63,9 @@ for arg; do
         -h|--help)
             usage
             exit 0;;
+        --)
+            shift
+            break;;
     esac
 done
 
