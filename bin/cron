@@ -92,6 +92,18 @@ if [[ -z $output ]]; then
     exit 1
 fi
 
+# Figure out ISDB "version"
+pushd $isdb >/dev/null
+    if git rev-parse --git-dir >/dev/null 2>&1; then
+        isdb_version=$(git describe --tags --always HEAD)
+        if [[ -n $(git status --porcelain --untracked-files=no) ]]; then
+            isdb_version="${isdb_version}-dirty"
+        fi
+    else
+        isdb_version=unknown
+    fi
+popd >/dev/null
+
 if [[ $commit == yes && $push == yes ]]; then
     pushd $output >/dev/null
         if git rev-parse --git-dir >/dev/null 2>&1; then
@@ -114,7 +126,23 @@ if [[ $commit == yes ]]; then
             if [[ -n $(git status --porcelain) ]]; then
                 echo "→ Committing changes"
                 git status --porcelain
-                git commit -m 'archiving updates'
+                git commit -F - <<COMMIT
+Regenerate site with latest data
+
+ISDB tools:
+
+  Hostname: $(hostname -f)
+  User: $USER
+  Path: $isdb
+  Version: $isdb_version
+
+Connection parameters:
+
+  PGHOST=$PGHOST
+  PGUSER=$PGUSER
+  PGDATABASE=${PGDATABASE:-isdb}
+  PGSERVICE=$PGSERVICE
+COMMIT
                 if [[ $push == yes ]]; then
                     if [[ -n $(git remote) ]]; then
                         echo "→ Pushing changes"
