@@ -1,5 +1,11 @@
 % Freezing versions of the ISDB
 
+From time to time we freeze versions of the ISDB by making a read-only copy
+that will never be modified.  These frozen versions are linked from the main
+page of the ISDB.  Freezing allows analyses to lock in a specific version of
+the data for repeatability while still allowing corrections and new data to
+flow into the latest in-flight version.
+
 Frozen versions of the ISDB are a combination of two things:
 
 1. A copy of the database to which only read-only access is permitted
