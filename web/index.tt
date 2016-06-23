@@ -162,6 +162,7 @@
       <h4>About data curation</h4>
       <ul>
         <li><a href="doc/Sources.html">Organization of data sources</a></li>
+        <li><a href="doc/Database-connection.html">Specifying database connection details</a></li>
         <li><a href="doc/Freezing.html">Freezing database versions</a></li>
       </ul>
 
