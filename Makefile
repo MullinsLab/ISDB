@@ -19,7 +19,7 @@ deps: $(cpanm) liftover perl-deps
 
 perl-deps: cpanfile
 	mkdir -p local
-	$(cpanm) --notest -l local --installdeps .
+	$(cpanm) --quiet --from https://cpan.metacpan.org/ --no-lwp --notest -l local --installdeps .
 
 $(cpanm):
 	curl -fsSL https://raw.githubusercontent.com/miyagawa/cpanminus/master/cpanm > $@
