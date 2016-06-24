@@ -2,3 +2,5 @@
 /bin/liftOver.Darwin
 /bin/liftOver.Linux
 /config_local.*
+/bin/cpanm
+/local

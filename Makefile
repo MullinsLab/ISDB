@@ -13,6 +13,18 @@ else
 OS := $(SYS)
 endif
 
+cpanm := bin/cpanm
+
+deps: $(cpanm) liftover perl-deps
+
+perl-deps: cpanfile
+	mkdir -p local
+	$(cpanm) --quiet --from https://cpan.metacpan.org/ --no-lwp --notest -l local --installdeps .
+
+$(cpanm):
+	curl -fsSL https://raw.githubusercontent.com/miyagawa/cpanminus/master/cpanm > $@
+	chmod +x $@
+
 liftover: bin/liftOver.$(SYS) cache/hg19ToHg38.over.chain.gz
 
 bin/liftOver.$(SYS):

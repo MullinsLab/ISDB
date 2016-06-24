@@ -8,6 +8,10 @@ pushd $isdb >/dev/null
 isdb=$(pwd)
 popd >/dev/null
 
+# the shasum utility might be installed in our local perl tree,
+# so add it to the PATH
+PATH=$isdb/local/bin:$PATH
+
 function usage() {
     cat <<.
 usage: $(basename $0) [--auto-update] [--commit [--push]] <output-directory>
