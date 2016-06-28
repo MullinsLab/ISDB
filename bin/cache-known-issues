@@ -43,4 +43,10 @@ if ($res->is_success) {
         };
     }
     say JSON->new->pretty->canonical->encode(\@out);
+} else {
+    warn $res->status_line, "\n";
+    warn "\n", $res->decoded_content, "\n"
+        if grep { defined and length } $res->decoded_content;
+    say "[]";
+    exit 1;
 }
