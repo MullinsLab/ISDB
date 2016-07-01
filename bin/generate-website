@@ -66,7 +66,10 @@ mkdir -p $base/cache/
 $bin/cache-pubmed-info > $base/cache/pubmed.json
 
 echo "Caching current Known Issues"
-$bin/cache-known-issues > $base/cache/issues.json
+if ! $bin/cache-known-issues > $base/cache/issues.json; then
+    echo "Warning: Couldn't fetch known issues, but proceeding anyway."
+    echo "Hint: Look at the messages between this line and the line «Caching current Known Issuess» above."
+fi
 
 echo "Rendering template"
 $bin/fill-template \
