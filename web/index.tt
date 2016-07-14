@@ -8,13 +8,7 @@
   <title>Integration Site Database (ISDB)</title>
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-  <style type="text/css">
-    body { padding-bottom: 10em }
-    .text-lg { font-size: 1.2em }
-    .notice { padding: 0.5em 0.7em }
-    .notice p:last-child { margin-bottom: 0 }
-    .col > h1:first-child, .col > h2:first-child, .col > h3:first-child, .col > h4:first-child { margin-top: 0 }
-  </style>
+  <link rel="stylesheet" href="static/isdb.css">
 </head>
 <% version_url = ->(v) { config.base_url _ (v.frozen ? "frozen/" _ v.name _ "/" : "") } %>
 <body class="container">

@@ -1,0 +1,5 @@
+body { padding-bottom: 10em }
+.text-lg { font-size: 1.2em }
+.notice { padding: 0.5em 0.7em }
+.notice p:last-child { margin-bottom: 0 }
+.col > h1:first-child, .col > h2:first-child, .col > h3:first-child, .col > h4:first-child { margin-top: 0 }

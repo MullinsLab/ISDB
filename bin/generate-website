@@ -71,6 +71,9 @@ if ! $bin/cache-known-issues > $base/cache/issues.json; then
     echo "Hint: Look at the messages between this line and the line «Caching current Known Issuess» above."
 fi
 
+echo "Copying static assets"
+cp -a $base/web/static $output
+
 echo "Rendering template"
 $bin/fill-template \
     --output=$output \
