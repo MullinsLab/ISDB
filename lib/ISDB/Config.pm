@@ -26,7 +26,7 @@ has conf => (
     init_arg => undef,
 );
 
-sub _build_conf {
+sub _read_conf {
     my $self = shift;
     my $conf = Config::Any->load_stems({
         stems   => $self->stems,
@@ -41,6 +41,18 @@ sub _build_conf {
     return reduce { merge($a, $b) } +{},
               map { pairvalues %$_ }
                   @$conf;
+}
+
+sub _build_conf {
+    my $self = shift;
+    my $conf = $self->_read_conf;
+
+    # Normalize base_url
+    $conf->{web}{base_url} .= "/"
+        unless not exists $conf->{web}{base_url}
+            or $conf->{web}{base_url} =~ m{/$};
+
+    return $conf;
 }
 
 1;
