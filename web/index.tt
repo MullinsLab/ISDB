@@ -91,15 +91,6 @@
       <% END %>
     </div>
     <div class="col col-md-5 col-sm-12">
-      <h2>Genome Browser</h2>
-      <p>
-        If you’re interested in a specific region of the human genome, such as
-        a gene, the <a href="https://genome.ucsc.edu">UCSC Genome Browser</a>
-        is a great way to start visualizing the ISDB data.  We provide a custom
-        track which you can
-        <a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgt.customText=<% config.web.base_url _ version_url(version) | uri | html %>exports/tracks/isdb.bed"
-           id="load-custom-track">load into the genome browser</a>.
-      </p>
     </div>
   </div>
 <% END %>
