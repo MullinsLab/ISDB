@@ -35,34 +35,53 @@
       <% INCLUDE 'source_list', resultset = isdb.resultset("Integration").in_vitro %>
 
       <% BLOCK source_list %>
-        <% counts = resultset.counts_by_source_and_publication %>
-        <ul>
-          <% FOR row IN counts.all %>
-            <li>
-              <% IF row.get_column("pubmed_id") %>
-                <% id   = row.get_column("pubmed_id") %>
-                <% info = pubmed_info.$id %>
-                <a href="https://www.ncbi.nlm.nih.gov/pubmed/<% id %>">
-                  <%- IF info -%>
-                    <% info.sortfirstauthor %>.
-                  <%- ELSE -%>
-                    PubMed ID: <% id %>
-                  <%- END -%>
-                </a>
-                <% IF info %>
-                  “<abbr title="“<% info.title %>”"><% info.title.substr(0, 40) %>…</abbr>”
+        <table class="table table-condensed table-striped source-table">
+          <thead>
+            <tr>
+              <th class="source-name">Data source</th>
+              <th class="author">First author</th>
+              <th class="publication-name">Publication</th>
+              <th class="n-count">n</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% counts = resultset.counts_by_source_and_publication %>
+            <% FOR row IN counts.all %>
+              <tr>
+                <td class="source-name">
+                  <% IF row.source.document.uri %>
+                    <a href="<% row.source.document.uri %>"><% row.source.name %></a>
+                  <% ELSE %>
+                    <% row.source.name %>
+                  <% END %>
+                </td>
+                <% IF row.get_column("pubmed_id") %>
+                  <% id   = row.get_column("pubmed_id") %>
+                  <% info = pubmed_info.$id %>
+                  <td class="author">
+                    <% IF info.sortfirstauthor %>
+                      <% info.sortfirstauthor %>
+                    <% ELSE %>
+                      <em>unknown</em>
+                    <% END %>
+                  </td>
+                  <td class="publication-name">
+                    <a href="https://www.ncbi.nlm.nih.gov/pubmed/<% id | uri | html %>">
+                      <%- IF info.title -%>
+                        <%- info.title -%>
+                      <%- ELSE -%>
+                        PMID: <% id %>
+                      <%- END -%>
+                    </a>
+                  </td>
+                <% ELSE %>
+                  <td colspan="2"><em>unpublished</em></td>
                 <% END %>
-                via
-              <% END %>
-              <% IF row.source.document.uri %>
-                <a href="<% row.source.document.uri %>"><% row.source.name %></a>
-              <% ELSE %>
-                <% row.source.name %>
-              <% END %>
-              <span class="text-muted">n=<% row.get_column("count") | commafy %></span>
-            </li>
-          <% END %>
-        </ul>
+                <td class="n-count"><% row.get_column("count") | commafy %></td>
+              </tr>
+            <% END %>
+          </tbody>
+        </table>
       <% END %>
 
       <% FOREACH query IN [["Subjects", "subjects"], ["Unique IS", "unique_sites"]] %>

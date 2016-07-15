@@ -6,3 +6,13 @@ body {
 .notice { padding: 0.5em 0.7em }
 .notice p:last-child { margin-bottom: 0 }
 .col > h1:first-child, .col > h2:first-child, .col > h3:first-child, .col > h4:first-child { margin-top: 0 }
+
+
+/* Tables of data sources */
+.source-table .n-count {
+  text-align: right;
+}
+.source-table th:not(.publication-name),
+.source-table td:not(.publication-name) {
+  white-space: nowrap;
+}
