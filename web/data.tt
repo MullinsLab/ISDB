@@ -10,9 +10,16 @@
       <p>
         These downloadable datasets are broad summaries of the full data
         contained within the ISDB.  Many questions are best answered by
-        querying the database directly.  If you’re unfamiliar with SQL
-        databases, we encourage you to collaborate with your local
-        bioinformatics practitioner.
+        querying the database directly.
+
+        <% IF config.show_database_connection %>
+          <span class="visible-sm-inline visible-xs-inline">
+            (See below for <a href="#access-the-database">connection details</a>.)
+          </span>
+        <% END %>
+
+        If you’re unfamiliar with SQL databases, we encourage you to
+        collaborate with your local bioinformatics practitioner.
       </p>
 
       <% FOR dataset IN exports %>
@@ -67,7 +74,7 @@
     </div>
     <div class="col col-md-5 col-sm-12">
       <% IF config.show_database_connection %>
-        <h2>Access the database</h2>
+        <h2 id="access-the-database">Access the database</h2>
         <p>
           If you’re handy with code, you can connect to the database directly
           as a read-only user.  Try:
