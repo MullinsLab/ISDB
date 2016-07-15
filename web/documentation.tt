@@ -8,7 +8,7 @@
         clear language intended for a wide research audience.  Still, there are
         always missing pieces, so if you can’t find the information you need
         about the ISDB within the topics above, please
-        <a href="mailto:mullspt@uw.edu?subject=ISDB%20documentation">drop us a line</a>
+        <a href="mailto:<% config.contact | uri | html %>?subject=ISDB%20documentation">drop us a line</a>
         with your question.
       </p>
 
