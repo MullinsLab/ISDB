@@ -74,13 +74,13 @@ fi
 echo "Copying static assets"
 cp -a $base/web/static $output
 
-echo "Rendering template"
+echo "Rendering templates"
 $bin/fill-template \
     --output=$output \
     --find-exports=$exports \
     $template_args \
     --var version@$output/version.json \
-    $base/web/index.tt
+    $base/web/*.tt
 
 echo "Generating documentation"
 if ! $bin/generate-documentation $output; then

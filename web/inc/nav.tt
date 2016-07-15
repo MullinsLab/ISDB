@@ -1,0 +1,18 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="./">About</a></li>
+      </ul>
+      <script type="text/javascript">
+        (function(){
+          var page = document.location.pathname.split(/\//).pop();
+          if (page && page !== "index.html") {
+            jQuery('nav .navbar-nav li.active').removeClass('active');
+            jQuery('nav .navbar-nav a[href$="' + page + '"]').closest('li').addClass("active");
+          }
+        })();
+      </script>
+    </div>
+  </div>
+</nav>

@@ -14,7 +14,6 @@
 </head>
 <body class="container">
   <h1>Integration Site Database <small>ISDB</small></h1>
-  <hr>
   <% IF version.frozen %>
     <div class="row">
       <div class="col-sm-12">
@@ -35,6 +34,8 @@
       </div>
     </div>
   <% END %>
+
+  <% INCLUDE "nav.tt" %>
 
   <% content | none %>
 
