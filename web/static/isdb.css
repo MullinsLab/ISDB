@@ -7,7 +7,6 @@ body {
 .notice p:last-child { margin-bottom: 0 }
 .col > h1:first-child, .col > h2:first-child, .col > h3:first-child, .col > h4:first-child { margin-top: 0 }
 
-
 /* Tables of data sources */
 .source-table .n-count {
   text-align: right;
@@ -15,4 +14,14 @@ body {
 .source-table th:not(.publication-name),
 .source-table td:not(.publication-name) {
   white-space: nowrap;
+}
+
+/* Attribution and copyright footer */
+.footer {
+  margin-top: 5em;
+}
+.footer .media .media-object {
+  height: 45px;
+  margin-left: 15px;
+  border-radius: 4px;
 }

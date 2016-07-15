@@ -39,5 +39,32 @@
 
   <% content | none %>
 
+  <div class="row footer">
+    <div class="col-md-8 col-sm-12">
+      <hr>
+      <div class="media">
+        <div class="media-left">
+          <a href="https://mullinslab.microbiol.washington.edu">
+            <img src="https://mullinslab.microbiol.washington.edu/img/ml.png"
+                 alt="Mullins Lab"
+               class="media-object">
+          </a>
+        </div>
+        <div class="media-body">
+          <p>
+            The ISDB is a project of the
+            <a href="https://mullinslab.microbiol.washington.edu">Mullins Molecular Retrovirology Lab</a>
+            at the <a href="https://washington.edu">University of Washington</a>.
+          </p>
+          <p>
+            Copyright © 2015–<% parse_timestamp(version.timestamp).strftime("%Y") %>
+            <a href="https://washington.edu">University of Washington</a>.
+            Previously published datasets are copyright their respective authors
+            and used in accordance with their licenses.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
