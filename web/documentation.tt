@@ -1,0 +1,31 @@
+<% WRAPPER "inc/layout.tt" %>
+  <div class="row">
+    <div class="col col-md-7 col-sm-12">
+      <h2>Documentation</h2>
+
+      <p>
+        We try to document as many parts of the ISDB as we can in brief and
+        clear language intended for a wide research audience.  Still, there are
+        always missing pieces, so if you can’t find the information you need
+        about the ISDB within the topics above, please
+        <a href="mailto:mullspt@uw.edu?subject=ISDB%20documentation">drop us a line</a>
+        with your question.
+      </p>
+
+      <h3>Topics</h3>
+
+      <h4>About data analysis</h4>
+      <ul>
+        <li><a href="doc/Manual.html">General usage manual</a></li>
+        <li><a href="doc/Tables.html">Table and sample document reference</a></li>
+      </ul>
+
+      <h4>About data curation</h4>
+      <ul>
+        <li><a href="doc/Sources.html">Organization of data sources</a></li>
+        <li><a href="doc/Database-connection.html">Specifying database connection details</a></li>
+        <li><a href="doc/Freezing.html">Freezing database versions</a></li>
+      </ul>
+    </div>
+  </div>
+<% END %>
