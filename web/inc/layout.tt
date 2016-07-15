@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Integration Site Database (ISDB)</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static/isdb.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</head>
+<body class="container">
+  <h1>Integration Site Database <small>ISDB</small></h1>
+  <hr>
+  <% IF version.frozen %>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="notice text-lg bg-warning">
+          <p>
+            This page is part of a <strong>copy</strong> of the ISDB
+            <strong>frozen in time</strong> on
+            <strong><% parse_timestamp(version.timestamp).strftime("%d %B %Y") %></strong>.
+            The permanent URL of this frozen version is:
+            <a href="<% config.base_url _ version_url(version) %>"><% config.base_url _ version_url(version) %></a>.
+          </p>
+          <p>
+            If you’re not using this frozen version for analysis, you may want to
+            <a href="<% config.base_url %>">switch to the latest version</a>.
+          </p>
+        </div>
+        <hr>
+      </div>
+    </div>
+  <% END %>
+
+  <% content | none %>
+
+</body>
+</html>

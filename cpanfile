@@ -31,3 +31,4 @@ requires 'Try::Tiny';
 requires 'Types::Standard';
 requires 'Types::Common::String';
 requires 'URI';
+requires 'URI::Escape';

@@ -1,39 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>Integration Site Database (ISDB)</title>
-
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-  <link rel="stylesheet" href="static/isdb.css">
-</head>
-<% version_url = ->(v) { config.base_url _ (v.frozen ? "frozen/" _ v.name _ "/" : "") } %>
-<body class="container">
-  <h1>Integration Site Database <small>ISDB</small></h1>
-  <hr>
-  <% IF version.frozen %>
-    <div class="row">
-      <div class="col-sm-12">
-        <div class="notice text-lg bg-warning">
-          <p>
-            This page is part of a <strong>copy</strong> of the ISDB
-            <strong>frozen in time</strong> on
-            <strong><% parse_timestamp(version.timestamp).strftime("%d %B %Y") %></strong>.
-            The permanent URL of this frozen version is:
-            <a href="<% version_url(version) %>"><% version_url(version) %></a>.
-          </p>
-          <p>
-            If you’re not using this frozen version for analysis, you may want to
-            <a href="<% config.base_url %>">switch to the latest version</a>.
-          </p>
-        </div>
-        <hr>
-      </div>
-    </div>
-  <% END %>
+<% WRAPPER "inc/layout.tt" %>
   <div class="row">
     <div class="col-md-7 col-sm-12">
       <p class="lead">
@@ -200,7 +165,7 @@
         a gene, the <a href="https://genome.ucsc.edu">UCSC Genome Browser</a>
         is a great way to start visualizing the ISDB data.  We provide a custom
         track which you can
-        <a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgt.customText=<% version_url(version) | uri | html %>exports/tracks/isdb.bed"
+        <a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgt.customText=<% config.base_url _ version_url(version) | uri | html %>exports/tracks/isdb.bed"
            id="load-custom-track">load into the genome browser</a>.
       </p>
       <h2>Download <% version.name %> datasets</h2>
@@ -260,5 +225,4 @@
       <% END %>
     </div>
   </div>
-</body>
-</html>
+<% END %>
