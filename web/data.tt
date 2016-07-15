@@ -77,7 +77,10 @@
         <h2 id="access-the-database">Access the database</h2>
         <p>
           If you’re handy with code, you can connect to the database directly
-          as a read-only user.  Try:
+          as a read-only user.  We like both writing
+          <a href="https://wikipedia.org/wiki/SQL">SQL</a> and using R’s
+          <a href="https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html">dplyr</a>
+          package.  To connect to the database, try:
         </p>
         <table class="table table-condensed">
           <tr><th>Type</th><td>PostgreSQL</td></tr>
