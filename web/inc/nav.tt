@@ -4,6 +4,7 @@
       <ul class="nav navbar-nav">
         <li class="active"><a href="./">About</a></li>
         <li><a href="data.html">Get the Data</a></li>
+        <li><a href="sources.html">Data Sources</a></li>
         <li><a href="documentation.html">Documentation</a></li>
       </ul>
       <script type="text/javascript">
