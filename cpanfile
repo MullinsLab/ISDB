@@ -32,3 +32,4 @@ requires 'Types::Standard';
 requires 'Types::Common::String';
 requires 'URI';
 requires 'URI::Escape';
+requires 'YAML::XS';
