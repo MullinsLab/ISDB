@@ -1,6 +1,6 @@
 <% WRAPPER "inc/layout.tt" %>
   <div class="row">
-    <div class="col-md-7 col-sm-12">
+    <div class="col col-md-7 col-sm-12">
       <p class="lead">
         The ISDB aims to provide a stable, authoritative, and standardized
         source of data for analysing HIV-1 integration sites from the viral
@@ -17,7 +17,8 @@
         automatically regenerated from our primary and secondary sources in
         order to incorporate changes and additions.
       </p>
-
+    </div>
+    <div class="col col-md-5 col-sm-12">
       <% FOREACH query IN [["Subjects", "subjects"], ["Unique IS", "unique_sites"]] %>
         <h3>Top 5 Genes by # of <% query.0 %></h3>
         <% genes = isdb.resultset("SummaryByGene").top_N_by_column(query.1, 5) %>
@@ -42,8 +43,6 @@
           </tbody>
         </table>
       <% END %>
-    </div>
-    <div class="col col-md-5 col-sm-12">
     </div>
   </div>
 <% END %>
