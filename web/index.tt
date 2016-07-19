@@ -3,9 +3,9 @@
     <div class="col-md-7 col-sm-12">
       <p class="lead">
         The ISDB aims to provide a stable, authoritative, and standardized
-        source of data for analysing HIV-1 integration sites. It seeks to
-        support analyses using the tools of your choice, whether that’s R and
-        ggplot or Excel and Prism.
+        source of data for analysing HIV-1 integration sites from the viral
+        reservoir. It seeks to support analyses using the tools of your choice,
+        whether that’s R and ggplot or Excel and Prism.
       </p>
 
       <p>
