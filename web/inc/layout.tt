@@ -23,11 +23,11 @@
             <strong>frozen in time</strong> on
             <strong><% parse_timestamp(version.timestamp).strftime("%d %B %Y") %></strong>.
             The permanent URL of this frozen version is:
-            <a href="<% config.base_url _ version_url(version) %>"><% config.base_url _ version_url(version) %></a>.
+            <a href="<% config.web.base_url _ version_url(version) %>"><% config.web.base_url _ version_url(version) %></a>.
           </p>
           <p>
             If you’re not using this frozen version for analysis, you may want to
-            <a href="<% config.base_url %>">switch to the latest version</a>.
+            <a href="<% config.web.base_url %>">switch to the latest version</a>.
           </p>
         </div>
         <hr>

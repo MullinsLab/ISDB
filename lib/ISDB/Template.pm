@@ -5,6 +5,7 @@ use utf8;
 
 package ISDB::Template;
 use Template::Alloy;
+use ISDB::Config;
 use ISDB::Schema;
 use Hash::Merge qw< merge >;
 use DateTime::Format::RFC3339;
@@ -17,7 +18,9 @@ sub fill {
     my $args     = shift || {};
     my $isdb     = ISDB::Schema->connect_default;
     my $defaults = {
-        isdb => $isdb,
+        isdb   => $isdb,
+        config => ISDB::Config->new->conf,
+
         parse_timestamp => sub {
             my $timestamp = shift // return undef;
             state $rfc3339 = DateTime::Format::RFC3339->new;
@@ -25,6 +28,7 @@ sub fill {
             $dt->set_time_zone('US/Pacific');
             return $dt;
         },
+
         version_url => sub {
             my $v = shift;
             return ($v and $v->{frozen})

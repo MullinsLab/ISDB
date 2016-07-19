@@ -11,7 +11,6 @@ use ISDB::Template;
 use ISDB::Exporter;
 use Path::Tiny;
 use JSON::MaybeXS;
-use ISDB::Config;
 
 my ($opt, $usage) = describe_options(
     '%c --output=directory [--find-exports=directory] template.tt [another.tt]',
@@ -66,8 +65,6 @@ $args->{pubmed_info} = decode_json( $pubmed_cache->slurp_raw )
 my $issues_cache = path($Bin)->parent->child("cache", "issues.json");
 $args->{issues} = decode_json( $issues_cache->slurp_raw )
     if $issues_cache->exists;
-
-$args->{config} = ISDB::Config->new->conf->{web};
 
 # Read in passed template vars
 for my $var (@{ $opt->var || [] }) {

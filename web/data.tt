@@ -12,7 +12,7 @@
         contained within the ISDB.  Many questions are best answered by
         querying the database directly.
 
-        <% IF config.show_database_connection %>
+        <% IF config.web.show_database_connection %>
           <span class="visible-sm-inline visible-xs-inline">
             (See below for <a href="#access-the-database">connection details</a>.)
           </span>
@@ -73,7 +73,7 @@
       <% END %>
     </div>
     <div class="col col-md-5 col-sm-12">
-      <% IF config.show_database_connection %>
+      <% IF config.web.show_database_connection %>
         <h2 id="access-the-database">Access the database</h2>
         <p>
           If you’re handy with code, you can connect to the database directly
