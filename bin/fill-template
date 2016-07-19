@@ -58,14 +58,6 @@ if ($opt->find_versions) {
     $args->{versions} = [ values %$versions ];
 }
 
-my $pubmed_cache = path($Bin)->parent->child("cache", "pubmed.json");
-$args->{pubmed_info} = decode_json( $pubmed_cache->slurp_raw )
-    if $pubmed_cache->exists;
-
-my $issues_cache = path($Bin)->parent->child("cache", "issues.json");
-$args->{issues} = decode_json( $issues_cache->slurp_raw )
-    if $issues_cache->exists;
-
 # Read in passed template vars
 for my $var (@{ $opt->var || [] }) {
     my ($name, $op, $value) = split /([=@])/, $var, 2;

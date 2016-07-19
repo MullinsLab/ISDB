@@ -80,6 +80,8 @@ $bin/fill-template \
     --find-exports=$exports \
     $template_args \
     --var version@$output/version.json \
+    --var pubmed_info@$base/cache/pubmed.json \
+    --var issues@$base/cache/issues.json \
     $base/web/*.tt
 
 echo "Generating documentation"
