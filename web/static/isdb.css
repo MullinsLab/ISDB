@@ -2,15 +2,32 @@ body {
   padding-bottom: 10em;
   overflow-y: scroll;
 }
-.text-lg { font-size: 1.2em }
-.notice { padding: 0.5em 0.7em }
-.notice p:last-child { margin-bottom: 0 }
+
+.text-lg {
+  font-size: 1.2em;
+}
+
+/* Notices are generally used in combination with the contextual text and
+ * background color classes provided by Bootstrap */
+.notice {
+  padding: 0.5em 0.7em;
+}
+.notice p:last-child {
+  margin-bottom: 0;
+}
 .frozen-notice {
   border: solid #f5efd3;
   border-width:  0 1px 1px 1px;
   border-radius: 0 0   4px 4px;
 }
-.col > h1:first-child, .col > h2:first-child, .col > h3:first-child, .col > h4:first-child { margin-top: 0 }
+
+/* Don't pad headers at the top of a column */
+.col > h1:first-child,
+.col > h2:first-child,
+.col > h3:first-child,
+.col > h4:first-child {
+  margin-top: 0;
+}
 
 /* Tables of data sources */
 .source-table .n-count {
