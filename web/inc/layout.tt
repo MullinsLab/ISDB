@@ -13,11 +13,10 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 </head>
 <body class="container">
-  <h1>Integration Site Database <small>ISDB</small></h1>
   <% IF version.frozen %>
     <div class="row">
       <div class="col-sm-12">
-        <div class="notice text-lg bg-warning">
+        <div class="frozen-notice notice text-lg bg-warning">
           <p>
             This page is part of a <strong>copy</strong> of the ISDB
             <strong>frozen in time</strong> on
@@ -30,11 +29,11 @@
             <a href="<% config.web.base_url %>">switch to the latest version</a>.
           </p>
         </div>
-        <hr>
       </div>
     </div>
   <% END %>
 
+  <h1>Integration Site Database <small>ISDB</small></h1>
   <% INCLUDE "nav.tt" %>
 
   <% content | none %>

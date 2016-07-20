@@ -5,6 +5,11 @@ body {
 .text-lg { font-size: 1.2em }
 .notice { padding: 0.5em 0.7em }
 .notice p:last-child { margin-bottom: 0 }
+.frozen-notice {
+  border: solid #f5efd3;
+  border-width:  0 1px 1px 1px;
+  border-radius: 0 0   4px 4px;
+}
 .col > h1:first-child, .col > h2:first-child, .col > h3:first-child, .col > h4:first-child { margin-top: 0 }
 
 /* Tables of data sources */
