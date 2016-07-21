@@ -47,3 +47,11 @@ body {
   margin-left: 15px;
   border-radius: 4px;
 }
+
+/* Nicer definition lists when used for column documentation */
+dt code {
+    font-weight: normal;
+}
+dd {
+    margin-bottom: 0.65em;
+}

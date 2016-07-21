@@ -38,11 +38,3 @@ h6 { font-size: 14px }
 .footnoteRef:hover sup {
     border-color: #337ab7; /* match link color */
 }
-
-dt code {
-    font-weight: normal;
-}
-
-dd {
-    margin-bottom: 0.65em;
-}

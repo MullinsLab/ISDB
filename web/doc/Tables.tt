@@ -1,19 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>Integration Site Database (ISDB)</title>
-
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <link rel="stylesheet" href="doc.css" type="text/css" />
-</head>
-<body class="container-fluid">
+<%
+  page = {
+    title = "Table Reference"
+  }
+-%>
+<% WRAPPER "../inc/layout.tt" %>
   <div class="row">
-    <div class="col-lg-5 col-md-8 col-sm-12">
-      <h1>Tables</h1>
+    <div class="col col-lg-5 col-md-8 col-sm-12">
+      <h2>Tables</h2>
       <p>
         The columns of the primary data tables in the ISDB are described below.
         These tables make up the backbone of the database.
@@ -22,7 +15,7 @@
         <% INCLUDE 'show_table' %>
       <% END %>
 
-      <h1>Views</h1>
+      <h2>Views</h2>
       <p>
         Views are different representations of the data contained within the tables
         above.  They pull together data from multiple tables in order to summarize
@@ -38,7 +31,7 @@
       <% END %>
 
       <% BLOCK show_table %>
-        <h2><% table.name %></h2>
+        <h3><% table.name %></h3>
         <% IF table.name == 'integration' %>
           <p>
             The primary fact table in the ISDB.  Each row records <em>a single
@@ -88,8 +81,8 @@
         </table>
       <% END %>
     </div>
-    <div class="col-lg-5 col-lg-offset-1 col-md-8 col-sm-12">
-      <h1>Glossary</h1>
+    <div class="col col-lg-5 col-lg-offset-1 col-md-8 col-sm-12">
+      <h2>Glossary</h2>
       <p>
         Data type and attribute terms are defined below.  You should also refer
         to the <a href="Manual.html#data-usage-guidelines">Data usage
@@ -186,7 +179,7 @@
         </dd>
       </dl>
 
-      <h1>Sample document fields</h1>
+      <h2>Sample document fields</h2>
       <p>
         If you're writing SQL to query the ISDB, you're likely going to want to
         extract data fields out of the <code>sample</code> JSON document
@@ -237,5 +230,4 @@
       </table>
     </div>
   </div>
-</body>
-</html>
+<% END %>

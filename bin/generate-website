@@ -84,6 +84,15 @@ $bin/fill-template \
     --var issues@$base/cache/issues.json \
     $base/web/*.tt
 
+mkdir -p $output/doc
+$bin/table-metadata > $base/cache/table-metadata.json
+$bin/fill-template \
+    --output=$output/doc \
+    --var version@$output/version.json \
+    --var tables@$base/cache/table-metadata.json \
+    --var webroot=../ \
+    $base/web/doc/Tables.tt
+
 echo "Generating documentation"
 if ! $bin/generate-documentation $output; then
     echo "Warning: Couldn't generate documentation, but proceeding anyway"
