@@ -1,0 +1,21 @@
+<%
+  page = {
+    title = "Documentation"
+  }
+-%>
+<%- page.head = BLOCK %>
+  <% INSERT "head.html" %>
+<% END -%>
+<% WRAPPER "${template_root}inc/layout.tt" %>
+  <div class="row">
+    <div class="col col-md-8 col-sm-12 pandoc">
+      <h2>
+        <% metadata.title %>
+        <% IF metadata.subtitle %>
+          <small><% metadata.subtitle %></small>
+        <% END %>
+      </h2>
+      <% INSERT "body.html" %>
+    </div>
+  </div>
+<% END %>

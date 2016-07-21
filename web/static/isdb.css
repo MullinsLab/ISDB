@@ -55,3 +55,26 @@ dt code {
 dd {
     margin-bottom: 0.65em;
 }
+
+/* Styles for Pandoc-generated HTML */
+
+/* Bottom out headers at 14px instead of 12px so that they're never smaller
+ * than body text.  h6 is possible because we shift header levels when going
+ * from Markdown to our layout-wrapped HTML. */
+.pandoc h5 { font-size: 16px } /* Bootstrap default is 14px */
+.pandoc h6 { font-size: 14px } /* Bootstrap default is 12px */
+
+/* <code> is expected to be whitespace-preserving */
+.pandoc code {
+  white-space: pre;
+}
+
+/* Fancier footnotes */
+.pandoc .footnoteRef sup {
+    border: 1px solid #777;
+    padding: 1px 4px;
+    border-radius: 100%;
+}
+.pandoc .footnoteRef:hover sup {
+    border-color: #337ab7; /* match link color */
+}
