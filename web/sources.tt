@@ -1,3 +1,8 @@
+<%
+  page = {
+    title = "Data Sources"
+  }
+-%>
 <% WRAPPER "inc/layout.tt" %>
   <div class="row">
     <div class="col col-md-7 col-sm-12">
