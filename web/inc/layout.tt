@@ -61,6 +61,10 @@
             at the <a href="https://washington.edu">University of Washington</a>.
           </p>
           <p>
+            This work was supported by the <a href="https://www.nih.gov">National Institutes of Health</a>
+            [R01AI111806, R21AI22361].
+          </p>
+          <p>
             Copyright © 2015–<% parse_timestamp(version.timestamp).strftime("%Y") %>
             <a href="https://washington.edu">University of Washington</a>.
             Previously published datasets are copyright their respective authors
