@@ -1,8 +1,4 @@
-% Integration Site Database (ISDB)
-% Mullins Molecular Retrovirology Lab
-% 26 April 2016
-
----
+% Usage Manual
 
 The Integration Site Database aims to provide a stable, authoritative, and
 standardized source of data for analysing HIV-1 integration sites. It seeks to

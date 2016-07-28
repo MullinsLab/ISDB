@@ -1,0 +1,80 @@
+<%
+  page = {
+    title = "Data Sources"
+  }
+-%>
+<% WRAPPER "inc/layout.tt" %>
+  <div class="row">
+    <div class="col col-md-7 col-sm-12">
+      <h2>Sources</h2>
+      <p>
+        The database contains
+        <strong><% isdb.resultset("Integration").in_vivo.count | commafy %> <em>in vivo</em></strong> and
+        <strong><% isdb.resultset("Integration").in_vitro.count | commafy %> <em>in vitro</em> observations</strong>
+        across
+        <strong><% isdb.resultset("IntegrationGene").count_distinct_genes | commafy %> genes</strong>
+        from the following sources.
+      </p>
+    </div>
+
+    <div class="col col-md-6 col-sm-12">
+      <h4><em>In vivo</em> datasets</h4>
+      <% INCLUDE 'source_list', resultset = isdb.resultset("Integration").in_vivo %>
+    </div>
+
+    <div class="col col-md-6 col-sm-12">
+      <h4><em>In vitro</em> datasets</h4>
+      <% INCLUDE 'source_list', resultset = isdb.resultset("Integration").in_vitro %>
+    </div>
+
+    <% BLOCK source_list %>
+      <table class="table table-condensed table-striped source-table">
+        <thead>
+          <tr>
+            <th class="source-name">Data source</th>
+            <th class="author">First author</th>
+            <th class="publication-name">Publication</th>
+            <th class="n-count">n</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% counts = resultset.counts_by_source_and_publication %>
+          <% FOR row IN counts.all %>
+            <tr>
+              <td class="source-name">
+                <% IF row.source.document.uri %>
+                  <a href="<% row.source.document.uri %>"><% row.source.name %></a>
+                <% ELSE %>
+                  <% row.source.name %>
+                <% END %>
+              </td>
+              <% IF row.get_column("pubmed_id") %>
+                <% id   = row.get_column("pubmed_id") %>
+                <% info = pubmed_info.$id %>
+                <td class="author">
+                  <% IF info.sortfirstauthor %>
+                    <% info.sortfirstauthor %>
+                  <% ELSE %>
+                    <em>unknown</em>
+                  <% END %>
+                </td>
+                <td class="publication-name">
+                  <a href="https://www.ncbi.nlm.nih.gov/pubmed/<% id | uri | html %>">
+                    <%- IF info.title -%>
+                      <%- info.title -%>
+                    <%- ELSE -%>
+                      PMID: <% id %>
+                    <%- END -%>
+                  </a>
+                </td>
+              <% ELSE %>
+                <td colspan="2"><em>unpublished</em></td>
+              <% END %>
+              <td class="n-count"><% row.get_column("count") | commafy %></td>
+            </tr>
+          <% END %>
+        </tbody>
+      </table>
+    <% END %>
+  </div>
+<% END %>

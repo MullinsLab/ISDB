@@ -68,18 +68,69 @@ $bin/cache-pubmed-info > $base/cache/pubmed.json
 echo "Caching current Known Issues"
 if ! $bin/cache-known-issues > $base/cache/issues.json; then
     echo "Warning: Couldn't fetch known issues, but proceeding anyway."
-    echo "Hint: Look at the messages between this line and the line «Caching current Known Issuess» above."
+    echo "Hint: Look at the messages between this line and the line «Caching current Known Issues» above."
 fi
 
-echo "Rendering template"
+echo "Copying static assets"
+cp -a $base/web/static $output
+
+echo "Rendering templates"
 $bin/fill-template \
     --output=$output \
     --find-exports=$exports \
     $template_args \
     --var version@$output/version.json \
-    $base/web/index.tt
+    --var pubmed_info@$base/cache/pubmed.json \
+    --var issues@$base/cache/issues.json \
+    $base/web/*.tt
+
+mkdir -p $output/doc
+$bin/table-metadata > $base/cache/table-metadata.json
+$bin/fill-template \
+    --output=$output/doc \
+    --var version@$output/version.json \
+    --var tables@$base/cache/table-metadata.json \
+    --var webroot=../ \
+    $base/web/doc/Tables.tt
 
 echo "Generating documentation"
-if ! $bin/generate-documentation $output; then
-    echo "Warning: Couldn't generate documentation, but proceeding anyway"
+doc_failed=0
+
+for md in $base/doc/*.md; do
+    echo "Converting $(basename $md)"
+
+    docname=$(basename $md .md)
+    tmp=$(mktemp -d)
+
+    # Copy the web template used for each documentation page; the copy means
+    # that the basename preservation done by fill-template Just Works.
+    cp $base/web/pandoc/page.tt $tmp/$docname.tt
+
+    # Process the Markdown document into three parts (metadata, body, and head)
+    # using Pandoc templates.  These will be consumed by the web template we
+    # copied above.
+    for part in metadata.json head.html body.html; do
+        if ! pandoc --smart --base-header-level=3 -t html5 --template $base/web/pandoc/$part.tmpl $md > $tmp/$part; then
+            echo "error: pandoc failed processing $md into $tmp/$part (exited $?)" >&2
+            doc_failed=1
+            continue 2
+        fi
+    done
+
+    # Style Markdown tables with Bootstrap
+    perl -pi -e 's/<table>/<table class="table table-condensed table-striped">/' $tmp/body.html
+
+    # Render page into output dir
+    $bin/fill-template \
+        --output=$output/doc \
+        --var version@$output/version.json \
+        --var webroot=../ \
+        --var template_root=$base/web/ \
+        --var metadata@$tmp/metadata.json \
+        $tmp/$docname.tt \
+        >/dev/null
+done
+
+if [[ $doc_failed -eq 1 ]]; then
+    echo "Warning: Couldn't generate documentation, but succeeding anyway. Is pandoc installed?"
 fi

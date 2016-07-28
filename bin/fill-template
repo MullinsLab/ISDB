@@ -11,13 +11,11 @@ use ISDB::Template;
 use ISDB::Exporter;
 use Path::Tiny;
 use JSON::MaybeXS;
-use ISDB::Config;
 
 my ($opt, $usage) = describe_options(
-    '%c [--output=directory] [--find-exports=directory] [template.tt]',
+    '%c --output=directory [--find-exports=directory] template.tt [another.tt]',
     [],
-    [ "Renders the provided template and outputs the results on stdout" ],
-    [ "or the given output directory." ],
+    [ "Renders the provided templates and outputs the results into the given directory" ],
     [],
     [ 'output|o=s',     "writes the filled template to the given directory as template.html" ],
     [ 'find-exports=s', "looks for exports in the given directory and provides metadata to the template" ],
@@ -27,15 +25,9 @@ my ($opt, $usage) = describe_options(
 );
 
 print($usage->text), exit(!$opt->help)
-    if $opt->help or not @ARGV;
-die "--find-exports and --find-versions require the use of --output\n"
-    if ($opt->find_exports or $opt->find_versions) and not $opt->output;
+    if $opt->help or not @ARGV or not $opt->output;
 
-my $args   = {};
-my $source = shift;
-my $output = $opt->output
-    ? path($opt->output)->child( path($source)->basename(".tt") . ".html" )->openw_utf8
-    : \*STDOUT;
+my $args = {};
 
 if ($opt->find_exports) {
     my $exporter = ISDB::Exporter->new( output_path => path($opt->find_exports) );
@@ -66,16 +58,6 @@ if ($opt->find_versions) {
     $args->{versions} = [ values %$versions ];
 }
 
-my $pubmed_cache = path($Bin)->parent->child("cache", "pubmed.json");
-$args->{pubmed_info} = decode_json( $pubmed_cache->slurp_raw )
-    if $pubmed_cache->exists;
-
-my $issues_cache = path($Bin)->parent->child("cache", "issues.json");
-$args->{issues} = decode_json( $issues_cache->slurp_raw )
-    if $issues_cache->exists;
-
-$args->{config} = ISDB::Config->new->conf->{web};
-
 # Read in passed template vars
 for my $var (@{ $opt->var || [] }) {
     my ($name, $op, $value) = split /([=@])/, $var, 2;
@@ -84,4 +66,12 @@ for my $var (@{ $opt->var || [] }) {
     $args->{$name} = $value;
 }
 
-print { $output } ISDB::Template->fill($source, $args);
+for my $source (@ARGV) {
+    my $input  = path($source);
+    my $output = path($opt->output)
+        ->child( $input->basename(".tt") . ".html" )
+        ->openw_utf8;
+
+    say "Rendering ", $input->realpath->relative;
+    print { $output } ISDB::Template->fill($source, $args);
+}

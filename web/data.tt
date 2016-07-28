@@ -1,0 +1,134 @@
+<%
+  page = {
+    title = "Get the Data"
+  }
+-%>
+<% WRAPPER "inc/layout.tt" %>
+  <div class="row">
+    <div class="col col-md-7 col-sm-12">
+      <h2>Download <% version.name %> datasets</h2>
+      <p class="notice bg-info">
+        Please read <a href="doc/Manual.html">our manual</a> for guidelines on
+        using the ISDB and the data contained within.
+      </p>
+
+      <p>
+        These downloadable datasets are broad summaries of the full data
+        contained within the ISDB.  Many questions are best answered by
+        querying the database directly.
+
+        <% IF config.web.show_database_connection %>
+          <span class="visible-sm-inline visible-xs-inline">
+            (See below for <a href="#access-the-database">connection details</a>.)
+          </span>
+        <% END %>
+
+        If you’re unfamiliar with SQL databases, we encourage you to
+        collaborate with your local bioinformatics practitioner.
+      </p>
+
+      <% FOR dataset IN exports %>
+        <h3><% dataset.name %></h3>
+        <p class="text-lg">
+          Download <% version.name %> version as:
+          <% FOREACH format IN dataset.formats %>
+            <%- IF loop.last AND NOT loop.first %> or <% END %>
+            <a href="<% format.value.path %>"><% format.key %></a>
+            <%- IF NOT loop.last AND loop.size > 2 %>, <% END %>
+          <% END %>
+        </p>
+        <p>
+          The <% version.name %> version is from <em><% parse_timestamp(dataset.timestamp).strftime('%a %b %e %H:%M %Y %Z') %></em>.
+        </p>
+        <p>This dataset contains the following fields:</p>
+        <ol>
+          <% FOR field IN dataset.fields %>
+            <li><code><% field %></code></li>
+          <% END %>
+        </ol>
+        <p>
+          The manual contains
+          <a href="doc/Manual.html#<% dataset.name.lower.replace('\s+', '-') %>">more information on this downloadable dataset</a>.
+        </p>
+      <% END %>
+
+      <% frozen_versions = versions.grep(->{ this.frozen }).sort('timestamp').reverse %>
+      <% IF frozen_versions.size %>
+        <h2>Frozen versions</h2>
+        <p>
+          When it’s time to do a set of analyses, we <em>freeze</em> a version of
+          the ISDB at a moment in time.  All our analyses are then done on that
+          frozen version, ensuring that the data doesn’t drift as we finalize our
+          analyses.  This is similar to using a single, specific version of the
+          human genome while working on a study.
+        </p>
+        <p>
+          The following frozen versions of the ISDB are available:
+          <ul>
+            <% FOR v IN frozen_versions %>
+              <li>
+                <a href="<% version_url(v) %>"><% v.name %></a>
+                <span class="text-muted">
+                  (frozen <% parse_timestamp(v.timestamp).strftime("%d %B %Y") %>)
+                </span>
+              </li>
+            <% END %>
+          </ul>
+        </p>
+      <% END %>
+    </div>
+    <div class="col col-md-5 col-sm-12">
+      <% IF config.web.show_database_connection %>
+        <h2 id="access-the-database">Access the database</h2>
+        <p>
+          If you’re handy with code, you can connect to the database directly
+          as a read-only user.  We like both writing
+          <a href="https://wikipedia.org/wiki/SQL">SQL</a> and using R’s
+          <a href="https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html">dplyr</a>
+          package.  To connect to the database, try:
+        </p>
+        <table class="table table-condensed">
+          <tr><th>Type</th><td>PostgreSQL</td></tr>
+          <tr><th>Host</th><td><code><% isdb.storage.dbh.pg_host %></code></td></tr>
+          <tr><th>User</th><td><code><% isdb.storage.dbh.pg_user %></code></td></tr>
+          <tr><th>Database name</th><td><code><% isdb.storage.dbh.pg_db %></code></td></tr>
+        </table>
+        <p>
+          You may also find our <a href="doc/Tables.html">reference of
+          available tables</a> handy.
+        </p>
+      <% END %>
+
+      <h2>Genome Browser</h2>
+      <p>
+        If you’re interested in a specific region of the human genome, such as
+        a gene, the <a href="https://genome.ucsc.edu">UCSC Genome Browser</a>
+        is a great way to start visualizing the ISDB data.  We provide a custom
+        track which you can
+        <a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgt.customText=<% config.web.base_url _ version_url(version) | uri | html %>exports/tracks/isdb.bed"
+           id="load-custom-track">load into the genome browser</a>.
+      </p>
+
+      <h3 id="issues">Known issues</h3>
+      <p>
+        ISDB is under active development.
+        <% IF issues.size %>
+          There are some known issues affecting data quality.
+        <% ELSE %>
+          However, we don’t know of any issues affecting data quality at the
+          moment.  Hooray!
+        <% END %>
+      </p>
+      <ul>
+        <% FOR issue IN issues %>
+        <li><% issue.name %> (<a href="<% issue.url %>">details</a>)</li>
+        <% END %>
+      </ul>
+      <p>
+        If you spot a problem in the ISDB<% IF issues.size %> that you don’t see here<% END %>,
+        <a href="mailto:<% config.contact | uri | html %>">please let us know</a>.
+        We strive to maintain high quality data ready to be used in analysis.
+      </p>
+    </div>
+  </div>
+<% END %>

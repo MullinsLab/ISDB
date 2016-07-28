@@ -15,9 +15,9 @@ This provides a permanent URL for the frozen version with the various data
 exports as well as a full copy of the database from which custom reports can
 continue to be made.
 
-## Freezing a new version
+# Freezing a new version
 
-### Copy the database
+## Copy the database
 
 The recommended form of the copied database name is `isdb_` followed by the
 name you'll use for the frozen version.  Dates are recommended, meaning that
@@ -33,7 +33,7 @@ server:
 
 (Replace `-T isdb` with the name of your live database if it's not `isdb`.)
 
-### Generate a frozen website
+## Generate a frozen website
 
 With the database copy you can now generate a frozen version of the website.
 

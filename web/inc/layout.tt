@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>
+    <% IF page.title %><% page.title %> — <% END %>
+    Integration Site Database (ISDB)
+  </title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="<% webroot %>static/isdb.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  <!-- Page-specific <head> elements -->
+  <% IF page.head %><% page.head | none %><% END %>
+</head>
+<body class="container">
+  <% IF version.frozen %>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="frozen-notice notice text-lg bg-warning">
+          <p>
+            This page is part of a <strong>copy</strong> of the ISDB
+            <strong>frozen in time</strong> on
+            <strong><% parse_timestamp(version.timestamp).strftime("%d %B %Y") %></strong>.
+            The permanent URL of this frozen version is:
+            <a href="<% config.web.base_url _ version_url(version) %>"><% config.web.base_url _ version_url(version) %></a>.
+          </p>
+          <p>
+            If you’re not using this frozen version for analysis, you may want to
+            <a href="<% config.web.base_url %>">switch to the latest version</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  <% END %>
+
+  <h1>Integration Site Database <small>ISDB</small></h1>
+  <% INCLUDE "nav.tt" %>
+
+  <% content | none %>
+
+  <div class="row footer">
+    <div class="col-md-8 col-sm-12">
+      <hr>
+      <div class="media">
+        <div class="media-left">
+          <a href="https://mullinslab.microbiol.washington.edu">
+            <img src="https://mullinslab.microbiol.washington.edu/img/ml.png"
+                 alt="Mullins Lab"
+               class="media-object">
+          </a>
+        </div>
+        <div class="media-body">
+          <p>
+            The ISDB is a project of the
+            <a href="https://mullinslab.microbiol.washington.edu">Mullins Molecular Retrovirology Lab</a>
+            at the <a href="https://washington.edu">University of Washington</a>.
+          </p>
+          <p>
+            This work was supported by the <a href="https://www.nih.gov">National Institutes of Health</a>
+            [R01AI111806, R21AI22361].
+          </p>
+          <p>
+            Copyright © 2015–<% parse_timestamp(version.timestamp).strftime("%Y") %>
+            <a href="https://washington.edu">University of Washington</a>.
+            Previously published datasets are copyright their respective authors
+            and used in accordance with their licenses.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

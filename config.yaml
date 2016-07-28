@@ -2,6 +2,9 @@
 # change values, you should make a copy of this file as config_local.yaml and
 # then edit it.
 ---
+# Contact address responsible for this ISDB
+contact: mullspt+cfar@uw.edu
+
 web:
   # The fully-qualified, internet-accessible location of where you plan to
   # publish the ISDB website.

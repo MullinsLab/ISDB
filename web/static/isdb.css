@@ -1,0 +1,80 @@
+body {
+  padding-bottom: 10em;
+  overflow-y: scroll;
+}
+
+.text-lg {
+  font-size: 1.2em;
+}
+
+/* Notices are generally used in combination with the contextual text and
+ * background color classes provided by Bootstrap */
+.notice {
+  padding: 0.5em 0.7em;
+}
+.notice p:last-child {
+  margin-bottom: 0;
+}
+.frozen-notice {
+  border: solid #f5efd3;
+  border-width:  0 1px 1px 1px;
+  border-radius: 0 0   4px 4px;
+}
+
+/* Don't pad headers at the top of a column */
+.col > h1:first-child,
+.col > h2:first-child,
+.col > h3:first-child,
+.col > h4:first-child {
+  margin-top: 0;
+}
+
+/* Tables of data sources */
+.source-table .n-count {
+  text-align: right;
+}
+.source-table th:not(.publication-name),
+.source-table td:not(.publication-name) {
+  white-space: nowrap;
+}
+
+/* Attribution and copyright footer */
+.footer {
+  margin-top: 5em;
+}
+.footer .media .media-object {
+  height: 45px;
+  margin-left: 15px;
+  border-radius: 4px;
+}
+
+/* Nicer definition lists when used for column documentation */
+dt code {
+    font-weight: normal;
+}
+dd {
+    margin-bottom: 0.65em;
+}
+
+/* Styles for Pandoc-generated HTML */
+
+/* Bottom out headers at 14px instead of 12px so that they're never smaller
+ * than body text.  h6 is possible because we shift header levels when going
+ * from Markdown to our layout-wrapped HTML. */
+.pandoc h5 { font-size: 16px } /* Bootstrap default is 14px */
+.pandoc h6 { font-size: 14px } /* Bootstrap default is 12px */
+
+/* <code> is expected to be whitespace-preserving */
+.pandoc code {
+  white-space: pre;
+}
+
+/* Fancier footnotes */
+.pandoc .footnoteRef sup {
+    border: 1px solid #777;
+    padding: 1px 4px;
+    border-radius: 100%;
+}
+.pandoc .footnoteRef:hover sup {
+    border-color: #337ab7; /* match link color */
+}
