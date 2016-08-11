@@ -3,6 +3,11 @@ body {
   overflow-y: scroll;
 }
 
+/* Pad top of navbar when not proceeded by the title */
+
+nav      { margin-top: 30px }
+h1 + nav { margin-top: 0    }
+
 .text-lg {
   font-size: 1.2em;
 }

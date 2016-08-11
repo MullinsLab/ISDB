@@ -26,7 +26,7 @@ has conf => (
     init_arg => undef,
 );
 
-sub _read_conf {
+sub _build_conf {
     my $self = shift;
     my $conf = Config::Any->load_stems({
         stems   => $self->stems,
@@ -39,18 +39,25 @@ sub _read_conf {
         },
     });
     return reduce { merge($a, $b) } +{},
-              map { pairvalues %$_ }
+              map { _normalize_conf(%$_) }
                   @$conf;
 }
 
-sub _build_conf {
-    my $self = shift;
-    my $conf = $self->_read_conf;
+sub _normalize_conf {
+    my ($file, $conf) = @_;
 
     # Normalize base_url
     $conf->{web}{base_url} .= "/"
         unless not exists $conf->{web}{base_url}
             or $conf->{web}{base_url} =~ m{/$};
+
+    # Resolve custom template paths relative to the config file itself not our
+    # current working dir
+    for my $tmpl (values %{ $conf->{web}{template} || {} }) {
+        next unless defined $tmpl;
+        $tmpl = path($tmpl)->absolute( path($file)->parent )->stringify
+            if path($tmpl)->is_relative;
+    }
 
     return $conf;
 }

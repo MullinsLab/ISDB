@@ -1,23 +1,17 @@
 % Usage Manual
 
-The Integration Site Database aims to provide a stable, authoritative, and
-standardized source of data for analysing HIV-1 integration sites. It seeks to
-support analyses using the tools of your choice, whether that's R and ggplot or
-Excel and Prism.
+This document uses the phrase "an ISDB" to refer in the abstract to any
+database created using the ISDB tools and software.  One such example of a
+database is [HIRIS][], the Mullins Lab's HIV-1 Reservoirs Integration Sites
+database.  You may be working with another database, public or private, also
+built using ISDB.
 
-The data contained within comes from a variety of published sources as well as
-sources internal to the [Mullins Lab][mullins], [Frenkel Lab][frenkel], and our
-collaborators.  The database itself is regularly and automatically regenerated
-from our primary and secondary sources in order to incorporate changes and
-additions.
+[HIRIS]: https://mullinslab.microbiol.washington.edu/hiris/
 
-[mullins]: https://mullinslab.microbiol.washington.edu
-[frenkel]: https://www.seattlechildrens.org/research/global-infectious-disease-research/frenkel-lab/
+# How to use an ISDB
 
-# How to use the ISDB
-
-The primary form of the ISDB is a [relational database][reldb] queried using
-[SQL](sql).  [PostgreSQL][pg] is the database software we use.  To query the
+The primary form of an ISDB is a [relational database][reldb] queried using
+[SQL](sql).  [PostgreSQL][pg] is the database software we use.  To query an
 ISDB directly, you or a colleague will need to connect to the database server
 and know how to write SQL.
 
@@ -27,27 +21,28 @@ files are suitable for loading into almost any program used for data analysis,
 including Excel.  See the [Downloadable datasets](#downloadable-datasets)
 section below for more information.
 
-From time to time we **freeze** versions of the ISDB by making a read-only copy
-that will never be modified.  These frozen versions are linked from the [main
-page](../) of the ISDB.  Freezing allows analyses to lock in a specific version
-of the data for repeatability while still allowing corrections and new data to
-flow into the latest in-flight version.
+It's possible to **freeze** versions of an ISDB by making a read-only copy that
+will never be modified.  These frozen versions are linked from the [main
+page](../) of an ISDB website.  Freezing allows analyses to lock in a specific
+version of the data for repeatability while still allowing corrections and new
+data to flow into the latest in-flight version.
 
 Custom reporting may be accomplished using SQL via R (with dplyr), Perl, or
-our query manager [re:dash][redash].
+a "business intelligence" tool such as [re:dash][redash] or [Tableau][].
 
 This documentation also includes [a reference guide to the tables and
-views](Tables.html) within the ISDB.
+views](Tables.html) within an ISDB.
 
 [reldb]: https://en.wikipedia.org/wiki/Relational_database
 [sql]: https://en.wikipedia.org/wiki/SQL
 [pg]: https://en.wikipedia.org/wiki/PostgreSQL
 [redash]: http://redash.io/
+[Tableau]: http://www.tableau.com
 [json]: https://en.wikipedia.org/wiki/JSON
 
 # Data usage guidelines
 
-The most commonly used data stored in the ISDB is explained below.  Please be
+The most commonly used data stored in an ISDB is explained below.  Please be
 sure to read these guidelines before embarking on an analysis or preparing a
 data source for submission.  If anything isn't covered, please ask and we'll be
 happy to answer your questions!
@@ -98,7 +93,7 @@ identifying a nucleotide.  These interbase locations are numbered starting with
 position 0, which is to the left/5ʹ of the first base.
 
 The same holds for `sequence_junction`, which, if available, reports the
-detected location of the HIV/human junction in a reported `sequence`.
+detected location of the provirus/human junction in a reported `sequence`.
 
 [interbase]: http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3383450/#__sec2
 
@@ -119,14 +114,14 @@ that no (or minimal) new integrations occurred while in culture.
 
 ## Gene names are from NCBI
 
-The gene names used in the ISDB are the same as the primary gene symbols from
+The gene names used in ISDB are the same as the primary gene symbols from
 the [NCBI Gene](http://www.ncbi.nlm.nih.gov/gene/) database.  Genes often have
-aliases, but the ISDB does not use them.  The genes and their locations on the
+aliases, but ISDB does not use them.  The genes and their locations on the
 human assembly are parsed from the GFF annotations provided by the Genome
 Reference Consortium.
 
 Note that gene names are not guaranteed by NCBI to be unique, although they
-usually are in practice due to the ISDB's filtered subset of NCBI Gene.  The
+usually are in practice due to ISDB's filtered subset of NCBI Gene.  The
 numeric `ncbi_gene_id` is guaranteed to be unique.
 
 ## A missing gene name means the IS is intergenic
@@ -141,9 +136,9 @@ Gene names that start with `LOC…` mean that someone, somewhere has evidence
 at the location, but the gene itself hasn't been characterized.
 
 Genes that produce non-coding RNA (ncRNA) are not specifically distinguished in
-the ISDB and appear as normal gene names.  A list of human genes which produce
+an ISDB and appear as normal gene names.  A list of human genes which produce
 ncRNAs is obtainable from NCBI Gene by [searching for <tt>human[organism] and
-NCRNA*[symbol]</tt>][ncRNAs].
+NCRNA\*[symbol]</tt>][ncRNAs].
 
 [ncRNAs]: http://www.ncbi.nlm.nih.gov/gene/?term=human%5Borgn%5D+and+NCRNA*%5Bsymbol%5D
 
@@ -156,12 +151,11 @@ the 3ʹ → 5ʹ orientation.
 # Downloadable datasets
 
 Two summary datasets of the raw integration site observations are available for
-download as CSV or [JSON][json].
+download as CSV, Excel, and [JSON][json].
 
 These datasets represent what seems like useful defaults, but we recognize that
-there's no such thing as a default analysis or default person.  We're more than
-happy to prepare custom reports that give you exactly the data you want in the
-form that you want.
+there's no such thing as a default analysis or default person.  Custom reports
+will give you exactly the data you want in the form that you want.
 
 ## Integration Summary
 
@@ -253,11 +247,11 @@ The annotated gene for which integrations are being summarized.
 
 #### `subjects`
 
-The number of distinct subjects (presumably human HIV+ patients) with HIV integrated anywhere in this gene.
+The number of distinct subjects with viral integrations anywhere in this gene.
 
 #### `unique_sites`
 
-The number of distinct nucleotide positions within this gene where HIV has been found to integrate. Multiplicity is ignored.
+The number of distinct nucleotide positions within this gene where virus has been found to integrate. Multiplicity is ignored.
 
 #### `proliferating_sites`
 
@@ -276,84 +270,3 @@ The _total number of independent observations_ of integrations into this gene. T
 A pipe `|` separated string of the environments in which the integration
 event took place.  Refer to the [data usage guidelines](#data-usage-guidelines)
 above.
-
-# Understanding how HIV integrates as a provirus
-
-The ISDB's representation of data requires some careful understanding of how reverse-transcribed HIV integrates into human genomic DNA.
-
-HIV starts as single-stranded RNA diagramed like so:
-
-     HIV  5ʹ R-U5~GAG~~~ENV~U3-R 3ʹ
-
-The R, U5, and U3 regions form the building blocks of the two long terminal
-repeat (LTR) regions (composed of U3-R-U5) in the double-stranded DNA produced
-by reverse transcriptase:
-
-     HIV  5ʹLTR~GAG~~~ENV~3ʹLTR
-          5ʹLTR~GAG~~~ENV~3ʹLTR (complementary strand)
-
-There are two orientations this double-stranded HIV DNA may be integrated into
-genomic DNA as a provirus:
-
-                        HIV
-     Chr  1 ---- 5ʹLTR~GAG~~~ENV~3ʹLTR ---- N
-          1 ---- 5ʹLTR~GAG~~~ENV~3ʹLTR ---- N
-     
-                        HIV
-     Chr  1 ---- 3ʹLTR~ENV~~~GAG~5ʹLTR ---- N
-          1 ---- 3ʹLTR~ENV~~~GAG~5ʹLTR ---- N
-
-The following diagrams form a truth table of provirus orientation with respect
-to the chromosome crossed by provirus orientation with respect to the gene.
-Pay careful attention to the location of GAG and ENV.
-
-## Provirus is _forward_ with respect to the chromosome…
-
-### …and _forward_ with respect to the gene
-
-             Gene is forward with
-             respect to chromosome
-             |——————→
-     Chr  1 ---- 5ʹLTR~GAG~~~ENV~3ʹLTR ---- N
-          1 ---- 5ʹLTR~GAG~~~ENV~3ʹLTR ---- N
-
-### …and _reverse_ with respect to the gene
-
-     Chr  1 ---- 5ʹLTR~GAG~~~ENV~3ʹLTR ---- N
-          1 ---- 5ʹLTR~GAG~~~ENV~3ʹLTR ---- N
-                                 ←——————| Gene is reverse with
-                                          respect to chromosome
-
-## Provirus is _reverse_ with respect to the chromosome…
-
-### …and _forward_ with respect to the gene
-
-     Chr  1 ---- 3ʹLTR~ENV~~~GAG~5ʹLTR ---- N
-          1 ---- 3ʹLTR~ENV~~~GAG~5ʹLTR ---- N
-                                 ←——————| Gene is reverse with
-                                          respect to chromosome
-
-### …and _reverse_ with respect to the gene
-
-             Gene is forward with
-             respect to chromosome
-             |——————→
-     Chr  1 ---- 3ʹLTR~ENV~~~GAG~5ʹLTR ---- N
-          1 ---- 3ʹLTR~ENV~~~GAG~5ʹLTR ---- N
-
-## Orientation tuples of (chromosome, gene) which occur together
-
-The above diagrams encompass all of the possible physical integrations.  For
-any given gene, however, only one of two sets of orientation tuples can be
-true:
-
-1. FF and RR — gene itself is _forward_ with respect to the chromosome
-2. FR and RF — gene itself is _reverse_ with respect to the chromosome
-
-Sets of tuples such as FF and FR aren't possible because they imply
-conflicting orientations of the gene to the chromosome.[^1]  Such combinations
-most likely indicate that the data is bogus or was wrongly interpreted.
-
-[^1]: It's exceedingly unlikely that the gene was actually flipped in human
-      genomic DNA, although it is possible.
-
