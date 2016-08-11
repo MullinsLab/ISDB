@@ -35,7 +35,7 @@
         <% IF table.name == 'integration' %>
           <p>
             The primary fact table in the database.  Each row records <em>a single
-            occurrence</em> of an HIV provirus detected at the given integration
+            occurrence</em> of a provirus detected at the given integration
             site in the given subject by the given source data.  Sites which are
             detected multiple times in a given subject are represented as
             multiple rows.  Technical replicates are excluded if they're from
@@ -105,7 +105,7 @@
 
         <dt id="data-type-ltr_end"><code>ltr_end</code></dt>
         <dd>
-          Either <code>5p</code> or <code>3p</code> to indicate which HIV LTR was
+          Either <code>5p</code> or <code>3p</code> to indicate which viral LTR was
           sequenced out of to determine the IS
         </dd>
 
