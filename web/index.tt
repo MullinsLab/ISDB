@@ -26,18 +26,18 @@
           <thead>
             <tr>
               <th>Gene</th>
-              <th># of Subjects</th>
-              <th>Unique IS</th>
-              <th>Total IS</th>
+              <th class="text-right"># of Subjects</th>
+              <th class="text-right">Unique IS</th>
+              <th class="text-right">Total IS</th>
             </tr>
           </thead>
           <tbody>
             <% FOR gene IN genes.all %>
             <tr>
               <td><a href="<% gene.ncbi_gene.uri %>"><% gene.gene %></a></td>
-              <td><% gene.subjects %></td>
-              <td><% gene.unique_sites %></td>
-              <td><% gene.total_in_gene %></td>
+              <td class="text-right"><% gene.subjects %></td>
+              <td class="text-right"><% gene.unique_sites %></td>
+              <td class="text-right"><% gene.total_in_gene %></td>
             </tr>
             <% END %>
           </tbody>
