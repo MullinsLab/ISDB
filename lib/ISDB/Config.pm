@@ -9,6 +9,11 @@ use List::Util qw< reduce pairvalues >;
 use Path::Tiny;
 use namespace::clean;
 
+has files => (
+    is       => 'lazy',
+    isa      => ArrayRef[NonEmptyStr],
+);
+
 has stems => (
     is       => 'ro',
     isa      => ArrayRef[NonEmptyStr],
@@ -26,10 +31,26 @@ has conf => (
     init_arg => undef,
 );
 
+sub _build_files {
+    my $self = shift;
+    my @files;
+
+    # Directly specified config file
+    push @files, $ENV{ISDB_CONFIG} if $ENV{ISDB_CONFIG};
+
+    # Cross stems by extensions, the same as Config::Any->load_stems
+    for my $stem (@{ $self->stems }) {
+        for my $ext (Config::Any->extensions) {
+            push @files, "$stem.$ext";
+        }
+    }
+    return \@files;
+}
+
 sub _build_conf {
     my $self = shift;
-    my $conf = Config::Any->load_stems({
-        stems   => $self->stems,
+    my $conf = Config::Any->load_files({
+        files   => $self->files,
         use_ext => 1,
 
         # Allow the use of [] to make Config::General settings explicitly an
