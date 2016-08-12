@@ -51,6 +51,14 @@ h1 + nav { margin-top: 0    }
   height: 45px;
   margin-left: 15px;
   border-radius: 4px;
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+  opacity: 0.5;
+}
+.footer .media .media-object:hover {
+  -webkit-filter: none;
+  filter: none;
+  opacity: 1;
 }
 
 /* Nicer definition lists when used for column documentation */
