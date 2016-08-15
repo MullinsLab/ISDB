@@ -38,7 +38,7 @@
             occurrence</em> of a provirus detected at the given integration
             site in the given subject by the given source data.  Sites which are
             detected multiple times in a given subject are represented as
-            multiple rows.  Technical replicates are excluded if they're from
+            multiple rows.  Technical replicates are excluded if they’re from
             single genome sequencing rather than bulk consensus sequencing.
           </p>
         <% ELSIF table.name == 'integration_summary' %>
@@ -181,7 +181,7 @@
 
       <h2>Sample document fields</h2>
       <p>
-        If you're writing SQL to query the database, you're likely going to want to
+        If you’re writing SQL to query the database, you’re likely going to want to
         extract data fields out of the <code>sample</code> JSON document
         associated with each integration site observation.  The document
         contains optional fields such as <code>subject</code>,
