@@ -165,8 +165,8 @@
           <span class="label label-warning">not null</span>
         </dt>
         <dd>
-          Indicates a column which may not be empty.  All rows will have a value
-          for the column.
+          Indicates a column which cannot be empty.  All rows will have a
+          value for the column.
         </dd>
         
         <dt id="foreign-key">
