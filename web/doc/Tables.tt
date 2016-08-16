@@ -89,7 +89,7 @@
         guidelines</a> in the <a href="Manual.html">manual</a> for more
         information.
       </p>
-      <dl class="dl-horizontal">
+      <dl>
         <dt id="data-type-landmark"><code>landmark</code></dt>
         <dd>
           The chromosome or RefSeq accession in which the reported integration site
