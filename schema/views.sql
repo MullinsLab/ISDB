@@ -1,6 +1,7 @@
 BEGIN;
 
 DROP VIEW IF EXISTS summary_by_gene;
+DROP VIEW IF EXISTS integration_gene_summary;
 DROP VIEW IF EXISTS integration_summary;
 DROP VIEW IF EXISTS integration_genes;
 DROP VIEW IF EXISTS sample_fields_metadata;
@@ -24,6 +25,22 @@ CREATE VIEW integration_genes AS
 ;
 
 CREATE VIEW integration_summary AS
+    SELECT environment                                      AS environment,
+           sample->>'subject'                               AS subject,
+           landmark                                         AS landmark,
+           location                                         AS location,
+           orientation_in_landmark                          AS orientation_in_landmark,
+           COUNT(1)                                         AS multiplicity,
+           ARRAY_AGG(DISTINCT source_name ORDER BY source_name)
+                                                            AS source_names,
+           ARRAY_AGG(DISTINCT (sample->>'pubmed_id')::int ORDER BY (sample->>'pubmed_id')::int)
+               FILTER (WHERE (sample->>'pubmed_id') IS NOT NULL)
+                                                            AS pubmed_ids
+      FROM integration
+  GROUP BY environment, subject, landmark, location, orientation_in_landmark
+;
+
+CREATE VIEW integration_gene_summary AS
     SELECT environment                                      AS environment,
            sample->>'subject'                               AS subject,
            ncbi_gene_id                                     AS ncbi_gene_id,
@@ -52,7 +69,7 @@ CREATE VIEW summary_by_gene AS
            SUM(multiplicity)                        AS total_in_gene,
            ARRAY_AGG(DISTINCT environment::text ORDER BY environment::text)
                                                     AS environments
-      FROM integration_summary
+      FROM integration_gene_summary
      GROUP BY ncbi_gene_id, gene
 ;
 

@@ -22,10 +22,12 @@
         it or make it easier to analyze.  Views are also used to produce the
         <a href="Manual.html#downloadable-datasets">downloadable datasets</a>.
       </p>
-			<p>
-				Note that integration sites which are covered by multiple genes will be
-				reported <strong>once per gene</strong> in these views. 
-			</p>
+      <p>
+        Note that integration sites which are covered by multiple genes will be
+        reported <strong>once per gene</strong> in the "Integration summary with annotated genes"
+        and "Summary by gene" views.
+      </p>
+
       <% FOR table IN tables.grep(->{ this.type == 'view' }) %>
         <% INCLUDE 'show_table' %>
       <% END %>
@@ -41,10 +43,16 @@
             multiple rows.  Technical replicates are excluded if they’re from
             single genome sequencing rather than bulk consensus sequencing.
           </p>
+        <% ELSIF table.name == 'integration_gene_summary' %>
+					<p>
+						The basis for the
+						<a href="Manual.html#integration-summary-with-annotated-genes">"Integration summary with annotated genes"</a>
+						downloadable dataset.
+          </p>
         <% ELSIF table.name == 'integration_summary' %>
 					<p>
 						The basis for the
-						<a href="Manual.html#integration-summary">"Integration Summary"</a>
+						<a href="Manual.html#integration-summary">"Integration summary"</a>
 						downloadable dataset.
           </p>
         <% ELSIF table.name == 'summary_by_gene' %>
