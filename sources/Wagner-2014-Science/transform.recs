@@ -23,9 +23,13 @@ my $t = {
 # Method used was ISLA, which always goes from 3p LTR
 $t->{ltr} = "3p";
 
-($t->{landmark}, $t->{location}) =
-    $r->{"CHROMOSOMAL COORDINATES (hg19)"} =~ /^(chr(?:[1-9]|1[0-9]|2[0-2]|[XY]|MT)):(\d+)/;
+($t->{landmark}, my @coords) =
+    $r->{"CHROMOSOMAL COORDINATES (hg19)"} =~ /^(chr(?:[1-9]|1[0-9]|2[0-2]|[XY]|MT)):(\d+)-(\d+)/;
 
+die "chromosomal coordinates in unexpected order"
+    unless $coords[0] < $coords[1];
+
+$t->{location} = $coords[ $r->{STRAND} =~ y/+-/01/r ];
 $t->{orientation_in_landmark} = $r->{STRAND} =~ y/+-/FR/r;
 
 # Convert location to zero-origin, interbase coordinates.  The reported
