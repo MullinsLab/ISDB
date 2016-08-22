@@ -1,10 +1,10 @@
-% Data sources for the ISDB
+% Data sources for an ISDB
 
-The ISDB is loaded with data from multiple _sources_.  Sources are independent
+An ISDB is loaded with data from multiple _sources_.  Sources are independent
 of each other and may represent a single publication's data, unpublished data,
 data from multiple publications, or any other collection of integration data.
 How you use sources is largely unconstrained, but they work well for loosely
-organizing the data which goes into the ISDB.
+organizing the data which goes into your ISDB.
 
 Each source is contained within its own directory holding all the necessary
 files for that source.  By convention, the name of the directory containing all
@@ -17,7 +17,8 @@ encourage you to use version control, such as [Git][], to manage your sources.
 We generally make each source its own git repository, although there are
 exceptions such as the sources bundled with the ISDB software.
 
-Here's an example of a source directory:
+Here's an example of a source directory, which you may find in the _sources/_
+directory of the ISDB git repository:
 
     Wagner-2014-Science/
     ├── 1256304WagnerTableS3-Revised.csv
@@ -33,7 +34,7 @@ Here's an example of a source directory:
 
 The two required files for each source are _metadata.json_ and
 _transformed.csv_.  The former is details about the source and the latter is
-the data transformed into records suitable for loading into the ISDB.  Each is
+the data transformed into records suitable for loading into an ISDB.  Each is
 discussed in more detail below.
 
 The other files are the published data files and code to transform those data
@@ -48,7 +49,7 @@ provided by a _metadata.json_ file which gets loaded into the `source` table's
 `document` field.
 
 Every metadata.json must have the keys _name_ and _uri_.  The _name_ is used as
-the source's primary key and must be unique within the ISDB.  The _uri_ should
+the source's primary key and must be unique within your ISDB.  The _uri_ should
 point to the upstream source of the data or provide a [`mailto:`][mailto] link
 for starting correspondence.
 
@@ -91,7 +92,7 @@ _transformed.csv_.  The CSV file should contain the column headers as the first
 line.  Each subsequent line is inserted into the database as a row in the
 `integration` table.
 
-The `integration` table is the primary fact table in the ISDB.  Each row
+The `integration` table is the primary fact table in an ISDB.  Each row
 records a single occurrence of a provirus detected at the given integration
 site in the given sample by the given source data.  Sites which are detected
 multiple independent times (i.e. not from PCR) in a given sample are

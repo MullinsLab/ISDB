@@ -1,12 +1,12 @@
-% Freezing versions of the ISDB
+% Freezing versions of an ISDB
 
-From time to time we freeze versions of the ISDB by making a read-only copy
-that will never be modified.  These frozen versions are linked from the main
-page of the ISDB.  Freezing allows analyses to lock in a specific version of
-the data for repeatability while still allowing corrections and new data to
-flow into the latest in-flight version.
+From time to time we freeze versions of our ISDB by making a read-only copy
+that will never be modified.  These frozen versions are linked from the data
+page of an ISDB website.  Freezing allows analyses to lock in a specific
+version of the data for repeatability while still allowing corrections and new
+data to flow into the latest in-flight version.
 
-Frozen versions of the ISDB are a combination of two things:
+Frozen versions of an ISDB are a combination of two things:
 
 1. A copy of the database to which only read-only access is permitted
 2. A specially regenerated copy of the website from the database copy
@@ -23,7 +23,7 @@ The recommended form of the copied database name is `isdb_` followed by the
 name you'll use for the frozen version.  Dates are recommended, meaning that
 the database name would look like: `isdb_2016-03-25`.
 
-It's highly recommended that only read-only access is permitted to the copied
+It's highly recommended that _only_ read-only access is permitted to the copied
 database.  By Mullins Lab convention, we use an `isdb_r` role in Postgres.
 
 To create the copy, run the following as a Postgres superuser on your database
@@ -37,9 +37,9 @@ server:
 
 With the database copy you can now generate a frozen version of the website.
 
-First fetch a clone of the ISDB website's git repository and make sure it's
+First fetch a clone of your ISDB website's git repository and make sure it's
 up-to-date with the remote.  In the example below, that's at the path
-`../isdb-web-internal/`.
+`../isdb-web/`.
 
 Now run `generate-website` using an invocation similar to the following:
 
@@ -47,7 +47,7 @@ Now run `generate-website` using an invocation similar to the following:
         ./bin/generate-website \
             --compare \
             --freeze-as 2016-03-25 \
-            ../isdb-web-internal/
+            ../isdb-web/
 
 Note that you should connect as the read-only user to the frozen copy of the
 database so the Postgres connection details on the frozen website are correct.

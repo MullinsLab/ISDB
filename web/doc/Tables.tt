@@ -8,8 +8,8 @@
     <div class="col col-lg-5 col-md-8 col-sm-12">
       <h2>Tables</h2>
       <p>
-        The columns of the primary data tables in the ISDB are described below.
-        These tables make up the backbone of the database.
+        The columns of the primary data tables are described below.  These
+        tables make up the backbone of the database.
       </p>
       <% FOR table IN tables.grep(->{ this.type == 'table' }) %>
         <% INCLUDE 'show_table' %>
@@ -19,7 +19,7 @@
       <p>
         Views are different representations of the data contained within the tables
         above.  They pull together data from multiple tables in order to summarize
-        it or make it easier to analyze.  The ISDB also uses views to produce the
+        it or make it easier to analyze.  Views are also used to produce the
         <a href="Manual.html#downloadable-datasets">downloadable datasets</a>.
       </p>
 			<p>
@@ -34,11 +34,11 @@
         <h3><% table.name %></h3>
         <% IF table.name == 'integration' %>
           <p>
-            The primary fact table in the ISDB.  Each row records <em>a single
-            occurrence</em> of an HIV provirus detected at the given integration
+            The primary fact table in the database.  Each row records <em>a single
+            occurrence</em> of a provirus detected at the given integration
             site in the given subject by the given source data.  Sites which are
             detected multiple times in a given subject are represented as
-            multiple rows.  Technical replicates are excluded if they're from
+            multiple rows.  Technical replicates are excluded if they’re from
             single genome sequencing rather than bulk consensus sequencing.
           </p>
         <% ELSIF table.name == 'integration_summary' %>
@@ -105,7 +105,7 @@
 
         <dt id="data-type-ltr_end"><code>ltr_end</code></dt>
         <dd>
-          Either <code>5p</code> or <code>3p</code> to indicate which HIV LTR was
+          Either <code>5p</code> or <code>3p</code> to indicate which viral LTR was
           sequenced out of to determine the IS
         </dd>
 
@@ -181,7 +181,7 @@
 
       <h2>Sample document fields</h2>
       <p>
-        If you're writing SQL to query the ISDB, you're likely going to want to
+        If you’re writing SQL to query the database, you’re likely going to want to
         extract data fields out of the <code>sample</code> JSON document
         associated with each integration site observation.  The document
         contains optional fields such as <code>subject</code>,

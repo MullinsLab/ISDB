@@ -1,8 +1,8 @@
 % Database connection
 
-The ISDB expects to connect to a [PostgreSQL][] (Pg) database for storing and
-retrieving data.  The Pg database software may be running on the local computer
-or on a remote server.
+The ISDB tools expect to connect to a [PostgreSQL][] (Pg) database for storing
+and retrieving data.  The Pg database software may be running on the local
+computer or on a remote server.
 
 All of the ISDB tools are designed to use connection details controlled by
 [standard PostgreSQL environment variables][envvars] and configuration files.
@@ -23,7 +23,9 @@ The Pg user should be specified by setting `PGUSER`.  If left unset, Pg uses
 the username of the person running the command.
 
 Passwords should be specified in a [password file][pgpass] rather than
-interactively or on the command line.
+interactively or on the command line.  Your Pg server may also use GSS-API or
+Kerberos authentication in which case you'd rely on your normal mechanisms for
+authenticating.
 
 You may also use a [service file][pgservice] definition containing host and
 user by setting `PGSERVICE`.  The ISDB tools forcibly default the database name

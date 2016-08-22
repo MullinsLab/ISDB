@@ -3,6 +3,11 @@ body {
   overflow-y: scroll;
 }
 
+/* Pad top of navbar when not proceeded by the title */
+
+nav      { margin-top: 30px }
+h1 + nav { margin-top: 0    }
+
 .text-lg {
   font-size: 1.2em;
 }
@@ -46,6 +51,14 @@ body {
   height: 45px;
   margin-left: 15px;
   border-radius: 4px;
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+  opacity: 0.5;
+}
+.footer .media .media-object:hover {
+  -webkit-filter: none;
+  filter: none;
+  opacity: 1;
 }
 
 /* Nicer definition lists when used for column documentation */

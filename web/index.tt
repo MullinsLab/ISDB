@@ -1,22 +1,21 @@
 <% WRAPPER "inc/layout.tt" %>
   <div class="row">
     <div class="col col-md-7 col-sm-12">
-      <p class="lead">
-        The ISDB aims to provide a stable, authoritative, and standardized
-        source of data for analysing HIV-1 integration sites from the viral
-        reservoir. It seeks to support analyses using the tools of your choice,
-        whether that’s R and ggplot or Excel and Prism.
-      </p>
+      <% IF config.web.template.blurb %>
+        <% INCLUDE $config.web.template.blurb %>
+      <% ELSE %>
+        <!--
+          Did you know you can include your own blurb instead of the
+          paltry one below? 😀
 
-      <p>
-        The data contained within comes from <a href="sources.html">a variety of
-        published sources</a> as well as sources internal to the
-        <a href="https://mullinslab.microbiol.washington.edu">Mullins Lab</a>,
-        <a href="https://www.seattlechildrens.org/research/global-infectious-disease-research/frenkel-lab/">Frenkel Lab</a>,
-        and our collaborators.  The database itself is regularly and
-        automatically regenerated from our primary and secondary sources in
-        order to incorporate changes and additions.
-      </p>
+          See the ISDB’s default config.yaml for more information on how to
+          configure that!
+        -->
+        <p class="lead">
+          This is a database of viral integration sites created using
+          <a href="https://mullinslab.microbiol.washington.edu/isdb/">ISDB</a>.
+        </p>
+      <% END %>
     </div>
     <div class="col col-md-5 col-sm-12">
       <% FOREACH query IN [["Subjects", "subjects"], ["Unique IS", "unique_sites"]] %>

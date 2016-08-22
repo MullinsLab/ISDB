@@ -6,17 +6,40 @@
 contact: mullspt+cfar@uw.edu
 
 web:
-  # The fully-qualified, internet-accessible location of where you plan to
-  # publish the ISDB website.
+  # Required.  The fully-qualified, internet-accessible location of where you
+  # plan to publish this ISDB website.
   base_url: ""
 
-  # Should the active database connection info be shown in the ISDB web page
+  # Optional.  Name of this database (e.g. HIRIS), used for branding.
+  name: ~
+
+  # Optional.  Title and subtitle to use on all web pages.  The subtitle is
+  # shown adjacent to the title in smaller, grey text.
+  title: ~
+  subtitle: ~
+
+  # Should the active database connection info be shown in the web page
   # for users to connect to?
   show_database_connection: 1
 
+  # Should a Known Issues list (by default fetched from Trello) be displayed on
+  # the data page?  See also the "issues" configuration item below.
+  show_known_issues: 1
+
+  # Optional.  Custom Template::Alloy files which affect how the website
+  # renders:
+  #
+  #   blurb.tt  - front page description of database (included by web/index.tt)
+  #   footer.tt - at the bottom of every page (included by web/inc/layout.tt)
+  #
+  # Paths relative to the config file itself are ok.
+  template:
+    blurb: ~
+    footer: ~
+
 issues:
-  # Embed a Trello list into the web page to show known issues with the ISDB.
-  # See the top of bin/cache-known-issues for more information.
+  # Embed a Trello list into the web page to show known issues with this
+  # database.  See the top of bin/cache-known-issues for more information.
   public_key: ~
   app_token: ~
   list_id: ~

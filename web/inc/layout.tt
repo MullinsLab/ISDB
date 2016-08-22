@@ -6,8 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>
-    <% IF page.title %><% page.title %> — <% END %>
-    Integration Site Database (ISDB)
+    <% IF page.title %><% page.title %><% END %>
+    <% IF page.title AND (config.web.title OR config.web.name) %> — <% END %>
+    <% IF config.web.title OR config.web.name %><% config.web.title || config.web.name %><% END %>
   </title>
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -23,7 +24,8 @@
       <div class="col-sm-12">
         <div class="frozen-notice notice text-lg bg-warning">
           <p>
-            This page is part of a <strong>copy</strong> of the ISDB
+            This page is part of a <strong>copy</strong> of
+            <% config.web.name || 'the data' %>
             <strong>frozen in time</strong> on
             <strong><% parse_timestamp(version.timestamp).strftime("%d %B %Y") %></strong>.
             The permanent URL of this frozen version is:
@@ -38,7 +40,15 @@
     </div>
   <% END %>
 
-  <h1>Integration Site Database <small>ISDB</small></h1>
+  <% IF config.web.title || config.web.name %>
+    <h1>
+      <% config.web.title || config.web.name %>
+      <% IF config.web.subtitle %>
+        <small><% config.web.subtitle %></small>
+      <% END %>
+    </h1>
+  <% END %>
+
   <% INCLUDE "nav.tt" %>
 
   <% content | none %>
@@ -55,20 +65,20 @@
           </a>
         </div>
         <div class="media-body">
+          <% IF config.web.template.footer %>
+            <% INCLUDE $config.web.template.footer %>
+          <% ELSE %>
+            <!--
+              Did you know you can include your own footer material here? 😀
+              See the ISDB’s default config.yaml for more information on how
+              to configure that!
+            -->
+          <% END %>
           <p>
-            The ISDB is a project of the
+            Built with <a href="https://mullinslab.microbiol.washington.edu/isdb/">ISDB</a>,
+            a project of the
             <a href="https://mullinslab.microbiol.washington.edu">Mullins Molecular Retrovirology Lab</a>
             at the <a href="https://washington.edu">University of Washington</a>.
-          </p>
-          <p>
-            This work was supported by the <a href="https://www.nih.gov">National Institutes of Health</a>
-            [R01AI111806, R21AI22361].
-          </p>
-          <p>
-            Copyright © 2015–<% parse_timestamp(version.timestamp).strftime("%Y") %>
-            <a href="https://washington.edu">University of Washington</a>.
-            Previously published datasets are copyright their respective authors
-            and used in accordance with their licenses.
           </p>
         </div>
       </div>

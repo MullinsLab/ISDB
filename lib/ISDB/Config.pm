@@ -9,6 +9,11 @@ use List::Util qw< reduce pairvalues >;
 use Path::Tiny;
 use namespace::clean;
 
+has files => (
+    is       => 'lazy',
+    isa      => ArrayRef[NonEmptyStr],
+);
+
 has stems => (
     is       => 'ro',
     isa      => ArrayRef[NonEmptyStr],
@@ -26,10 +31,26 @@ has conf => (
     init_arg => undef,
 );
 
-sub _read_conf {
+sub _build_files {
     my $self = shift;
-    my $conf = Config::Any->load_stems({
-        stems   => $self->stems,
+    my @files;
+
+    # Directly specified config file
+    push @files, $ENV{ISDB_CONFIG} if $ENV{ISDB_CONFIG};
+
+    # Cross stems by extensions, the same as Config::Any->load_stems
+    for my $stem (@{ $self->stems }) {
+        for my $ext (Config::Any->extensions) {
+            push @files, "$stem.$ext";
+        }
+    }
+    return \@files;
+}
+
+sub _build_conf {
+    my $self = shift;
+    my $conf = Config::Any->load_files({
+        files   => $self->files,
         use_ext => 1,
 
         # Allow the use of [] to make Config::General settings explicitly an
@@ -39,18 +60,25 @@ sub _read_conf {
         },
     });
     return reduce { merge($a, $b) } +{},
-              map { pairvalues %$_ }
+              map { _normalize_conf(%$_) }
                   @$conf;
 }
 
-sub _build_conf {
-    my $self = shift;
-    my $conf = $self->_read_conf;
+sub _normalize_conf {
+    my ($file, $conf) = @_;
 
     # Normalize base_url
     $conf->{web}{base_url} .= "/"
         unless not exists $conf->{web}{base_url}
             or $conf->{web}{base_url} =~ m{/$};
+
+    # Resolve custom template paths relative to the config file itself not our
+    # current working dir
+    for my $tmpl (values %{ $conf->{web}{template} || {} }) {
+        next unless defined $tmpl;
+        $tmpl = path($tmpl)->absolute( path($file)->parent )->stringify
+            if path($tmpl)->is_relative;
+    }
 
     return $conf;
 }
