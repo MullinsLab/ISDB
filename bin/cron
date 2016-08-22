@@ -139,6 +139,7 @@ ISDB tools:
   User: $USER
   Path: $isdb
   Version: $isdb_version
+  ISDB_CONFIG: $ISDB_CONFIG
 
 Connection parameters:
 
