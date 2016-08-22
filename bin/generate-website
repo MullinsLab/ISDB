@@ -59,6 +59,17 @@ if [[ $run_exports == yes ]]; then
     echo "Exporting BED for Genome Browser"
     mkdir -p $exports/tracks
     $bin/export-bed > $exports/tracks/isdb.bed
+
+    echo "Exporting GFF for each gene"
+    rm -rf $exports/gff-per-gene
+    mkdir -p $exports/gff-per-gene
+    $bin/export-gff-per-gene --quiet $exports/gff-per-gene
+
+    echo "Zipping up GFF per gene"
+    pushd $exports >/dev/null
+        rm -f gff-per-gene.zip
+        zip -qr gff-per-gene.zip gff-per-gene/
+    popd >/dev/null
 fi
 
 echo "Caching PubMed info"

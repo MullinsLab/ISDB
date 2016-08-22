@@ -110,6 +110,20 @@
            id="load-custom-track">load into the genome browser</a>.
       </p>
 
+      <h3>Annotation files per gene</h3>
+      <p>
+        A <a href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md">GFF3
+        file</a> is produced for each gene containing integration sites,
+        letting you quickly focus on a specific gene of interest.
+      </p>
+      <p>
+        Get started by <a href="doc/GFF-per-gene-exports.html">learning how to
+        use these exports</a>.  Once familiar with their data, you can <a
+        href="exports/gff-per-gene/">browse the files</a> or <a
+        href="exports/gff-per-gene.zip">download a zip file</a> containing them
+        all.
+      </p>
+
       <% IF config.web.show_known_issues %>
       <h3 id="issues">Known issues</h3>
       <p>

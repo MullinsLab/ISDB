@@ -36,6 +36,7 @@
       <ul>
         <li><a href="doc/Manual.html">General usage manual</a></li>
         <li><a href="doc/Tables.html">Table and sample document reference</a></li>
+        <li><a href="doc/GFF-per-gene-exports.html">Using the per-gene GFF exports</a></li>
       </ul>
 
       <h4>About data curation</h4>
