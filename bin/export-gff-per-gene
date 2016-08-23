@@ -1,0 +1,164 @@
+#!/usr/bin/env perl
+use 5.010;
+use strict;
+use warnings;
+use utf8;
+use open qw< :std :encoding(UTF-8) >;
+use FindBin qw< $Bin $Script >;
+use lib "$Bin/../lib", "$Bin/../local/lib/perl5";
+use Getopt::Long::Descriptive;
+use Path::Tiny;
+use ISDB::Schema;
+use Bio::GFF3::LowLevel qw< gff3_format_feature >;
+
+my ($opt, $usage) = describe_options(
+    '%c [--gene NAME] <output-directory>',
+    [],
+    [ "Creates one GFF3 file per gene in the output directory.  Genes of interest" ],
+    [ "may be specified using --gene, otherwise all genes with integrations are" ],
+    [ "output." ],
+    [],
+    [ "The GFF3 files will use coordinates relative to the genes but orientation" ],
+    [ "relative to the chromosome.  This matches with the expectations of" ],
+    [ "Geneious when importing NCBI Gene documents." ],
+    [],
+    [ 'gene=s@',   "Gene name of interest.  May be specified multiple times." ],
+    [ 'quiet',     "Print less progress information to stdout" ],
+    [ 'help',      "Print this usage message and exit" ],
+);
+print($usage->text), exit(!$opt->help)
+    if $opt->help or not @ARGV;
+
+my $output_path = path(shift);
+$output_path->mkpath;
+
+# XXX TODO: This query may want to become a view, or integration_genes (and
+# integration_summary) could grow a location_in_gene column with the
+# calculation already done.  This makes particular sense because
+# integration_genes already does the join logic we repeat here and so has
+# access to the specific ncbi_gene_location row.  For now, it the least
+# intrusive to just handle it ourselves here.
+# -trs, 19 August 2016
+my $schema       = ISDB::Schema->connect_default;
+my $integrations = $schema->resultset('IntegrationSummary')->search_rs(
+    {
+        gene => (
+            $opt->gene
+                ? { -in => $opt->gene }
+                : { '!=', undef }
+        ),
+        'me.landmark' => { -ident => 'locations.landmark' },
+        'me.location' => {
+            -between => [
+                { -ident => 'locations.gene_start' },
+                { -ident => 'locations.gene_end' },
+            ]
+        },
+    },
+    {
+        join       => { ncbi_gene => 'locations' },
+        '+columns' => [{ gene_start => 'locations.gene_start' }],
+        order_by   => [qw[ gene landmark location subject ]],
+    }
+);
+
+my ($file, $fh, $feature_id, $files_written);
+
+while (my $is = $integrations->next) {
+    # Open a new file for each gene.  The results are ordered by gene above.
+    if (not $file or $file->basename ne format_filename($is)) {
+        close $fh or die "Error closing $file: $!"
+            if $fh;
+
+        $file = $output_path->child(format_filename($is));
+        $fh   = $file->openw_utf8;
+        $feature_id = 1;
+        $files_written++;
+
+        # Status update
+        say "$file" unless $opt->quiet;
+
+        # Print a column header line for human convenience
+        say { $fh } "##gff-version 3";
+        say { $fh } "#", join "\t", qw[ seqid source type start end score strand phase attributes ];
+    }
+
+    print { $fh } gff3_format_feature({
+        seq_id => format_gene($is),
+        source => format_sources($is),
+        type   => 'proviral_location',
+        start  => format_location($is),
+        end    => format_location($is),
+        score  => $is->multiplicity,
+        strand => format_strand($is),
+        phase  => undef,
+        attributes => {
+            # Geneious, and possibly other readers, use Name as a unique ID if
+            # ID isn't provided.  So we provide one!
+            ID   => [ $feature_id++ ],
+            Name => [ format_name($is) ],
+        },
+    });
+}
+say "$files_written files written";
+exit 0;
+
+sub format_filename {
+    my $is = shift;
+    return format_gene($is) . ".gff3";
+}
+
+# Using "name - id" means Geneious can match up the imported NCBI Gene sequence
+# document with the annotation document automatically.
+sub format_gene {
+    my $is = shift;
+    return sprintf "%s - %d", $is->gene, $is->ncbi_gene_id;
+}
+
+sub format_sources {
+    my $is = shift;
+    return join "|", @{ $is->source_names || [] };
+}
+
+sub format_location {
+    my $is = shift;
+
+    # GFF3 is 1-origin, base-numbered.  Zero-width features are represented by
+    # start == end and are taken to be to the right of the indicated base in
+    # the direction of the landmark.
+    #
+    # 0 1 2 3    ISDB coordinate is 2
+    #  A T·C G   · is proviral location
+    #  1 2 3 4   GFF3 coordinate is also 2  \o/
+    #
+    # Geneious appears to import all NCBI Gene sequences in the orientation of
+    # the chromosome, so we don't need to do anything annoying like renumber
+    # bases from the end for genes on the reverse strand.
+    #
+    # Thanks to our 0-origin, interbase-numbered coordinates, we can just
+    # subtract the location from the gene start to get a gene-relative
+    # position.
+    #
+    return $is->location - $is->get_column("gene_start");
+}
+
+# Geneious expects strand for NCBI Gene documents to be relative to the
+# chromosome, not the gene itself!  This is because the "landmark" of the
+# documents is still considered the chromosome, which is not what you might
+# expect given you're looking at a single-gene annotation.
+sub format_strand {
+    my $is     = shift;
+    my $strand = $is->orientation_in_landmark
+        or return undef;
+
+    $strand =~ tr/FR/+-/;
+    return $strand;
+}
+
+sub format_name {
+    my $is   = shift;
+    my $name = $is->subject // $is->environment;
+
+    return $name unless $is->multiplicity > 1;
+    return sprintf "%s (x%d)", $name, $is->multiplicity;
+}
