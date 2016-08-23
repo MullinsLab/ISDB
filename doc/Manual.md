@@ -127,9 +127,9 @@ numeric `ncbi_gene_id` is guaranteed to be unique.
 ## A missing gene name means the IS is intergenic
 
 If an integration site is intergenic (literally "between genes"), it will be
-missing a gene name in the [Integration Summary](#integration-summary) dataset
-and be lumped into the row missing a gene name in the [Summary by
-Gene](#summary-by-gene) dataset.
+missing a gene name in the [Integration summary with annotated
+genes](#integration-summary-with-annotated-genes) dataset and be lumped into
+the row missing a gene name in the [Summary by Gene](#summary-by-gene) dataset.
 
 Gene names that start with `LOC…` mean that someone, somewhere has evidence
 (either experimental or computational) that a gene or gene-like region exists
@@ -157,9 +157,9 @@ These datasets represent what seems like useful defaults, but we recognize that
 there's no such thing as a default analysis or default person.  Custom reports
 will give you exactly the data you want in the form that you want.
 
-## Integration Summary
+## Integration summary with annotated genes
 
-The _integration summary_ report contains a row for each gene integration _event_ in
+The _integration gene summary_ report contains a row for each gene integration _event_ in
 the database, along with that event's _clonal multiplicity_ as reported by the
 source.  Note that integrations into **locations covered by multiple genes** (such
 as two in opposite orientations) **will be reported once per gene**.
@@ -182,7 +182,7 @@ columns before `multiplicity` are collapsed and counted towards the final
 | `source_names`             | text                 | `NCI-RID`  |
 | `pubmed_ids`               | text                 | `25011556` |
 
-### Fields
+### Fields {#common-fields}
 
 #### `environment`
 
@@ -225,6 +225,34 @@ One or more numeric PubMed IDs identifying the paper which published or
 analyzed the integration events in this row.  Multiple IDs are separated by
 pipes `|`.
 
+## Integration summary
+
+The _integration summary_ report contains a row for each integration _event_ in
+the database, along with that event's _clonal multiplicity_ as reported by the
+source.  This report is _not_ annotated with gene information, and no data is
+duplicated: each evidentiary record in the database contributes to the
+multiplicity of one row in this report.
+
+Individual integration site observations with the same values for
+`environment`, `subject`, `landmark`, `location`, and `orientation_in_landmark`
+are counted towards a row's `multiplicity`.
+
+| column                    | type                 | example       |
+|---------------------------+----------------------+---------------|
+| `environment`             | text                 | `in vivo`     |
+| `subject`                 | text                 | `25011556_R1` |
+| `landmark`                | text                 | `chr5`        |
+| `location`                | non-negative integer | `44642671`    |
+| `orientation_in_landmark` | orientation          | `F`           |
+| `multiplicity`            | non-negative integer | `1`           |
+| `source_names`            | text                 | `NCI-RID`     |
+| `pubmed_ids`              | text                 | `25011556`    |
+
+### Fields
+
+Field definitions and formats are the same as [fields in the integration gene
+summary](#common-fields).
+
 ## Summary by Gene
 
 The _summary by gene_ report counts integration sites appearing in annotated genes across various subjects, sources, and locations.  Currently it **lumps all _in vivo_ and _in vitro_ data together** when counting.
@@ -263,7 +291,7 @@ instances are extremely rare.
 
 #### `total_in_gene`
 
-The _total number of independent observations_ of integrations into this gene. This number is equal to the sum of `multiplicity` from each row of `integration_summary` annotated with this `gene`, so it should _exclude_ technical replicates.
+The _total number of independent observations_ of integrations into this gene. This number is equal to the sum of `multiplicity` from each row of `integration_gene_summary` annotated with this `gene`, so it should _exclude_ technical replicates.
 
 #### `environments`
 

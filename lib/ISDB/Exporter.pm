@@ -89,6 +89,11 @@ sub _build_exports {
             resultset => $isdb->resultset("IntegrationSummary"),
             filename  => 'integration-summary',
         },
+        {
+            name      => 'Integration summary with annotated genes',
+            resultset => $isdb->resultset("IntegrationGeneSummary"),
+            filename  => 'integration-gene-summary',
+        },
     ];
 }
 

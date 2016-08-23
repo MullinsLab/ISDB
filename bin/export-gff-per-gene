@@ -33,14 +33,14 @@ my $output_path = path(shift);
 $output_path->mkpath;
 
 # XXX TODO: This query may want to become a view, or integration_genes (and
-# integration_summary) could grow a location_in_gene column with the
+# integration_gene_summary) could grow a location_in_gene column with the
 # calculation already done.  This makes particular sense because
 # integration_genes already does the join logic we repeat here and so has
 # access to the specific ncbi_gene_location row.  For now, it the least
 # intrusive to just handle it ourselves here.
 # -trs, 19 August 2016
 my $schema       = ISDB::Schema->connect_default;
-my $integrations = $schema->resultset('IntegrationSummary')->search_rs(
+my $integrations = $schema->resultset('IntegrationGeneSummary')->search_rs(
     {
         gene => (
             $opt->gene

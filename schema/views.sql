@@ -1,6 +1,7 @@
 BEGIN;
 
 DROP VIEW IF EXISTS summary_by_gene;
+DROP VIEW IF EXISTS integration_gene_summary;
 DROP VIEW IF EXISTS integration_summary;
 DROP VIEW IF EXISTS integration_genes;
 DROP VIEW IF EXISTS sample_fields_metadata;
@@ -24,6 +25,22 @@ CREATE VIEW integration_genes AS
 ;
 
 CREATE VIEW integration_summary AS
+    SELECT environment                                      AS environment,
+           sample->>'subject'                               AS subject,
+           landmark                                         AS landmark,
+           location                                         AS location,
+           orientation_in_landmark                          AS orientation_in_landmark,
+           COUNT(1)                                         AS multiplicity,
+           ARRAY_AGG(DISTINCT source_name ORDER BY source_name)
+                                                            AS source_names,
+           ARRAY_AGG(DISTINCT (sample->>'pubmed_id')::int ORDER BY (sample->>'pubmed_id')::int)
+               FILTER (WHERE (sample->>'pubmed_id') IS NOT NULL)
+                                                            AS pubmed_ids
+      FROM integration
+  GROUP BY environment, subject, landmark, location, orientation_in_landmark
+;
+
+CREATE VIEW integration_gene_summary AS
     SELECT environment                                      AS environment,
            sample->>'subject'                               AS subject,
            ncbi_gene_id                                     AS ncbi_gene_id,
@@ -52,23 +69,23 @@ CREATE VIEW summary_by_gene AS
            SUM(multiplicity)                        AS total_in_gene,
            ARRAY_AGG(DISTINCT environment::text ORDER BY environment::text)
                                                     AS environments
-      FROM integration_summary
+      FROM integration_gene_summary
      GROUP BY ncbi_gene_id, gene
 ;
 
 CREATE VIEW sample_fields_metadata AS
-	SELECT field,
-		   count(1),
-		   count(DISTINCT sample->>field)        as values,
-		   array_agg(DISTINCT source_name
+    SELECT field,
+           count(1),
+           count(DISTINCT sample->>field)        as values,
+           array_agg(DISTINCT source_name
                      ORDER BY source_name)       as sources,
-		   array_agg(DISTINCT environment::text
+           array_agg(DISTINCT environment::text
                      ORDER BY environment::text) as environments
-	  FROM (SELECT DISTINCT jsonb_object_keys(sample) AS field FROM integration)
-		AS sample_fields
-	  JOIN integration ON (sample ? field AND sample->>field != '')
-	 GROUP BY field
-	 ORDER BY count(DISTINCT source_name) DESC, count DESC
+      FROM (SELECT DISTINCT jsonb_object_keys(sample) AS field FROM integration)
+        AS sample_fields
+      JOIN integration ON (sample ? field AND sample->>field != '')
+     GROUP BY field
+     ORDER BY count(DISTINCT source_name) DESC, count DESC
 ;
 
 COMMIT;

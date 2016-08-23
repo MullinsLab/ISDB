@@ -10,7 +10,7 @@ use Path::Tiny;
 use ISDB::Schema;
 
 my $schema       = ISDB::Schema->connect_default;
-my $integrations = $schema->resultset('IntegrationSummary')->search(
+my $integrations = $schema->resultset('IntegrationGeneSummary')->search(
     {
         landmark => { 'LIKE', 'chr%' },
         location => { '!=', undef },
