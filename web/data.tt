@@ -27,7 +27,7 @@
         collaborate with your local bioinformatics practitioner.
       </p>
 
-      <% FOR dataset IN exports %>
+      <% FOR dataset IN exports.sort('name') %>
         <h3><% dataset.name %></h3>
         <p class="text-lg">
           Download <% version.name %> version as:
