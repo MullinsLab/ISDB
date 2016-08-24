@@ -83,7 +83,7 @@ if ! $bin/cache-known-issues > $base/cache/issues.json; then
 fi
 
 echo "Copying static assets"
-cp -a $base/web/static $output
+cp -a $base/web/assets $output
 
 echo "Rendering templates"
 $bin/fill-template \
