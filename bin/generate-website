@@ -15,6 +15,9 @@ variables PGHOST, PGUSER, PGDATABASE, etc.
 Web configuration options may be changed in config_local.yaml or in a separate
 file of your choosing specified by the environment variable ISDB_CONFIG.
 
+When iterating on website customizations for an existing site, it's often
+useful to pass --skip-exports and --skip-cached.
+
 Options:
 
    --compare            Compare new exports to old exports and only replace old
@@ -27,6 +30,9 @@ Options:
 
    --skip-stats         Don't update cached stats; use existing ones.
 
+   --skip-cached        Don't update any cache files; use existing ones.
+                        Implies --skip-stats.
+
    -h --help            Show this usage information.
 .
 }
@@ -34,6 +40,7 @@ Options:
 version_name=latest
 run_exports=yes
 refresh_stats=yes
+refresh_cached=yes
 
 for arg; do
     case "$arg" in
@@ -52,6 +59,9 @@ for arg; do
             shift;;
         --skip-stats)
             refresh_stats=no
+            shift;;
+        --skip-cached)
+            refresh_cached=no
             shift;;
         --)
             shift;
@@ -100,20 +110,25 @@ if [[ $run_exports == yes ]]; then
     popd >/dev/null
 fi
 
-mkdir -p $output/cache/
+if [[ $refresh_cached == yes ]]; then
+    mkdir -p $output/cache/
 
-if [[ $refresh_stats == yes ]]; then
-    echo "Caching stats"
-    $bin/cache-stats > $output/cache/stats.json
-fi
+    if [[ $refresh_stats == yes ]]; then
+        echo "Caching stats"
+        $bin/cache-stats > $output/cache/stats.json
+    fi
 
-echo "Caching PubMed info"
-$bin/cache-pubmed-info > $output/cache/pubmed.json
+    echo "Caching table metadata"
+    $bin/table-metadata > $output/cache/table-metadata.json
 
-echo "Caching current Known Issues"
-if ! $bin/cache-known-issues > $output/cache/issues.json; then
-    echo "Warning: Couldn't fetch known issues, but proceeding anyway."
-    echo "Hint: Look at the messages between this line and the line «Caching current Known Issues» above."
+    echo "Caching PubMed info"
+    $bin/cache-pubmed-info > $output/cache/pubmed.json
+
+    echo "Caching current Known Issues"
+    if ! $bin/cache-known-issues > $output/cache/issues.json; then
+        echo "Warning: Couldn't fetch known issues, but proceeding anyway."
+        echo "Hint: Look at the messages between this line and the line «Caching current Known Issues» above."
+    fi
 fi
 
 echo "Copying static assets"
@@ -131,7 +146,6 @@ $bin/fill-template \
     $base/web/*.tt
 
 mkdir -p $output/doc
-$bin/table-metadata > $output/cache/table-metadata.json
 $bin/fill-template \
     --output=$output/doc \
     --var version@$output/version.json \
