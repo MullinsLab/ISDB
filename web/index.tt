@@ -20,7 +20,7 @@
     <div class="col col-md-5 col-sm-12">
       <% FOREACH query IN [["Subjects", "subjects"], ["Unique IS", "unique_sites"]] %>
         <h3>Top 5 Genes by # of <% query.0 %></h3>
-        <% genes = isdb.resultset("SummaryByGene").top_N_by_column(query.1, 5) %>
+        <% genes = stats.top_5_genes_by.${query.1} %>
         <table class="table table-condensed">
           <thead>
             <tr>
@@ -31,7 +31,7 @@
             </tr>
           </thead>
           <tbody>
-            <% FOR gene IN genes.all %>
+            <% FOR gene IN genes %>
             <tr>
               <td><a href="<% gene.ncbi_gene.uri %>"><% gene.gene %></a></td>
               <td class="text-right"><% gene.subjects %></td>

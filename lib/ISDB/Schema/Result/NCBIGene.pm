@@ -99,4 +99,12 @@ sub uri {
     return URI->new("https://www.ncbi.nlm.nih.gov/gene/" . $self->id);
 }
 
+sub as_hash {
+    my $self = shift;
+    return {
+        $self->get_columns,
+        uri => $self->uri->as_string,
+    };
+}
+
 1;

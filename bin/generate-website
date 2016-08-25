@@ -9,6 +9,7 @@ function usage() {
 
 version_name=latest
 run_exports=yes
+refresh_stats=yes
 
 for arg; do
     case "$arg" in
@@ -24,6 +25,9 @@ for arg; do
             shift 2;;
         --skip-exports)
             run_exports=no
+            shift;;
+        --skip-stats)
+            refresh_stats=no
             shift;;
         --)
             shift;
@@ -72,8 +76,14 @@ if [[ $run_exports == yes ]]; then
     popd >/dev/null
 fi
 
-echo "Caching PubMed info"
 mkdir -p $base/cache/
+
+if [[ $refresh_stats == yes ]]; then
+    echo "Caching stats"
+    $bin/cache-stats > $base/cache/stats.json
+fi
+
+echo "Caching PubMed info"
 $bin/cache-pubmed-info > $base/cache/pubmed.json
 
 echo "Caching current Known Issues"
@@ -91,6 +101,7 @@ $bin/fill-template \
     --find-exports=$exports \
     $template_args \
     --var version@$output/version.json \
+    --var stats@$base/cache/stats.json \
     --var pubmed_info@$base/cache/pubmed.json \
     --var issues@$base/cache/issues.json \
     $base/web/*.tt
@@ -100,6 +111,7 @@ $bin/table-metadata > $base/cache/table-metadata.json
 $bin/fill-template \
     --output=$output/doc \
     --var version@$output/version.json \
+    --var stats@$base/cache/stats.json \
     --var tables@$base/cache/table-metadata.json \
     --var webroot=../ \
     $base/web/doc/Tables.tt

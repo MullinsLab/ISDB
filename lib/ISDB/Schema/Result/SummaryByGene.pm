@@ -134,4 +134,12 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+sub as_hash {
+    my $self = shift;
+    return {
+        $self->get_columns,
+        ncbi_gene => $self->ncbi_gene->as_hash,
+    };
+}
+
 1;
