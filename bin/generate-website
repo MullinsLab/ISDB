@@ -4,7 +4,31 @@ bin=$(dirname $0)
 base=$bin/..
 
 function usage() {
-    echo "usage: $(basename $0) [--compare] [--freeze-as name] [--skip-exports] <output-directory>"
+    cat <<.
+usage: $(basename $0) [options] <output-directory>
+
+Generates a static website for an ISDB instance into <output-directory>.
+
+The database to connect to is controlled by the normal PostgreSQL environment
+variables PGHOST, PGUSER, PGDATABASE, etc.
+
+Web configuration options may be changed in config_local.yaml or in a separate
+file of your choosing specified by the environment variable ISDB_CONFIG.
+
+Options:
+
+   --compare            Compare new exports to old exports and only replace old
+                        files if the new ones are different.
+
+   --freeze-as <name>   Generate a frozen version of the website using the
+                        provided name.
+
+   --skip-exports       Don't update exports; use existing ones.
+
+   --skip-stats         Don't update cached stats; use existing ones.
+
+   -h --help            Show this usage information.
+.
 }
 
 version_name=latest
