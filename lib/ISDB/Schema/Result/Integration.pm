@@ -148,13 +148,4 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-04-06 11:16:06
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fzlzaU8Q3S5RDnSWfA5B7w
 
-use JSON::MaybeXS;
-
-for my $column (qw[ sample info ]) {
-    __PACKAGE__->inflate_column($column, {
-        inflate => sub { decode_json($_[0]) },
-        deflate => sub { encode_json($_[0]) },
-    });
-}
-
 1;
