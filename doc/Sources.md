@@ -145,3 +145,15 @@ you'd represent it in the CSV as:
 
 See the _transform.recs_ files in the stock data sources for examples of our
 _sample_ and _info_ document conventions.
+
+# Reference version and coordinate liftover
+
+As [described in the manual](Manual.html#hg38), ISDB tools handle genome
+coordinates using the GRCh38/hg38 human genome reference. This means that when
+loading your own integrations, if they were mapped to an earlier reference
+release (such as GRCh37/hg19), chromosomal coordinates must be translated to
+GRCh38 as a step in preparing your `integrations.csv` file. The best way of
+doing this is to download the UCSC [`liftOver`][] tool and use it to translate
+each coordinate in your data set.
+
+[liftOver]: https://genome.ucsc.edu/cgi-bin/hgLiftOver
