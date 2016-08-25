@@ -21,11 +21,16 @@ use base 'DBIx::Class::Core';
 
 =item * L<ISDB::Schema::InflateColumn::JSON>
 
+=item * L<ISDB::Schema::SerializableAsJSON>
+
 =back
 
 =cut
 
-__PACKAGE__->load_components("+ISDB::Schema::InflateColumn::JSON");
+__PACKAGE__->load_components(
+  "+ISDB::Schema::InflateColumn::JSON",
+  "+ISDB::Schema::SerializableAsJSON",
+);
 
 =head1 TABLE: C<ncbi_gene_location>
 
@@ -110,8 +115,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-02-11 22:50:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9G0bu+I3f7dBPRS3uB5FLQ
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-25 13:58:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ilv2QwrKZ7zFR3Dl3M+ypA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
