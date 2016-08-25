@@ -76,18 +76,18 @@ if [[ $run_exports == yes ]]; then
     popd >/dev/null
 fi
 
-mkdir -p $base/cache/
+mkdir -p $output/cache/
 
 if [[ $refresh_stats == yes ]]; then
     echo "Caching stats"
-    $bin/cache-stats > $base/cache/stats.json
+    $bin/cache-stats > $output/cache/stats.json
 fi
 
 echo "Caching PubMed info"
-$bin/cache-pubmed-info > $base/cache/pubmed.json
+$bin/cache-pubmed-info > $output/cache/pubmed.json
 
 echo "Caching current Known Issues"
-if ! $bin/cache-known-issues > $base/cache/issues.json; then
+if ! $bin/cache-known-issues > $output/cache/issues.json; then
     echo "Warning: Couldn't fetch known issues, but proceeding anyway."
     echo "Hint: Look at the messages between this line and the line «Caching current Known Issues» above."
 fi
@@ -101,18 +101,18 @@ $bin/fill-template \
     --find-exports=$exports \
     $template_args \
     --var version@$output/version.json \
-    --var stats@$base/cache/stats.json \
-    --var pubmed_info@$base/cache/pubmed.json \
-    --var issues@$base/cache/issues.json \
+    --var stats@$output/cache/stats.json \
+    --var pubmed_info@$output/cache/pubmed.json \
+    --var issues@$output/cache/issues.json \
     $base/web/*.tt
 
 mkdir -p $output/doc
-$bin/table-metadata > $base/cache/table-metadata.json
+$bin/table-metadata > $output/cache/table-metadata.json
 $bin/fill-template \
     --output=$output/doc \
     --var version@$output/version.json \
-    --var stats@$base/cache/stats.json \
-    --var tables@$base/cache/table-metadata.json \
+    --var stats@$output/cache/stats.json \
+    --var tables@$output/cache/table-metadata.json \
     --var webroot=../ \
     $base/web/doc/Tables.tt
 
