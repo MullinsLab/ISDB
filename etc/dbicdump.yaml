@@ -16,3 +16,4 @@ loader_options:
     source_name: source
   components:
     - +ISDB::Schema::InflateColumn::JSON
+    - +ISDB::Schema::SerializableAsJSON

@@ -21,11 +21,16 @@ use base 'DBIx::Class::Core';
 
 =item * L<ISDB::Schema::InflateColumn::JSON>
 
+=item * L<ISDB::Schema::SerializableAsJSON>
+
 =back
 
 =cut
 
-__PACKAGE__->load_components("+ISDB::Schema::InflateColumn::JSON");
+__PACKAGE__->load_components(
+  "+ISDB::Schema::InflateColumn::JSON",
+  "+ISDB::Schema::SerializableAsJSON",
+);
 
 =head1 TABLE: C<source>
 
@@ -86,9 +91,17 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-21 15:04:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Xf0GTbLl74edqmm9qgmKzg
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-25 13:58:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Fzw/lwJojEbfralOcUv0Wg
 
 __PACKAGE__->add_columns("+source_name" => { accessor => "name" });
+
+sub as_hash {
+    my $self = shift;
+    return {
+        $self->get_columns,
+        document => $self->document,
+    };
+}
 
 1;

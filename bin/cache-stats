@@ -1,0 +1,39 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use utf8;
+use 5.010;
+use open qw< :std :encoding(UTF-8) >;
+use FindBin qw< $Bin >;
+use lib "$Bin/../lib", "$Bin/../local/lib/perl5";
+use ISDB::Schema;
+use JSON::MaybeXS;
+
+my $db    = ISDB::Schema->connect_default;
+my $is    = $db->resultset("Integration");
+my $genes = $db->resultset("SummaryByGene");
+
+my $stats = {
+    counts => {
+        integrations => {
+            in_vivo  => $is->in_vivo->count,
+            in_vitro => $is->in_vitro->count,
+            genes    => $db->resultset("IntegrationGene")->count_distinct_genes,
+        },
+        by_source_and_publication => {
+            in_vivo  => [ $is->in_vivo->counts_by_source_and_publication->all  ],
+            in_vitro => [ $is->in_vitro->counts_by_source_and_publication->all ],
+        },
+    },
+    top_5_genes_by => {
+        subjects     => [ $genes->top_N_by_column( subjects     => 5 )->all ],
+        unique_sites => [ $genes->top_N_by_column( unique_sites => 5 )->all ],
+    },
+    sources => {
+        map {; $_->name => $_ }
+            $db->resultset("Source")->all
+    },
+    sample_fields => [ $db->resultset("SampleFieldsMetadata")->all ],
+};
+
+say JSON->new->canonical->pretty->convert_blessed->encode($stats);

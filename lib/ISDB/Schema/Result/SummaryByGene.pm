@@ -21,11 +21,16 @@ use base 'DBIx::Class::Core';
 
 =item * L<ISDB::Schema::InflateColumn::JSON>
 
+=item * L<ISDB::Schema::SerializableAsJSON>
+
 =back
 
 =cut
 
-__PACKAGE__->load_components("+ISDB::Schema::InflateColumn::JSON");
+__PACKAGE__->load_components(
+  "+ISDB::Schema::InflateColumn::JSON",
+  "+ISDB::Schema::SerializableAsJSON",
+);
 __PACKAGE__->table_class("DBIx::Class::ResultSource::View");
 
 =head1 TABLE: C<summary_by_gene>
@@ -91,8 +96,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-04-20 16:01:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IL/CyL6JUNObqyN7AvqfJQ
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-25 13:58:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:woFemn0xVvgnmtrhtXrlZw
 
 =head2 ncbi_gene
 
@@ -128,5 +133,13 @@ __PACKAGE__->has_many(
   { "foreign.ncbi_gene_id" => "self.ncbi_gene_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
+
+sub as_hash {
+    my $self = shift;
+    return {
+        $self->get_columns,
+        ncbi_gene => $self->ncbi_gene->as_hash,
+    };
+}
 
 1;

@@ -217,7 +217,7 @@
           </tr>
         </thead>
         <tbody>
-          <% FOR f IN isdb.resultset("SampleFieldsMetadata").all %>
+          <% FOR f IN stats.sample_fields %>
             <tr>
               <td><tt><% f.field %></tt></td>
               <td>

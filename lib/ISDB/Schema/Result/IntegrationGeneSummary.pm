@@ -21,11 +21,16 @@ use base 'DBIx::Class::Core';
 
 =item * L<ISDB::Schema::InflateColumn::JSON>
 
+=item * L<ISDB::Schema::SerializableAsJSON>
+
 =back
 
 =cut
 
-__PACKAGE__->load_components("+ISDB::Schema::InflateColumn::JSON");
+__PACKAGE__->load_components(
+  "+ISDB::Schema::InflateColumn::JSON",
+  "+ISDB::Schema::SerializableAsJSON",
+);
 __PACKAGE__->table_class("DBIx::Class::ResultSource::View");
 
 =head1 TABLE: C<integration_gene_summary>
@@ -119,8 +124,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-07-27 10:24:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AK86xKJoyF9fuGmYQGuEGw
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-25 13:58:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+n3K8vFg3vwgmZIvdznKXw
 
 =head2 ncbi_gene
 

@@ -9,22 +9,22 @@
       <h2>Sources</h2>
       <p>
         The database contains
-        <strong><% isdb.resultset("Integration").in_vivo.count | commafy %> <em>in vivo</em></strong> and
-        <strong><% isdb.resultset("Integration").in_vitro.count | commafy %> <em>in vitro</em> observations</strong>
+        <strong><% stats.counts.integrations.in_vivo  | commafy %> <em>in vivo</em></strong> and
+        <strong><% stats.counts.integrations.in_vitro | commafy %> <em>in vitro</em> observations</strong>
         across
-        <strong><% isdb.resultset("IntegrationGene").count_distinct_genes | commafy %> genes</strong>
+        <strong><% stats.counts.integrations.genes | commafy %> genes</strong>
         from the following sources.
       </p>
     </div>
 
     <div class="col col-md-6 col-sm-12">
       <h4><em>In vivo</em> datasets</h4>
-      <% INCLUDE 'source_list', resultset = isdb.resultset("Integration").in_vivo %>
+      <% INCLUDE 'source_list', source_list = stats.counts.by_source_and_publication.in_vivo %>
     </div>
 
     <div class="col col-md-6 col-sm-12">
       <h4><em>In vitro</em> datasets</h4>
-      <% INCLUDE 'source_list', resultset = isdb.resultset("Integration").in_vitro %>
+      <% INCLUDE 'source_list', source_list = stats.counts.by_source_and_publication.in_vitro %>
     </div>
 
     <% BLOCK source_list %>
@@ -38,18 +38,18 @@
           </tr>
         </thead>
         <tbody>
-          <% counts = resultset.counts_by_source_and_publication %>
-          <% FOR row IN counts.all %>
+          <% FOR row IN source_list %>
             <tr>
               <td class="source-name">
-                <% IF row.source.document.uri %>
-                  <a href="<% row.source.document.uri %>"><% row.source.name %></a>
+                <% source = stats.sources.${row.source_name} -%>
+                <%- IF source.document.uri %>
+                  <a href="<% source.document.uri %>"><% row.source_name %></a>
                 <% ELSE %>
-                  <% row.source.name %>
+                  <% row.source_name %>
                 <% END %>
               </td>
-              <% IF row.get_column("pubmed_id") %>
-                <% id   = row.get_column("pubmed_id") %>
+              <% IF row.pubmed_id %>
+                <% id   = row.pubmed_id %>
                 <% info = pubmed_info.$id %>
                 <td class="author">
                   <% IF info.sortfirstauthor %>
@@ -70,7 +70,7 @@
               <% ELSE %>
                 <td colspan="2"><em>unpublished</em></td>
               <% END %>
-              <td class="n-count"><% row.get_column("count") | commafy %></td>
+              <td class="n-count"><% row.count | commafy %></td>
             </tr>
           <% END %>
         </tbody>

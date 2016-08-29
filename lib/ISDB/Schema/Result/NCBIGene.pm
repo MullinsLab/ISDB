@@ -21,11 +21,16 @@ use base 'DBIx::Class::Core';
 
 =item * L<ISDB::Schema::InflateColumn::JSON>
 
+=item * L<ISDB::Schema::SerializableAsJSON>
+
 =back
 
 =cut
 
-__PACKAGE__->load_components("+ISDB::Schema::InflateColumn::JSON");
+__PACKAGE__->load_components(
+  "+ISDB::Schema::InflateColumn::JSON",
+  "+ISDB::Schema::SerializableAsJSON",
+);
 
 =head1 TABLE: C<ncbi_gene>
 
@@ -84,14 +89,22 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-02-11 16:34:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hFGbqURkx777LHRrTFHhFQ
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-25 13:58:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4OCENHtVFCs1FA9Z1gQtyg
 
 use URI;
 
 sub uri {
     my $self = shift;
     return URI->new("https://www.ncbi.nlm.nih.gov/gene/" . $self->id);
+}
+
+sub as_hash {
+    my $self = shift;
+    return {
+        $self->get_columns,
+        uri => $self->uri->as_string,
+    };
 }
 
 1;
