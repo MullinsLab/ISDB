@@ -164,7 +164,7 @@ sub export {
 sub find_metadata {
     my $self = shift;
     my @exported = map { $self->read_metadata($_) }
-                       $self->output_path->children(qr/\.metadata\.json/);
+                       $self->output_path->children(qr/\.metadata\.json$/);
     return @exported;
 }
 
