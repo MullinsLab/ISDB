@@ -19,7 +19,7 @@ requires 'List::Util', '1.29';
 requires 'LWP::UserAgent';
 requires 'LWP::Protocol::Net::Curl';
 requires 'Moo';
-requires 'Path::Tiny';
+requires 'Path::Tiny', '0.065';
 requires 'Types::LoadableClass';
 requires 'Types::Standard';
 requires 'Type::Params';
