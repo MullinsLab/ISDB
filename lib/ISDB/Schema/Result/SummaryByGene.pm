@@ -41,6 +41,11 @@ __PACKAGE__->table("summary_by_gene");
 
 =head1 ACCESSORS
 
+=head2 environment
+
+  data_type: 'integration_environment'
+  is_nullable: 1
+
 =head2 ncbi_gene_id
 
   data_type: 'integer'
@@ -71,14 +76,11 @@ __PACKAGE__->table("summary_by_gene");
   data_type: 'numeric'
   is_nullable: 1
 
-=head2 environments
-
-  data_type: 'text[]'
-  is_nullable: 1
-
 =cut
 
 __PACKAGE__->add_columns(
+  "environment",
+  { data_type => "integration_environment", is_nullable => 1 },
   "ncbi_gene_id",
   { data_type => "integer", is_nullable => 1 },
   "gene",
@@ -91,13 +93,11 @@ __PACKAGE__->add_columns(
   { data_type => "bigint", is_nullable => 1 },
   "total_in_gene",
   { data_type => "numeric", is_nullable => 1 },
-  "environments",
-  { data_type => "text[]", is_nullable => 1 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-25 13:58:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:woFemn0xVvgnmtrhtXrlZw
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-09-23 14:07:22
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uMTjQ5ghZlV+FirBH3ioEA
 
 =head2 ncbi_gene
 
