@@ -100,14 +100,21 @@
         </p>
       <% END %>
 
-      <h2>Genome Browser</h2>
+      <h2>Genome Browser and IGV</h2>
       <p>
         If you’re interested in a specific region of the human genome, such as
         a gene, the <a href="https://genome.ucsc.edu">UCSC Genome Browser</a>
-        is a great way to start visualizing the data.  We provide a custom
-        track which you can
-        <a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgt.customText=<% config.web.base_url _ version_url(version) | uri | html %>exports/tracks/isdb.bed"
-           id="load-custom-track">load into the genome browser</a>.
+        is a great way to start visualizing the data.  We provide two custom
+        tracks which you can load into the genome browser, one for
+        <a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgt.customText=<% config.web.base_url _ version_url(version) | uri | html %>exports/tracks/in-vivo.bed"><em>in vivo</em> sites</a>
+        and another for
+        <a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgt.customText=<% config.web.base_url _ version_url(version) | uri | html %>exports/tracks/in-vitro.bed"><em>in vitro</em> sites</a>.
+      </p>
+      <p>
+        If you’d rather view the data in other genomics software such as
+        <a href="http://software.broadinstitute.org/software/igv/home">IGV</a>,
+        you can <a href="exports/tracks/">download the track data as BED
+        files</a>.
       </p>
 
       <h3>Annotation files per gene</h3>
