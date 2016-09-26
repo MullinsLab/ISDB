@@ -50,18 +50,7 @@ while (my $is = $integrations->next) {
         $is->location,
         $is->location + 1,
         $is->subject =~ s/\s+/_/gr,
-        score($is->multiplicity),
+        $is->multiplicity,
         ($is->orientation_in_landmark // 'U') =~ y/UFR/.+-/r,
         ($is->location) x 2;    # Thick start and end
-}
-
-sub score {
-    my $multiplicity = shift;
-
-    state $max_multiplicity = $integrations->search({}, {
-        columns  => [{ max => { MAX => 'multiplicity' } }],
-        order_by => [],
-    })->first->get_column("max");
-
-    return int(1000 / $max_multiplicity * $multiplicity);
 }
