@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 use 5.014;
+use utf8;
 our $line;  # from recs
 
 my $t = {
@@ -39,6 +40,10 @@ $t->{location}--
     if $t->{orientation_in_landmark} eq "R";
 
 my ($hiv, $human) = @$r{"HIV 3'LTR JUNCTION SEQUENCE*", "HUMAN JUNCTION SEQUENCE"};
+
+# Remove garbage nucleotides
+s/Ê+$// for $human;
+
 $t->{sequence}          = $hiv . $human;
 $t->{sequence_junction} = length $hiv;
 
