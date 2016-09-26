@@ -71,7 +71,7 @@ community.
 [glossary]: http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/info/definitions.shtml
 [accession]: http://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_accession_numbers_and_mole/
 
-## Locations use the human genome assembly version GRCh38 (hg38)
+## Locations use the human genome assembly version GRCh38 (hg38) {#hg38}
 
 All locations are provided in __GRCh38__ (hg38) coordinates and determined
 without using patch scaffolds (fix or novel) from patch releases.  This

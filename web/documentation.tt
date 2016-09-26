@@ -43,6 +43,7 @@
       <ul>
         <li><a href="doc/Sources.html">Organization of data sources</a></li>
         <li><a href="doc/Database-connection.html">Specifying database connection details</a></li>
+        <li><a href="doc/Workflows.html">Workflows for database maintenance</a></li>
         <li><a href="doc/Freezing.html">Freezing database versions</a></li>
       </ul>
     </div>
