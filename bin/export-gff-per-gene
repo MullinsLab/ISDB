@@ -62,7 +62,8 @@ my $integrations = $schema->resultset('IntegrationGeneSummary')->search_rs(
     }
 );
 
-my ($file, $fh, $feature_id, $files_written);
+my ($file, $fh, $feature_id);
+my $files_written = 0;
 
 while (my $is = $integrations->next) {
     # Open a new file for each gene.  The results are ordered by gene above.
