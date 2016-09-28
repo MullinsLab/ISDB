@@ -18,9 +18,9 @@
       <% END %>
     </div>
     <div class="col col-md-5 col-sm-12">
-      <% FOREACH query IN [["Subjects", "subjects"], ["Unique IS", "unique_sites"]] %>
-        <h3>Top 5 Genes by # of <% query.0 %></h3>
-        <% genes = stats.top_5_genes_by.${query.1} %>
+      <% FOREACH query IN [["Subjects", "by_subjects"], ["Unique IS", "by_unique_sites"]] %>
+        <h3>Top 5 Genes by # of <% query.0 %> <em>in vivo</em></h3>
+        <% genes = stats.top_5_genes.in_vivo.${query.1} %>
         <table class="table table-condensed">
           <thead>
             <tr>

@@ -5,6 +5,7 @@ library(ggplot2)
 
 isdb = src_postgres("isdb", host = "ireland", user = "isdb_r")
 data = tbl(isdb, sql("SELECT * FROM summary_by_gene")) %>%
+  filter( environment = "in vivo" ) %>%
   collect()
 
 genes = ggplot(data) +

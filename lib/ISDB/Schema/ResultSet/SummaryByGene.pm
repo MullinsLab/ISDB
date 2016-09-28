@@ -7,6 +7,16 @@ package ISDB::Schema::ResultSet::SummaryByGene;
 use base 'DBIx::Class::ResultSet';
 use namespace::clean;
 
+sub in_vivo {
+    my $self = shift;
+    return $self->search_rs({ environment => 'in vivo' });
+}
+
+sub in_vitro {
+    my $self = shift;
+    return $self->search_rs({ environment => 'in vitro' });
+}
+
 sub top_N_by_column {
     my $self = shift;
     my $col  = shift or return undef;

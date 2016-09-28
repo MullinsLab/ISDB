@@ -60,17 +60,19 @@ CREATE VIEW integration_gene_summary AS
 ;
 
 CREATE VIEW summary_by_gene AS
-    SELECT ncbi_gene_id,
+    SELECT environment,
+           ncbi_gene_id,
            gene                                     AS gene,
-           COUNT(DISTINCT subject)                  AS subjects,
+           CASE environment
+             WHEN 'in vivo'  THEN COUNT(DISTINCT subject)
+             WHEN 'in vitro' THEN null
+           END                                      AS subjects,
            COUNT(DISTINCT (landmark, location))     AS unique_sites,
            COUNT(DISTINCT (landmark, location))
                  FILTER (WHERE multiplicity >= 2)   AS proliferating_sites,
-           SUM(multiplicity)                        AS total_in_gene,
-           ARRAY_AGG(DISTINCT environment::text ORDER BY environment::text)
-                                                    AS environments
+           SUM(multiplicity)                        AS total_in_gene
       FROM integration_gene_summary
-     GROUP BY ncbi_gene_id, gene
+     GROUP BY environment, ncbi_gene_id, gene
 ;
 
 CREATE VIEW sample_fields_metadata AS

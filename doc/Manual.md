@@ -255,19 +255,27 @@ summary](#common-fields).
 
 ## Summary by Gene
 
-The _summary by gene_ report counts integration sites appearing in annotated genes across various subjects, sources, and locations.  Currently it **lumps all _in vivo_ and _in vitro_ data together** when counting.
+The _summary by gene_ report counts integration sites appearing in annotated
+genes across various subjects, sources, and locations.  Genes with both _in
+vivo_ and _in vitro_ data are reported with two rows.
 
-| column                 | type    | example |
-|------------------------+---------+---------|
-| `ncbi_gene_id`         | integer | `80208` |
-| `gene`                 | text    | `SPG11` |
-| `subjects`             | integer | `12`    |
-| `unique_sites`         | integer | `14`    |
-| `proliferating_sites`  | integer | `2`     |
-| `total_in_gene`        | integer | `29`    |
-| `environments`         | text    | `in vivo|in vitro` |
+| column                 | type    | example   |
+|------------------------+---------+-----------|
+| `environment`          | text    | `in vivo` |
+| `ncbi_gene_id`         | integer | `80208`   |
+| `gene`                 | text    | `SPG11`   |
+| `subjects`             | integer | `12`      |
+| `unique_sites`         | integer | `14`      |
+| `proliferating_sites`  | integer | `2`       |
+| `total_in_gene`        | integer | `29`      |
 
 ### Fields
+
+#### `environment`
+
+The environment in which the integration event took place.  Either _in vivo_ or
+_in vitro_.  Refer to the [data usage guidelines](#data-usage-guidelines)
+above.
 
 #### `ncbi_gene_id`, `gene`
 
@@ -292,9 +300,3 @@ instances are extremely rare.
 #### `total_in_gene`
 
 The _total number of independent observations_ of integrations into this gene. This number is equal to the sum of `multiplicity` from each row of `integration_gene_summary` annotated with this `gene`, so it should _exclude_ technical replicates.
-
-#### `environments`
-
-A pipe `|` separated string of the environments in which the integration
-event took place.  Refer to the [data usage guidelines](#data-usage-guidelines)
-above.
