@@ -37,6 +37,10 @@ web:
     blurb: ~
     footer: ~
 
+  # Optional. Path to a directory containing *.md files that will be linked
+  # from the Documentation page in the generated website.
+  local_documentation: ~
+
 issues:
   # Embed a Trello list into the web page to show known issues with this
   # database.  See the top of bin/cache-known-issues for more information.

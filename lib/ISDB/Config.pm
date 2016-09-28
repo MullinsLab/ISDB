@@ -74,7 +74,7 @@ sub _normalize_conf {
 
     # Resolve custom template paths relative to the config file itself not our
     # current working dir
-    for my $tmpl (values %{ $conf->{web}{template} || {} }) {
+    for my $tmpl (values %{ $conf->{web}{template} || {} }, $conf->{web}{local_documentation}) {
         next unless defined $tmpl;
         $tmpl = path($tmpl)->absolute( path($file)->parent )->stringify
             if path($tmpl)->is_relative;

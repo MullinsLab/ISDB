@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e -o pipefail
+shopt -s nullglob
 bin=$(dirname $0)
 base=$bin/..
 
@@ -158,7 +159,13 @@ $bin/fill-template \
 echo "Generating documentation"
 doc_failed=0
 
-for md in $base/doc/*.md; do
+docs=($base/doc/*.md)
+local_doc_dir=$( $bin/read-config web.local_documentation || true )
+if [[ -n $local_doc_dir ]]; then
+    docs+=($local_doc_dir/*.md)
+fi
+
+for md in ${docs[@]}; do
     echo "Converting $(basename $md)"
 
     docname=$(basename $md .md)
@@ -198,7 +205,7 @@ if [[ $doc_failed -eq 1 ]]; then
     echo "{}" > $output/cache/documentation.json
 else
     echo "Indexing documentation"
-    $bin/index-documentation $base/doc > $output/cache/documentation.json
+    $bin/index-documentation $local_doc_dir $base/doc > $output/cache/documentation.json
 fi
 
 $bin/fill-template \
