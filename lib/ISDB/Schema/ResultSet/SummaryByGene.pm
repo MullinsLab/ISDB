@@ -37,16 +37,15 @@ sub with_interestingness {
     my $me   = $self->current_source_alias;
     return $self->search_rs(
         {
-            gene     => { '!=', undef },
-            subjects => { '!=', 0 },
+            gene => { '!=', undef },
         },
         {
             '+columns'  => [{
-                interestingness => \["$me.total_in_gene / $me.unique_sites / $me.subjects AS interestingness"],
+                interestingness => \["$me.total_in_gene / $me.unique_sites / coalesce($me.subjects, 1) AS interestingness"],
             }],
             order_by    => [
                 'interestingness',
-                'subjects      DESC',
+                'coalesce(subjects, 1) DESC',
                 'unique_sites  DESC',
                 'total_in_gene DESC',
             ],

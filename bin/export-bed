@@ -6,62 +6,100 @@ use utf8;
 use open qw< :std :encoding(UTF-8) >;
 use FindBin qw< $Bin >;
 use lib "$Bin/../lib", "$Bin/../local/lib/perl5";
+use Getopt::Long::Descriptive;
 use Path::Tiny;
 use ISDB::Schema;
+use ISDB::Config;
+
+my ($opt, $usage) = describe_options(
+    join("\n",
+        "%c --in-vivo > in-vivo.bed",
+        "%c --in-vitro > in-vitro.bed"),
+    [],
+    [ "Exports all integrations from an ISDB as a BED file suitable for genomics" ],
+    [ "visualization software such as UCSC's Genome Browser or IGV.  BED files" ],
+    [ "are also used for other genomics data analysis tools." ],
+    [],
+    [ "You must specify either --in-vivo or --in-vitro." ],
+    [],
+    [ "environment", [
+        [ "in-vivo",  "output in vivo integrations" ],
+        [ "in-vitro", "output in vitro integrations" ]],
+        { required => 1 },
+    ],
+    [ "no-header", "don't output browser and track header lines" ],
+    [ "help",      "print usage message and exit" ],
+);
+
+print($usage->text), exit(!$opt->help)
+    if $opt->help or not $opt->environment;
 
 my $schema       = ISDB::Schema->connect_default;
-my $integrations = $schema->resultset('IntegrationGeneSummary')->search(
+my $environment  = $opt->environment =~ s/_/ /gr;
+my $integrations = $schema->resultset('IntegrationSummary')->search(
     {
-        landmark => { 'LIKE', 'chr%' },
-        location => { '!=', undef },
-        subject  => { '!=', undef },
+        # XXX TODO: Translate IS in secondary assemblies too.  This requires
+        # converting from RefSeq accessions to UCSC-style identifiers.  See
+        # also https://trello.com/c/Hj7QeUvy.
+        # -trs, 23 Sept 2016
+        landmark    => { 'LIKE', 'chr%' },
+        location    => { '!=', undef },
+        environment => $environment,
     },
     {
-        order_by => ['landmark', 'location', 'subject'],
+        order_by => [
+            'landmark',
+            'location',
+            ($environment eq 'in vivo' ? 'subject' : ())
+        ],
     }
 );
 
-my $most_interesting = $schema
-    ->resultset('SummaryByGene')
-    ->with_interestingness
-    ->search_rs({}, { rows => 1 })
-    ->first;
+unless ($opt->no_header) {
+    my $dbname = ISDB::Config->new->conf->{name}
+              // $schema->storage->dbh->{pg_db}
+              // 'isdb';
 
-my $most_interesting_loc = $most_interesting
-    ->related_resultset('gene_locations')
-    ->first;
+    my $track_name = "$dbname - $environment";
 
-my $position = sprintf "%s:%d-%d",
-    $most_interesting_loc->landmark,
-    $most_interesting_loc->gene_start + 1,
-    $most_interesting_loc->gene_end;
+    my $most_interesting = $schema
+        ->resultset('SummaryByGene')
+        ->search_rs({ environment => $environment })
+        ->with_interestingness
+        ->search_rs({}, { rows => 1 })
+        ->first;
 
-say <<HEADER;
-# Position of most "interesting" integrated gene: @{[ $most_interesting->gene ]}
-browser position $position
-browser hide all
-browser full refGene
-browser full ISDB
-track name=ISDB description="Integration Site Database" visibility=full colorByStrand="0,0,255 255,0,0" useScore=0 db=hg38 group=genes priority=0
-HEADER
+    if ($most_interesting) {
+        my $most_interesting_loc = $most_interesting
+            ->related_resultset('gene_locations')
+            ->search_rs({ landmark => { 'LIKE', 'chr%' } })
+            ->first;
+
+        my $position = sprintf "%s:%d-%d",
+            $most_interesting_loc->landmark,
+            $most_interesting_loc->gene_start + 1,
+            $most_interesting_loc->gene_end;
+
+        my $header = <<"        HEADER";
+            # Position of most "interesting" integrated gene: @{[ $most_interesting->gene ]}
+            browser position $position
+            browser hide all
+            browser full refGene
+            browser full "$track_name"
+        HEADER
+        print $header =~ s/^\s*//mgr;
+    }
+
+    say qq[track name="$track_name" description="$dbname - $environment integration sites (blue = F, red = R)" visibility=full colorByStrand="0,0,255 255,0,0" useScore=0 db=hg38 group=genes priority=0];
+}
+
 while (my $is = $integrations->next) {
     say join "\t",
         $is->landmark,
         $is->location,
         $is->location + 1,
-        $is->subject =~ s/\s+/_/gr,
-        score($is->multiplicity),
+        ($is->subject // $is->environment) =~ s/\s+/_/gr,
+        $is->multiplicity,
         ($is->orientation_in_landmark // 'U') =~ y/UFR/.+-/r,
         ($is->location) x 2;    # Thick start and end
-}
-
-sub score {
-    my $multiplicity = shift;
-
-    state $max_multiplicity = $integrations->search({}, {
-        columns  => [{ max => { MAX => 'multiplicity' } }],
-        order_by => [],
-    })->first->get_column("max");
-
-    return int(1000 / $max_multiplicity * $multiplicity);
 }

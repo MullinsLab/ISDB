@@ -5,13 +5,13 @@
 # Contact address responsible for this ISDB
 contact: mullspt+cfar@uw.edu
 
+# Optional.  Name of this database (e.g. HIRIS), used for branding.
+name: ~
+
 web:
   # Required.  The fully-qualified, internet-accessible location of where you
   # plan to publish this ISDB website.
   base_url: ""
-
-  # Optional.  Name of this database (e.g. HIRIS), used for branding.
-  name: ~
 
   # Optional.  Title and subtitle to use on all web pages.  The subtitle is
   # shown adjacent to the title in smaller, grey text.

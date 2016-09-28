@@ -96,7 +96,8 @@ if [[ $run_exports == yes ]]; then
 
     echo "Exporting BED for Genome Browser"
     mkdir -p $exports/tracks
-    $bin/export-bed > $exports/tracks/isdb.bed
+    $bin/export-bed --in-vivo  > $exports/tracks/in-vivo.bed
+    $bin/export-bed --in-vitro > $exports/tracks/in-vitro.bed
 
     echo "Exporting GFF for each gene"
     rm -rf $exports/gff-per-gene
