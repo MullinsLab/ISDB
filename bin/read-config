@@ -1,0 +1,23 @@
+#!/usr/bin/env perl
+use 5.010;
+use strict;
+use warnings;
+use utf8;
+use open qw< :std :encoding(UTF-8) >;
+use FindBin qw< $Bin $Script >;
+use lib "$Bin/../lib", "$Bin/../local/lib/perl5";
+use ISDB::Config;
+
+my $ref = ISDB::Config->new->conf;
+
+die "usage: $Script path.to.entry" unless @ARGV;
+my @path = split /\./, (join " ", @ARGV);
+for my $key (@path) {
+    $ref = $ref->{$key};
+}
+
+if (defined $ref and !ref $ref) {
+    say $ref;
+} else {
+    exit 1;
+}
