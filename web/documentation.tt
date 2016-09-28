@@ -9,7 +9,7 @@
       <h2>Documentation</h2>
 
       <p>
-        <% config.web.name || 'This database' %> is built using <a
+        <% config.name || 'This database' %> is built using <a
         href="https://mullinslab.microbiol.washington.edu/isdb/">ISDB</a> and
         as such the ISDB documentation applies.  Topics are listed below.
       </p>
@@ -25,7 +25,7 @@
       </p>
 
       <p>
-        For questions about the data in <% config.web.name || 'this specific
+        For questions about the data in <% config.name || 'this specific
         database' %> itself, please contact the database maintainers at
         <a href="mailto:<% config.contact | uri | html %>"><% config.contact %></a>.
       </p>

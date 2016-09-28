@@ -7,8 +7,8 @@
 
   <title>
     <% IF page.title %><% page.title %><% END %>
-    <% IF page.title AND (config.web.title OR config.web.name) %> — <% END %>
-    <% IF config.web.title OR config.web.name %><% config.web.title || config.web.name %><% END %>
+    <% IF page.title AND (config.web.title OR config.name) %> — <% END %>
+    <% IF config.web.title OR config.name %><% config.web.title || config.name %><% END %>
   </title>
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -31,7 +31,7 @@
         <div class="frozen-notice notice text-lg bg-warning">
           <p>
             This page is part of a <strong>copy</strong> of
-            <% config.web.name || 'the data' %>
+            <% config.name || 'the data' %>
             <strong>frozen in time</strong> on
             <strong><% parse_timestamp(version.timestamp).strftime("%d %B %Y") %></strong>.
             The permanent URL of this frozen version is:
@@ -46,9 +46,9 @@
     </div>
   <% END %>
 
-  <% IF config.web.title || config.web.name %>
+  <% IF config.web.title || config.name %>
     <h1>
-      <% config.web.title || config.web.name %>
+      <% config.web.title || config.name %>
       <% IF config.web.subtitle %>
         <small><% config.web.subtitle %></small>
       <% END %>

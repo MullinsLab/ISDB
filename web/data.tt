@@ -9,12 +9,12 @@
       <h2>Download <% version.name %> datasets</h2>
       <p class="notice bg-info">
         Please read <a href="doc/Manual.html">the ISDB manual</a> for guidelines on
-        using <% config.web.name || 'this database' %> and the data contained within.
+        using <% config.name || 'this database' %> and the data contained within.
       </p>
 
       <p>
         These downloadable datasets are broad summaries of the full data
-        contained within <% config.web.name || 'this database' %>.
+        contained within <% config.name || 'this database' %>.
         Many questions are best answered by querying the database directly.
 
         <% IF config.web.show_database_connection %>
@@ -57,7 +57,7 @@
         <h2>Frozen versions</h2>
         <p>
           When it’s time to do a set of analyses, we <em>freeze</em> a version
-          of <% config.web.name || 'the data' %> at a moment in time.  All
+          of <% config.name || 'the data' %> at a moment in time.  All
           analysis is then done on that frozen version, ensuring that the data
           doesn’t drift as analyses are tweaked and finalized.  This is similar
           to using a single, specific version of the human genome while working
@@ -127,7 +127,7 @@
       <% IF config.web.show_known_issues %>
       <h3 id="issues">Known issues</h3>
       <p>
-        <% config.web.name || 'This database' %> is under active development.
+        <% config.name || 'This database' %> is under active development.
         <% IF issues.size %>
           There are some known issues affecting data quality.
         <% ELSE %>
@@ -141,7 +141,7 @@
         <% END %>
       </ul>
       <p>
-        If you spot a problem in <% config.web.name || 'this database' %><% IF issues.size %> that you don’t see here<% END %>,
+        If you spot a problem in <% config.name || 'this database' %><% IF issues.size %> that you don’t see here<% END %>,
         <a href="mailto:<% config.contact | uri | html %>">please let us know</a>.
         We strive to maintain high quality data ready to be used in analysis.
       </p>
