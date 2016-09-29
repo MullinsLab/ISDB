@@ -1,4 +1,8 @@
-% Workflows for database maintenance
+---
+title: Workflows for database maintenance
+topic: About data curation
+order: 3
+...
 
 
 # Running ISDB tools

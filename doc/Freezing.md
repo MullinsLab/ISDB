@@ -1,4 +1,8 @@
-% Freezing versions of an ISDB
+---
+title: Freezing versions of an ISDB
+topic: About data curation
+order: 4
+...
 
 From time to time we freeze versions of our ISDB by making a read-only copy
 that will never be modified.  These frozen versions are linked from the data

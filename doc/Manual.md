@@ -1,4 +1,8 @@
-% Usage Manual
+---
+title: Accessing and understanding the data
+topic: About data analysis
+order: 1
+...
 
 This document uses the phrase "an ISDB" to refer in the abstract to any
 database created using the ISDB tools and software.  One such example of a

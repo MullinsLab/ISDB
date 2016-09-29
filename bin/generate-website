@@ -195,4 +195,15 @@ done
 
 if [[ $doc_failed -eq 1 ]]; then
     echo "Warning: Couldn't generate documentation, but succeeding anyway. Is pandoc installed?"
+    echo "{}" > $output/cache/documentation.json
+else
+    echo "Indexing documentation"
+    $bin/index-documentation $base/doc > $output/cache/documentation.json
 fi
+
+$bin/fill-template \
+    --output=$output/doc \
+    --var version@$output/version.json \
+    --var documentation@$output/cache/documentation.json \
+    --var webroot=../ \
+    $base/web/doc/index.tt

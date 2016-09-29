@@ -1,4 +1,8 @@
-% Using the per-gene GFF exports
+---
+title: Using the per-gene GFF exports
+topic: About data analysis
+order: 3
+...
 
 A gene-specific annotation file is produced for every gene which overlaps with
 an integration site in the database.  The file format is [GFF3][] ("generic

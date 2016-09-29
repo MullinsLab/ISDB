@@ -1,4 +1,8 @@
-% Data sources for an ISDB
+---
+title: Data sources for an ISDB
+topic: About data curation
+order: 1
+...
 
 An ISDB is loaded with data from multiple _sources_.  Sources are independent
 of each other and may represent a single publication's data, unpublished data,

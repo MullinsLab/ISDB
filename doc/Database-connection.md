@@ -1,4 +1,8 @@
-% Database connection
+---
+title: Database connection
+topic: About data curation
+order: 2
+...
 
 The ISDB tools expect to connect to a [PostgreSQL][] (Pg) database for storing
 and retrieving data.  The Pg database software may be running on the local

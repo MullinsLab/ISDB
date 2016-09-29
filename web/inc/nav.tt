@@ -5,11 +5,17 @@
         <li class="active"><a href="<% webroot %>./">About</a></li>
         <li><a href="<% webroot %>data.html">Get the Data</a></li>
         <li><a href="<% webroot %>sources.html">Data Sources</a></li>
-        <li><a href="<% webroot %>documentation.html">Documentation</a></li>
+        <li><a href="<% webroot %>doc">Documentation</a></li>
       </ul>
       <script type="text/javascript">
         (function(){
-          var page = document.location.pathname.split(/\//).pop();
+          var components = document.location.pathname.split(/\//).slice(-2);
+          var page;
+          if (components[0] == "doc") {
+            page = "doc";
+          } else {
+            page = components[1];
+          }
           if (page && page !== "index.html") {
             jQuery('nav .navbar-nav li.active').removeClass('active');
             jQuery('nav .navbar-nav a[href$="' + page + '"]').closest('li').addClass("active");

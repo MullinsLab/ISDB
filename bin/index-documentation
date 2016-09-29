@@ -1,0 +1,47 @@
+#!/usr/bin/env perl
+use 5.010;
+use strict;
+use warnings;
+use utf8;
+use open qw< :std :encoding(UTF-8) >;
+use FindBin qw< $Bin $Script >;
+use lib "$Bin/../lib", "$Bin/../local/lib/perl5";
+use Path::Tiny;
+use JSON::MaybeXS;
+use YAML::XS;
+use Try::Tiny;
+
+die "Usage: $Script directory ..." unless @ARGV;
+
+my $index = {};
+
+for my $dir (@ARGV) {
+    for my $file (path($dir)->children(qr/\.md$/)) {
+        my $contents = $file->slurp_raw;
+
+        # extract a delimited yaml block
+        my ($yaml_bytes) = $contents =~ /(^-{3}$ (.+?) ^[.-]{3}$)/msx;
+        unless ($yaml_bytes) {
+            warn sprintf "No metadata found in %s", $file->canonpath;
+        }
+        my $yaml = {};
+        try {
+            $yaml = Load($yaml_bytes) if $yaml_bytes;
+        } catch {
+            warn sprintf "Decoding error in YAML block in %s: $@", $file->canonpath;
+        };
+        my $topic = $yaml->{topic} // "Local documentation";
+        push @{$index->{$topic}}, {
+            filename => $file->basename,
+            slug     => $file->basename('.md'),
+            title    => $yaml->{title} // $file->basename,
+            order    => $yaml->{order} // 0,
+        };
+    }
+}
+
+for my $key (keys %$index) {
+    @{$index->{$key}} = sort { $a->{order} <=> $b->{order} } @{$index->{$key}};
+}
+
+print JSON->new->canonical->pretty->encode($index);
