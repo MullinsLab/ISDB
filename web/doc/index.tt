@@ -30,10 +30,9 @@
         <a href="mailto:<% config.contact | uri | html %>"><% config.contact %></a>.
       </p>
 
-      <% IF !documentation.size %>
-        <p class="alert alert-warning">Documentation not processed. Please install <a href="http://pandoc.org">Pandoc</a></p>
-        <p><a href="Tables.html">Table and sample document reference</a></p>
-      <% ELSE %>
+      <% IF pandoc_failed %>
+        <p class="alert alert-warning">Documentation not processed. Linked files may be out of date or missing. You may need to install <a href="http://pandoc.org">Pandoc</a></p>
+      <% END %>
       <h3>Topics</h3>
 
       <% FOR topic IN documentation.keys.sort %>
@@ -46,7 +45,6 @@
             <li><a href="Tables.html">Table and sample document reference</a></li>
             <% END %>
           </ul>
-          <% END %>
       <% END %>
 
     </div>

@@ -112,8 +112,9 @@ if [[ $run_exports == yes ]]; then
     popd >/dev/null
 fi
 
+mkdir -p $output/cache/
+
 if [[ $refresh_cached == yes ]]; then
-    mkdir -p $output/cache/
 
     if [[ $refresh_stats == yes ]]; then
         echo "Caching stats"
@@ -202,15 +203,15 @@ done
 
 if [[ $doc_failed -eq 1 ]]; then
     echo "Warning: Couldn't generate documentation, but succeeding anyway. Is pandoc installed?"
-    echo "{}" > $output/cache/documentation.json
-else
-    echo "Indexing documentation"
-    $bin/index-documentation $local_doc_dir $base/doc > $output/cache/documentation.json
 fi
+
+echo "Indexing documentation"
+$bin/index-documentation $local_doc_dir $base/doc > $output/cache/documentation.json
 
 $bin/fill-template \
     --output=$output/doc \
     --var version@$output/version.json \
     --var documentation@$output/cache/documentation.json \
     --var webroot=../ \
+    --var pandoc_failed=$doc_failed \
     $base/web/doc/index.tt
