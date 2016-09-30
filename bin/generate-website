@@ -29,6 +29,8 @@ Options:
 
    --skip-exports       Don't update exports; use existing ones.
 
+   --skip-docs          Don't update documentation; use existing pages.
+
    --skip-stats         Don't update cached stats; use existing ones.
 
    --skip-cached        Don't update any cache files; use existing ones.
@@ -42,6 +44,7 @@ version_name=latest
 run_exports=yes
 refresh_stats=yes
 refresh_cached=yes
+refresh_docs=yes
 
 for arg; do
     case "$arg" in
@@ -63,6 +66,9 @@ for arg; do
             shift;;
         --skip-cached)
             refresh_cached=no
+            shift;;
+        --skip-docs)
+            refresh_docs=no
             shift;;
         --)
             shift;
@@ -157,61 +163,63 @@ $bin/fill-template \
     --var webroot=../ \
     $base/web/doc/Tables.tt
 
-echo "Generating documentation"
-doc_failed=0
+if [[ $refresh_docs == yes ]]; then
+    echo "Generating documentation"
+    doc_failed=0
 
-docs=($base/doc/*.md)
-local_doc_dir=$( $bin/read-config web.local_documentation || true )
-if [[ -n $local_doc_dir ]]; then
-    docs+=($local_doc_dir/*.md)
-fi
+    docs=($base/doc/*.md)
+    local_doc_dir=$( $bin/read-config web.local_documentation || true )
+    if [[ -n $local_doc_dir ]]; then
+        docs+=($local_doc_dir/*.md)
+    fi
 
-for md in ${docs[@]}; do
-    echo "Converting $(basename $md)"
+    for md in ${docs[@]}; do
+        echo "Converting $(basename $md)"
 
-    docname=$(basename $md .md)
-    tmp=$(mktemp -d)
+        docname=$(basename $md .md)
+        tmp=$(mktemp -d)
 
-    # Copy the web template used for each documentation page; the copy means
-    # that the basename preservation done by fill-template Just Works.
-    cp $base/web/pandoc/page.tt $tmp/$docname.tt
+        # Copy the web template used for each documentation page; the copy means
+        # that the basename preservation done by fill-template Just Works.
+        cp $base/web/pandoc/page.tt $tmp/$docname.tt
 
-    # Process the Markdown document into three parts (metadata, body, and head)
-    # using Pandoc templates.  These will be consumed by the web template we
-    # copied above.
-    for part in metadata.json head.html body.html; do
-        if ! pandoc --smart --base-header-level=3 -t html5 --template $base/web/pandoc/$part.tmpl $md > $tmp/$part; then
-            echo "error: pandoc failed processing $md into $tmp/$part (exited $?)" >&2
-            doc_failed=1
-            continue 2
-        fi
+        # Process the Markdown document into three parts (metadata, body, and head)
+        # using Pandoc templates.  These will be consumed by the web template we
+        # copied above.
+        for part in metadata.json head.html body.html; do
+            if ! pandoc --smart --base-header-level=3 -t html5 --template $base/web/pandoc/$part.tmpl $md > $tmp/$part; then
+                echo "error: pandoc failed processing $md into $tmp/$part (exited $?)" >&2
+                doc_failed=1
+                continue 2
+            fi
+        done
+
+        # Style Markdown tables with Bootstrap
+        perl -pi -e 's/<table>/<table class="table table-condensed table-striped">/' $tmp/body.html
+
+        # Render page into output dir
+        $bin/fill-template \
+            --output=$output/doc \
+            --var version@$output/version.json \
+            --var webroot=../ \
+            --var template_root=$base/web/ \
+            --var metadata@$tmp/metadata.json \
+            $tmp/$docname.tt \
+            >/dev/null
     done
 
-    # Style Markdown tables with Bootstrap
-    perl -pi -e 's/<table>/<table class="table table-condensed table-striped">/' $tmp/body.html
+    if [[ $doc_failed -eq 1 ]]; then
+        echo "Warning: Couldn't generate documentation, but succeeding anyway. Is pandoc installed?"
+    fi
 
-    # Render page into output dir
+    echo "Indexing documentation"
+    $bin/index-documentation $local_doc_dir $base/doc > $output/cache/documentation.json
+
     $bin/fill-template \
         --output=$output/doc \
         --var version@$output/version.json \
+        --var documentation@$output/cache/documentation.json \
         --var webroot=../ \
-        --var template_root=$base/web/ \
-        --var metadata@$tmp/metadata.json \
-        $tmp/$docname.tt \
-        >/dev/null
-done
-
-if [[ $doc_failed -eq 1 ]]; then
-    echo "Warning: Couldn't generate documentation, but succeeding anyway. Is pandoc installed?"
+        --var pandoc_failed=$doc_failed \
+        $base/web/doc/index.tt
 fi
-
-echo "Indexing documentation"
-$bin/index-documentation $local_doc_dir $base/doc > $output/cache/documentation.json
-
-$bin/fill-template \
-    --output=$output/doc \
-    --var version@$output/version.json \
-    --var documentation@$output/cache/documentation.json \
-    --var webroot=../ \
-    --var pandoc_failed=$doc_failed \
-    $base/web/doc/index.tt
