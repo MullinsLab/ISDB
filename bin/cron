@@ -14,7 +14,7 @@ PATH=$isdb/local/bin:$PATH
 
 function usage() {
     cat <<.
-usage: $(basename $0) [--auto-update] [--commit [--push]] <output-directory>
+usage: $(basename $0) [--auto-update] [--commit [--push]] [--] <output-directory> [generate-website options]
        $(basename $0) --help
 
   --auto-update     Pulls the ISDB source repo itself before
@@ -86,10 +86,17 @@ for arg; do
         --)
             shift
             break;;
+        -*)
+            printf 'Unknown option: %s\n\n' "$1" >&2
+            usage
+            exit 1;;
+        *)
+            break;; # break after first non-option
     esac
 done
 
 output=$1
+shift
 
 if [[ -z $output ]]; then
     usage
@@ -120,7 +127,7 @@ if [[ $commit == yes && $push == yes ]]; then
 fi
 
 echo "→ Regenerating website"
-$bin/generate-website --compare $output
+$bin/generate-website --compare "$@" $output
 
 if [[ $commit == yes ]]; then
     echo "→ Checking for changes to commit"
