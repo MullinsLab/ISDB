@@ -24,4 +24,4 @@ fi
 
 $isdb/bin/drop-source $source/metadata.json
 $isdb/bin/create-source $source/metadata.json
-$isdb/bin/load-integrations "$@" $source/transformed.csv
+$isdb/bin/load-integrations "$@" $source/integrations.csv
