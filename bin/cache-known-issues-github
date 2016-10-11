@@ -57,8 +57,6 @@ An example snippet of C<config_local.yaml> configured for GitHub issues:
 
 =cut
 
-my $wrote_output = 0;
-
 my $conf  = ISDB::Config->new->conf;
 my $repo  = $conf->{issues}{repository};
 my $label = $conf->{issues}{label};
@@ -95,17 +93,10 @@ if ($res->is_success) {
             @$result;
 
     say JSON->new->pretty->canonical->encode(\@issues);
-    $wrote_output = 1;
 } else {
+    warn "Failed to fetch known issues\n";
     warn $res->status_line, "\n";
     warn $res->decoded_content =~ s/^/  /gmr, "\n"
         if grep { defined and length } $res->decoded_content;
     die "API request unsuccessful\n";
-}
-
-END {
-    unless ($wrote_output) {
-        warn "Failed to fetch known issues\n";
-        say "[]";
-    }
 }

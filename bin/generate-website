@@ -145,6 +145,11 @@ if [[ $refresh_cached == yes ]]; then
         echo "Warning: Couldn't fetch known issues, but proceeding anyway."
         echo "Hint: Look at the messages between this line and the line «Caching current Known Issues» above."
     fi
+
+    if ! json_pp -json_opt utf8 < $output/cache/issues.json >/dev/null 2>&1; then
+        echo "Warning: Invalid issues.json, overwriting with an empty stub"
+        echo "[]" > $output/cache/issues.json
+    fi
 fi
 
 echo "Copying static assets"

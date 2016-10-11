@@ -65,8 +65,6 @@ An example C<config_local.yaml> configured for Trello issues:
 
 =cut
 
-my $wrote_output = 0;
-
 my $auth  = ISDB::Config->new->conf->{issues};
 my $key   = $auth->{public_key};
 my $token = $auth->{app_token};
@@ -90,19 +88,12 @@ if ($res->is_success) {
         };
     }
     say JSON->new->pretty->canonical->encode(\@out);
-    $wrote_output = 1;
 } else {
+    warn "Failed to fetch known issues\n";
     warn $res->status_line, "\n";
     warn $res->decoded_content =~ s/^/  /gmr, "\n"
         if grep { defined and length } $res->decoded_content;
     die "API request unsuccessful",
         ($res->code == 401 ? " (Bad credentials?)" : ""),
         "\n";
-}
-
-END {
-    unless ($wrote_output) {
-        warn "Failed to fetch known issues\n";
-        say "[]";
-    }
 }
