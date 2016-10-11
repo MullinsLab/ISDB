@@ -33,16 +33,16 @@ directory of the ISDB git repository:
     ├── tocsv
     ├── transform
     ├── transform.recs
-    ├── transformed-GRCh37.csv
-    └── transformed.csv
+    ├── integrations-GRCh37.csv
+    └── integrations.csv
 
 The two required files for each source are _metadata.json_ and
-_transformed.csv_.  The former is details about the source and the latter is
+_integrations.csv_.  The former is details about the source and the latter is
 the data transformed into records suitable for loading into an ISDB.  Each is
 discussed in more detail below.
 
 The other files are the published data files and code to transform those data
-files into _transformed.csv_.
+files into _integrations.csv_.
 
 [Git]: https://en.wikipedia.org/wiki/Git_(software)
 
@@ -92,7 +92,7 @@ A complete example is below:
 # Integration site data
 
 The ISDB tools load integration site observations from a CSV file called
-_transformed.csv_.  The CSV file should contain the column headers as the first
+_integrations.csv_.  The CSV file should contain the column headers as the first
 line.  Each subsequent line is inserted into the database as a row in the
 `integration` table.
 

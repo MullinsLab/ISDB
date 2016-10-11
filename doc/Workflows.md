@@ -31,7 +31,7 @@ documentation for details.
 
 An ISDB is loaded with data from multiple _sources_. Each source is contained
 within its own directory holding all the necessary files for that source. Each
-source requires a file called `transformed.csv`, which contains integration
+source requires a file called `integrations.csv`, which contains integration
 data, and `metadata.json`, which provides some information about the source.
 More information is available in the [Sources][] documentation.
 

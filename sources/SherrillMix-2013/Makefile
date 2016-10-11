@@ -4,8 +4,8 @@ export SHELLOPTS:=errexit:pipefail
 
 ISDB := ../..
 
-transformed-GRCh37.csv: 12977_2013_3591_MOESM2_ESM
+integrations-GRCh37.csv: 12977_2013_3591_MOESM2_ESM
 	./transform $< > $@
 
-transformed.csv: transformed-GRCh37.csv
+integrations.csv: integrations-GRCh37.csv
 	$(ISDB)/bin/liftover hg19 hg38 $< | ./tocsv > $@

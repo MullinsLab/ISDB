@@ -4,13 +4,13 @@ export SHELLOPTS:=errexit:pipefail
 
 ISDB := ../..
 
-transformed-GRCh37.csv: source.tsv
+integrations-GRCh37.csv: source.tsv
 	./transform $< > $@
 
-transformed.csv: transformed-GRCh37.csv
+integrations.csv: integrations-GRCh37.csv
 	$(ISDB)/bin/liftover hg19 hg38 $< | ./tocsv > $@
 
-orphaned.csv: transformed-GRCh37.csv transformed.csv
+orphaned.csv: integrations-GRCh37.csv integrations.csv
 	./orphans $^ > $@
 
 source.tsv:
