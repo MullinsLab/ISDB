@@ -1,0 +1,111 @@
+#!/usr/bin/env perl
+use 5.014;
+use strict;
+use warnings;
+use utf8;
+use open qw< :std :encoding(UTF-8) >;
+use FindBin qw< $Bin $Script >;
+use lib "$Bin/../lib", "$Bin/../local/lib/perl5";
+use LWP::UserAgent;
+use LWP::Protocol::Net::Curl;
+use JSON::MaybeXS;
+use ISDB::Config;
+
+=encoding UTF-8
+
+=head1 NAME
+
+cache-known-issues-github - Fetch a list of known issues with your ISDB from
+Github and output a summary as JSON
+
+=head1 SYNOPSIS
+
+    # Normally this is done for you by ./bin/generate-website
+    ./bin/cache-known-issues-github > cache/issues.json
+
+=head1 DESCRIPTION
+
+This program fetches all the issues for a L<GitHub|https://github.com>
+repository using the GitHub API and writes out a summary of them as JSON to
+stdout.
+
+The output is loaded by the website template in order to include a handy list
+of known issues list on the website.
+
+Even on error this program outputs an empty JSON array so that downstream
+consumers of its output don't have to do make special considerations.
+
+=head1 CONFIGURATION
+
+All configuration is put under a top-level item named C<issues> in your
+C<config_local.yaml>. 
+
+First, add an item named C<service> with the value C<github>.  Then, add a
+C<repository> item with the full name (e.g. C<username/repo-name>) of the
+GitHub repository from which to fetch open issues.
+
+You may optionally restrict to issues tagged with a specific label by adding a
+C<label> item.
+
+An example snippet of C<config_local.yaml> configured for GitHub issues:
+
+    ---
+    issues:
+      service: github
+      repository: MullinsLab/HIRIS
+      label: known issue
+
+=cut
+
+my $wrote_output = 0;
+
+my $conf  = ISDB::Config->new->conf;
+my $repo  = $conf->{issues}{repository};
+my $label = $conf->{issues}{label};
+my $agent = sprintf '%s/%s (%s)',
+    $conf->{name} || 'ISDB',
+    $Script,
+    $conf->{contact} || $conf->{web}{base_url} || 'no contact given';
+
+die "You must first configure GitHub details in config_local.yaml.\n\n",
+    "Read \`perldoc ", __FILE__, "\` for more details.\n\n"
+        unless $repo;
+
+my $ua  = LWP::UserAgent->new( agent => $agent );
+my $url = "https://api.github.com/repos/$repo/issues?state=open&per_page=100";
+my $res = $ua->get($url, Accept => 'application/vnd.github.v3+json');
+
+# XXX TODO: Showing more than 100 issues would be a bit absurd for our use
+# case, but maybe we should do the API pagination dance (or start using
+# Net::Github) at some point.  It doesn't seem super important now.
+# -trs, 11 Oct 2016
+
+if ($res->is_success) {
+    my $keep = sub {
+        my $issue  = shift;
+        my @labels = map { $_->{name} } @{ $issue->{labels} };
+        return 0 if $_->{pull_request};
+        return 0 if $label and not grep { $_ eq $label } @labels;
+        return 1;
+    };
+    my $result = decode_json($res->decoded_content);
+    my @issues =
+         map { +{ name => $_->{title}, url => $_->{html_url} } }
+        grep { $keep->($_) }
+            @$result;
+
+    say JSON->new->pretty->canonical->encode(\@issues);
+    $wrote_output = 1;
+} else {
+    warn $res->status_line, "\n";
+    warn $res->decoded_content =~ s/^/  /gmr, "\n"
+        if grep { defined and length } $res->decoded_content;
+    die "API request unsuccessful\n";
+}
+
+END {
+    unless ($wrote_output) {
+        warn "Failed to fetch known issues\n";
+        say "[]";
+    }
+}

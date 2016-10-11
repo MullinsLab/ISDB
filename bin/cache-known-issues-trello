@@ -15,13 +15,13 @@ use ISDB::Config;
 
 =head1 NAME
 
-cache-known-issues - Fetch a list of known issues with the ISDB from Trello and
-output a summary as JSON
+cache-known-issues-trello - Fetch a list of known issues with your ISDB from
+Trello and output a summary as JSON
 
 =head1 SYNOPSIS
 
     # Normally this is done for you by ./bin/generate-website
-    ./bin/cache-known-issues > cache/issues.json
+    ./bin/cache-known-issues-trello > cache/issues.json
 
 =head1 DESCRIPTION
 
@@ -51,12 +51,14 @@ Be sure to replace I<YOUR_PUBLIC_KEY> with the key you found in the first step.
 Put both of these credentials in a C<config_local.yaml> (or C<.json>, C<.xml>,
 or C<.conf>) file, under a top-level item C<issues>, as items called
 C<public_key> and C<app_token> respectively.  Then put a Trello list ID in
-another item C<list_id>, also under C<issues>.
+another item C<list_id>, also under C<issues>.  Finally, make sure you have a
+C<service> item under C<issues> which is set to C<trello>.
 
 An example C<config_local.yaml> configured for Trello issues:
 
     ---
     issues:
+      service: trello
       public_key: ddce269a1e3d054cae349621c198dd52
       app_token: c157a79031e1c40f85931829bc5fc552d3b07384d113edec49eaa6238ad5ff00
       list_id: 50a2fabfdd276f573ff97ace

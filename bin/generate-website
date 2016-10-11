@@ -133,8 +133,15 @@ if [[ $refresh_cached == yes ]]; then
     echo "Caching PubMed info"
     $bin/cache-pubmed-info > $output/cache/pubmed.json
 
-    echo "Caching current Known Issues"
-    if ! $bin/cache-known-issues > $output/cache/issues.json; then
+    # Known issues
+    service=$($bin/read-config issues.service || true)
+    if [[ -z $service ]]; then
+        service=trello
+        echo "Warning: No issues service specified, falling back to default of $service"
+    fi
+
+    echo "Caching current Known Issues from $service"
+    if ! env PATH="$bin:$PATH" cache-known-issues-$service > $output/cache/issues.json; then
         echo "Warning: Couldn't fetch known issues, but proceeding anyway."
         echo "Hint: Look at the messages between this line and the line «Caching current Known Issues» above."
     fi
