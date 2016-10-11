@@ -43,7 +43,12 @@ web:
 
 issues:
   # Embed a Trello list into the web page to show known issues with this
-  # database.  See the top of bin/cache-known-issues for more information.
+  # database.  See `perldoc bin/cache-known-issues-trello` for more
+  # information.
+  #
+  # Fetching issues from a GitHub repository is also possible.  See `perldoc
+  # bin/cache-known-issues-github` for more information.
+  service: trello
   public_key: ~
   app_token: ~
   list_id: ~
