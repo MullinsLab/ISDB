@@ -14,7 +14,8 @@ The database to connect to is controlled by the normal PostgreSQL environment
 variables PGHOST, PGUSER, PGDATABASE, etc.
 
 Web configuration options may be changed in config_local.yaml or in a separate
-file of your choosing specified by the environment variable ISDB_CONFIG.
+file of your choosing specified by the environment variable ISDB_CONFIG.  Paths
+specified in configuration files may be relative to the config file itself.
 
 When iterating on website customizations for an existing site, it's often
 useful to pass --skip-exports and --skip-cached.
