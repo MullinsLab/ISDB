@@ -57,8 +57,8 @@ the source's primary key and must be unique within your ISDB.  The _uri_ should
 point to the upstream source of the data or provide a [`mailto:`][mailto] link
 for starting correspondence.
 
-If the source is published work, the metadata should also have a _pubmed_ key
-containing the PubMed Identifier (PMID) and a _citation_ key with a
+If the source is published work, the metadata should also have a _pubmed_id_
+key containing the PubMed Identifier (PMID) and a _citation_ key with a
 [BibTeX][]-style citation.
 
 A complete example is below:
@@ -67,7 +67,7 @@ A complete example is below:
 {
     "name": "Wagner-2014-Science",
     "uri": "https://mullinslab.microbiol.washington.edu/publications/wagner_2014_science/",
-    "pubmed": 25011556,
+    "pubmed_id": 25011556,
     "citation": {
         "_type":    "@article",
         "_citekey": "Wagner-2014-Science",
