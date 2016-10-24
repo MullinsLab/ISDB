@@ -95,3 +95,9 @@ dd {
 .pandoc .footnoteRef:hover sup {
     border-color: #337ab7; /* match link color */
 }
+
+.pandoc li table {
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
