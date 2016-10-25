@@ -44,6 +44,27 @@ my ($hiv, $human) = @$r{"HIV 3'LTR JUNCTION SEQUENCE*", "HUMAN JUNCTION SEQUENCE
 # Remove garbage nucleotides
 s/Ê+$// for $human;
 
+# Correct an apparent trimming consistency error in two reactions which missed
+# an intervening A (as supported by other reactions).  In both cases, the human
+# sequence context at the position is a short run of As.
+#
+#   pcr  │ landmark │ location │ junction │                   hiv                   │                             human
+# ───────┼──────────┼──────────┼──────────┼─────────────────────────────────────────┼───────────────────────────────────────────────────────────────
+#  PES51 │ chr6     │ 90018367 │       39 │ CCCTCAGACCATTTTAGTCAGTGTAGAAAATCTCTAGCA │ AGAGCTGGCTGACTCTTCAGTTGAAGAGACAGCACTAAGAGTCTGGAAAGATGATAATAG…
+#  PEX65 │ chr6     │ 90018368 │       39 │ CCCTCAGACCATTTTAGTCAGTGTAGAAAATCTCTAGCA │ AAGAGCTGGCTGACTCTTCAGTTGAAGAGACAGCACTAAGAGTCTGGAAAGATGATAATA…
+#  PEB56 │ chr6     │ 90018368 │       39 │ CCCTCAGACCATTTTAGTCAGTGTAGAAAATCTCTAGCA │ AAGAGCTGGCTGACTCTTCAGTTGAAGAGACAGCACTAAGAGTCTGGAAAGATGATAATA…
+#  PEP62 │ chr6     │ 90018368 │       39 │ CCCTCAGACCATTTTAGTCAGTGTAGAAAATCTCTAGCA │ AAGAGCTGGCTGACTCTTCAGTTGAAGAGACAGCACTAAGAGTCTGGAAAGATGATAATA…
+# ───────┼──────────┼──────────┼──────────┼─────────────────────────────────────────┼───────────────────────────────────────────────────────────────
+#  PCI54 │ chr22    │ 39016212 │       39 │ CCCTCAGACCCTTTTAGTCAGTGTGGAAAATCTCTAGCA │ TAAATAAATAAATAAATAAATAATGTGGGGAGGAGGCCAGGGGCATGGTGTCTCACGCAT…
+#  PEP60 │ chr22    │ 39016213 │       39 │ CCCTCAGACCCTTTTAGTCAGTGTGGAAAATCTCTAGCA │ ATAAATAAATAAATAAATAAATAATGTGGGGAGGAGGCCAGGGGCATGGTGTCTCACGCA…
+#
+# This should eventually be reported back to the authors (Sherry included) and
+# corrected by them after verifying on the chromats.
+if (grep { $t->{sample}{pcr} eq $_ } qw[ PES51 PCI54 ]) {
+    $human = "A$human";
+    $t->{location}++;
+}
+
 $t->{sequence}          = $hiv . $human;
 $t->{sequence_junction} = length $hiv;
 
