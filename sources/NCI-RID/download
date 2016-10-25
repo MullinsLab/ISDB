@@ -31,7 +31,7 @@ function query-rid() {
 }
 
 echo "Extracting download URL" >&2
-tsv=$(query-rid | grep -Pio '(?<=href=)(.+?)(?=>Download\s+Result)')
+tsv=$(query-rid | perl -nle '/(?<=href=)(.+?)(?=>Download\s+Result)/i and print $1')
 
 echo "Downloading TSV" >&2
 curl -fsS $rid/$tsv
