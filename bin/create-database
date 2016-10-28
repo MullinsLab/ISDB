@@ -1,14 +1,58 @@
 #!/bin/bash
+# This script sets up the initial database loaded with necessary static data
+# and creates three roles with different privilege levels, although does not
+# configure how those roles may be accessed by clients.
+#
+# It should be run as a Pg superuser.
+#
+# You may control the database name by passing your desired name as the first
+# argument or setting PGDATABASE.
 set -e -o pipefail -o nounset
 
 isdb=$(dirname $0)/..
-dbname=${PGDATABASE:-isdb}
-psql="psql --set ON_ERROR_STOP=1 $dbname"
 
-createdb $dbname -E UTF-8
-$psql <<<"REVOKE CREATE ON SCHEMA public FROM PUBLIC;"
-$psql < $isdb/schema/tables.sql
-$psql < $isdb/schema/views.sql
+case "${1:-}" in
+    -h|--help)
+        perl -ne '2 .. not s/^# *// ? print : exit' -- $0
+        exit 0;;
+esac
+
+# Set default database to connect to if unspecified by the command line or PGDATABASE.
+PGDATABASE=${1:-${PGDATABASE:-isdb}}
+export PGDATABASE
+
+owner=isdb_admin
+rw_role=isdb_rw
+ro_role=isdb_ro
+psql="psql --no-psqlrc --set ON_ERROR_STOP=1"
+
+pg_role_exists() {
+    local role="${1//\'}"
+    $psql -qc "SELECT 1/count(*) FROM pg_catalog.pg_roles WHERE rolname='$role'" postgres >/dev/null 2>&1
+}
+
+# First, as the superuser create our desired users, create the database, and
+# adjust privileges only the superuser can adjust.
+
+# Configuring authentication for these users is left as an exercise for the
+# reader: http://www.postgresql.org/docs/current/static/client-authentication.html
+pg_role_exists $owner   || createuser $owner
+pg_role_exists $rw_role || createuser $rw_role
+pg_role_exists $ro_role || createuser $ro_role
+createdb -E UTF-8 -O $owner $PGDATABASE "Integration site database (ISDB)"
+$psql --set owner=$owner < $isdb/schema/alterdb.sql
+
+
+# Then drop privileges to our desired owner to do the rest.  Note that we can't
+# just set PGUSER=$owner because authentication for that role may not
+# exist/work for the system user we're running as.
+(echo "SET ROLE $owner;"; cat $isdb/schema/{tables,views,acl}.sql) \
+    | $psql --set rw_role=$rw_role --set ro_role=$ro_role
+
+
+# Finally, load our static data.  This happens as the superuser, but that's OK
+# since it's DML not DDL.  We could work around this by implementing PGSETROLE
+# or similar in ISDB::Config, or adding an --as $owner option to load-genes.
 $isdb/bin/load-genes \
     --gff <(gunzip -qc $isdb/schema/data/ref_GRCh38.p2_top_level.gff3.gz) \
     --chrmap $isdb/schema/data/chr_accessions_GRCh38.p2

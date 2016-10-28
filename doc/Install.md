@@ -48,8 +48,6 @@ with macOS as well.
    instructions
 3. Install libpq and PostgreSQL 9.4 or later:
    `apt-get install libpq-dev postgresql-9.4` (or 9.5, or 9.6)
-4. Create a non-superuser database role matching your shell user account:
-   `sudo -u postgres createuser --createdb $USER`
 
 The oldest currently supported Ubuntu release, Ubuntu 12.04.5 LTS, is known to
 work with ISDB tools.
@@ -72,15 +70,28 @@ directory:
 
 The ISDB maintenance utilities are set up to run from inside the directory
 containing the source code.  Once dependencies are installed, all the tools
-under `bin/` should be functional.  You can use the `bin/create-database` tool
-to create a new database called `isdb` on your local PostgreSQL server:
+under `bin/` should be functional.
 
-```
-user@host:~/isdb/ $ ./bin/create-database
-```
+You can use the `bin/create-database` tool to create a new database called
+`isdb` on your local PostgreSQL server.  It must be run as a database
+superuser since it creates users and a database.  This tool connects to
+PostgreSQL based on environment variables; see the [database connection
+documentation](Database-connection.html) for details.
 
-This tool connects to PostgreSQL based on environment variables; see the
-[database connection documentation](Database-connection.html) for details.
+If you're using macOS and Postgres.app, then your macOS user is already a
+superuser so you can run:
+
+    user@mac:~/isdb/ $ ./bin/create-database
+
+If you're on Linux or a vanilla PostgreSQL install, you'll need to run the
+tool as the `postgres` system user:
+
+    user@linux:~/isdb/ $ sudo -u postgres ./bin/create-database
+
+After that, add your own Linux user as an ISDB administrator so you'll be able
+to run ISDB tools without using `sudo -u postgres` again:
+
+    user@linux:~/isdb/ $ sudo -u postgres createuser --role=isdb_admin $USER
 
 You should now be able to connect to the `isdb` database and confirm that the
 basics have been loaded. For example:

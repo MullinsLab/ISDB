@@ -3,7 +3,7 @@ library(RPostgreSQL)
 library(dplyr)
 library(ggplot2)
 
-isdb = src_postgres("isdb", host = "ireland", user = "isdb_r")
+isdb = src_postgres("isdb", host = "ireland", user = "isdb_ro")
 data = tbl(isdb, sql("SELECT * FROM summary_by_gene")) %>%
   filter( environment = "in vivo" ) %>%
   collect()

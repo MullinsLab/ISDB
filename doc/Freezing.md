@@ -28,7 +28,7 @@ name you'll use for the frozen version.  Dates are recommended, meaning that
 the database name would look like: `isdb_2016-03-25`.
 
 It's highly recommended that _only_ read-only access is permitted to the copied
-database.  By Mullins Lab convention, we use an `isdb_r` role in Postgres.
+database, i.e. only access as `isdb_ro` or a member of `isdb_ro`.
 
 To create the copy, run the following as a Postgres superuser on your database
 server:
@@ -47,7 +47,7 @@ up-to-date with the remote.  In the example below, that's at the path
 
 Now run `generate-website` using an invocation similar to the following:
 
-    env PGUSER=isdb_r PGHOST=ireland PGDATABASE=isdb_2016-03-25 \
+    env PGUSER=isdb_ro PGHOST=ireland PGDATABASE=isdb_2016-03-25 \
         ./bin/generate-website \
             --compare \
             --freeze-as 2016-03-25 \
