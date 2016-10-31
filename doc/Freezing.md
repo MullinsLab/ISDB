@@ -37,6 +37,11 @@ server:
 
 (Replace `-T isdb` with the name of your live database if it's not `isdb`.)
 
+You may also want to make a backup snapshot of the frozen database so you can
+recover it precisely in the future:
+
+    pg_dump -F c -b -C -f isdb_2016-03-25-frozen.pgdb isdb_2016-03-25
+
 ## Generate a frozen website
 
 With the database copy you can now generate a frozen version of the website.
