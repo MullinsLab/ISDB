@@ -85,7 +85,8 @@ And then subsequently:
 ```
 user@host:isdb $ ./bin/generate-website ../my-db-website
 user@host:isdb $ cd ../my-db-website
-user@host:my-db-website $ git commit -am "Record website updates"
+user@host:my-db-website $ git add -A
+user@host:my-db-website $ git commit -m "Record website updates"
 ```
 
 The contents of the `my-db-website` directory can then be placed in the
