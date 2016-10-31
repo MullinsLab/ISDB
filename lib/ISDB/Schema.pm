@@ -15,10 +15,18 @@ __PACKAGE__->load_namespaces;
 # Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-12-02 17:00:10
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:v0gwY6SVU5Sc1FGqiUXwUw
 
-sub connect_default {
-    my $self   = shift;
+sub default_connection_info {
     my $dbname = $ENV{PGDATABASE} || 'isdb';
-    return $self->connect({ dsn => "dbi:Pg:dbname=$dbname" });
+    return {
+        dsn             => "dbi:Pg:dbname=$dbname",
+        pg_enable_utf8  => 1,
+        on_connect_do   => [],
+    };
+}
+
+sub connect_default {
+    my $self = shift;
+    return $self->connect( $self->default_connection_info );
 }
 
 1;
