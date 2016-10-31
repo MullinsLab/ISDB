@@ -56,6 +56,20 @@ with macOS as well.
 The oldest currently supported Ubuntu release, Ubuntu 12.04.5 LTS, is known to
 work with ISDB tools.
 
+## Installing prerequisites on Red Hat or CentOS
+
+These instructions should also work on Fedora and other RHEL variants, although
+they've only been tested on CentOS 7.
+
+1. Install packaged dependencies:
+   `yum install @development libcurl-devel pandoc perl-core`
+
+2. Set up the [PostgreSQL yum repository](https://www.postgresql.org/download/linux/redhat/)
+   for at least Pg 9.4 or newer following their instructions
+
+3. Install PostgreSQL 9.4 or later:
+   `yum install postgresql9.4{,-docs,-devel}` (or 9.5, or 9.6)
+
 # Install ISDB's direct dependencies
 
 The tools for populating the ISDB have dependencies that do not need to be
