@@ -42,10 +42,10 @@ future, as service definitions are handy!)
 Below is an example of how to specify database connection details on the
 command line when running an ISDB tool:
 
-    env PGUSER=isdb_admin PGHOST=ireland ~/isdb/bin/load-source Wagner-2014-Science
+    env PGUSER=isdb_rw PGHOST=ireland ~/isdb/bin/load-source Wagner-2014-Science
 
 This tells the tool to connect to a computer named `ireland` as the user named
-`isdb_admin`.  The database name is unspecified, so it defaults to `isdb`.
+`isdb_rw`.  The database name is unspecified, so it defaults to `isdb`.
 
 The `load-source` tool is responsible for all aspects of taking an [ISDB data
 source][sources] and loading it into the database.  However, the particulars of

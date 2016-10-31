@@ -2,10 +2,10 @@ BEGIN;
 
 GRANT SELECT
    ON ALL TABLES IN SCHEMA public
-   TO isdb_r;
+   TO :ro_role;
 
 GRANT SELECT, INSERT, UPDATE, DELETE, TRUNCATE
    ON ALL TABLES IN SCHEMA public
-   TO isdb;
+   TO :rw_role;
 
 COMMIT;

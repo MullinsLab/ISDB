@@ -30,7 +30,9 @@ server, or access to the owner role of a database set up for your use.
 ## Installing prerequisites on Mac OS X/macOS
 
 1. Install Apple's command line developer tools with `xcode-select --install`
+
 2. Download and install [Postgres.app](http://postgresapp.com)
+
 3. Install [pandoc](http://pandoc.org/installing.html) with its installer
    package
 
@@ -42,17 +44,31 @@ with macOS as well.
 
 1. Install packaged dependencies:
    `apt-get install build-essential pkg-config libcurl4-gnutls-dev pandoc`
+
 2. Set up the PostgreSQL APT repository appropriate for your system
    [Debian](https://www.postgresql.org/download/linux/debian/),
    [Ubuntu](https://www.postgresql.org/download/linux/ubuntu/) following their
    instructions
+
 3. Install libpq and PostgreSQL 9.4 or later:
    `apt-get install libpq-dev postgresql-9.4` (or 9.5, or 9.6)
-4. Create a non-superuser database role matching your shell user account:
-   `sudo -u postgres createuser --createdb $USER`
 
 The oldest currently supported Ubuntu release, Ubuntu 12.04.5 LTS, is known to
 work with ISDB tools.
+
+## Installing prerequisites on Red Hat or CentOS
+
+These instructions should also work on Fedora and other RHEL variants, although
+they've only been tested on CentOS 7.
+
+1. Install packaged dependencies:
+   `yum install @development libcurl-devel pandoc perl-core`
+
+2. Set up the [PostgreSQL yum repository](https://www.postgresql.org/download/linux/redhat/)
+   for at least Pg 9.4 or newer following their instructions
+
+3. Install PostgreSQL 9.4 or later:
+   `yum install postgresql9.4{,-docs,-devel}` (or 9.5, or 9.6)
 
 # Install ISDB's direct dependencies
 
@@ -72,15 +88,28 @@ directory:
 
 The ISDB maintenance utilities are set up to run from inside the directory
 containing the source code.  Once dependencies are installed, all the tools
-under `bin/` should be functional.  You can use the `bin/create-database` tool
-to create a new database called `isdb` on your local PostgreSQL server:
+under `bin/` should be functional.
 
-```
-user@host:~/isdb/ $ ./bin/create-database
-```
+You can use the `bin/create-database` tool to create a new database called
+`isdb` on your local PostgreSQL server.  It must be run as a database
+superuser since it creates users and a database.  This tool connects to
+PostgreSQL based on environment variables; see the [database connection
+documentation](Database-connection.html) for details.
 
-This tool connects to PostgreSQL based on environment variables; see the
-[database connection documentation](Database-connection.html) for details.
+If you're using macOS and Postgres.app, then your macOS user is already a
+superuser so you can run:
+
+    user@mac:~/isdb/ $ ./bin/create-database
+
+If you're on Linux or a vanilla PostgreSQL install, you'll need to run the
+tool as the `postgres` system user:
+
+    user@linux:~/isdb/ $ sudo -u postgres ./bin/create-database
+
+After that, add your own Linux user as an ISDB administrator so you'll be able
+to run ISDB tools without using `sudo -u postgres` again:
+
+    user@linux:~/isdb/ $ sudo -u postgres createuser --role=isdb_admin $USER
 
 You should now be able to connect to the `isdb` database and confirm that the
 basics have been loaded. For example:
@@ -90,7 +119,7 @@ $ psql isdb
 isdb =# select count(*) from ncbi_gene;
  count
 -------
- 54281
+ 51141
 (1 row)
 isdb =# select count(*) from integration;
  count
