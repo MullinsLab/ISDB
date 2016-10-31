@@ -30,7 +30,9 @@ server, or access to the owner role of a database set up for your use.
 ## Installing prerequisites on Mac OS X/macOS
 
 1. Install Apple's command line developer tools with `xcode-select --install`
+
 2. Download and install [Postgres.app](http://postgresapp.com)
+
 3. Install [pandoc](http://pandoc.org/installing.html) with its installer
    package
 
@@ -42,10 +44,12 @@ with macOS as well.
 
 1. Install packaged dependencies:
    `apt-get install build-essential pkg-config libcurl4-gnutls-dev pandoc`
+
 2. Set up the PostgreSQL APT repository appropriate for your system
    [Debian](https://www.postgresql.org/download/linux/debian/),
    [Ubuntu](https://www.postgresql.org/download/linux/ubuntu/) following their
    instructions
+
 3. Install libpq and PostgreSQL 9.4 or later:
    `apt-get install libpq-dev postgresql-9.4` (or 9.5, or 9.6)
 
