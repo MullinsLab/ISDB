@@ -119,7 +119,7 @@ $ psql isdb
 isdb =# select count(*) from ncbi_gene;
  count
 -------
- 54281
+ 51141
 (1 row)
 isdb =# select count(*) from integration;
  count
