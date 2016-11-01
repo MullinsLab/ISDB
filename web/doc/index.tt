@@ -10,25 +10,12 @@
 
       <p>
         <% config.name || 'This database' %> is built using <a
-        href="https://mullinslab.microbiol.washington.edu/isdb/">ISDB</a> and
-        as such the ISDB documentation applies.  Topics are listed below.
+        href="https://mullinslab.microbiol.washington.edu/isdb/">ISDB</a>. The
+        following documents explain how to access and analyze the data in
+        <% config.name || 'this database' %>, as well as how to load and manage
+        data using ISDB tools.
       </p>
 
-      <p>
-        We at the <a href="https://mullinslab.microbiol.washington.edu">Mullins
-        Lab</a> try to document as many parts of ISDB as we can in brief and
-        clear language intended for a wide research audience.  There are always
-        missing pieces, though.  Please
-        <a href="mailto:<% 'mullspt+cfar@uw.edu' | uri | html %>?subject=ISDB%20documentation">drop us a line</a>
-        with your question if you can’t find the information you need about
-        ISDB within the topics below.
-      </p>
-
-      <p>
-        For questions about the data in <% config.name || 'this specific
-        database' %> itself, please contact the database maintainers at
-        <a href="mailto:<% config.contact | uri | html %>"><% config.contact %></a>.
-      </p>
 
       <% IF pandoc_failed %>
         <p class="alert alert-warning">Documentation not processed. Linked files may be out of date or missing. You may need to install <a href="http://pandoc.org">Pandoc</a></p>
@@ -47,6 +34,30 @@
           </ul>
       <% END %>
 
+      <h3>Getting help</h3>
+      <% IF config.contact %>
+          <p>
+            For questions about the data in <% config.name || 'this specific
+            database' %> itself, please contact the database maintainers at
+            <a href="mailto:<% config.contact | uri | html %>"><% config.contact %></a>.
+          </p>
+      <% ELSE %>
+          <p>The maintainers of <% config.name || 'this database' %> haven't configured
+          a contact email. The ISDB developers may be able to answer some of your usage
+          questions; we can be reached at
+          <a href="mailto:<% 'mullspt+cfar@uw.edu' | uri | html %>?subject=ISDB%20usage">mullspt+cfar@uw.edu</a>.
+          Please track down the <% config.name || 'database' %> maintainers if you have
+          questions about the specific data available here.
+      <% END %>
+      <p>
+        We at the <a href="https://mullinslab.microbiol.washington.edu">Mullins
+        Lab</a> try to document as many parts of ISDB as we can in brief and
+        clear language intended for a wide research audience.  There are always
+        missing pieces, though.  Please
+        <a href="mailto:<% 'mullspt+cfar@uw.edu' | uri | html %>?subject=ISDB%20documentation">drop us a line</a>
+        with your question if you can’t find the information you need about
+        ISDB within the supplied documentation.
+      </p>
     </div>
   </div>
 <% END %>

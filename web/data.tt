@@ -149,7 +149,11 @@
       </ul>
       <p>
         If you spot a problem in <% config.name || 'this database' %><% IF issues.size %> that you don’t see here<% END %>,
-        <a href="mailto:<% config.contact | uri | html %>">please let us know</a>.
+        <% IF config.contact %>
+            <a href="mailto:<% config.contact | uri | html %>">please let us know</a>.
+        <% ELSE %>
+            please let the administrators know.
+        <% END %>
         We strive to maintain high quality data ready to be used in analysis.
       </p>
       <% END %>
