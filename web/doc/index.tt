@@ -33,7 +33,9 @@
             <% END %>
           </ul>
       <% END %>
+    </div>
 
+    <div class="col col-md-5 col-sm-12">
       <h3>Getting help</h3>
       <% IF config.contact %>
           <p>
@@ -42,12 +44,14 @@
             <a href="mailto:<% config.contact | uri | html %>"><% config.contact %></a>.
           </p>
       <% ELSE %>
-          <p>The maintainers of <% config.name || 'this database' %> haven't configured
-          a contact email. The ISDB developers may be able to answer some of your usage
-          questions; we can be reached at
-          <a href="mailto:<% 'mullspt+cfar@uw.edu' | uri | html %>?subject=ISDB%20usage">mullspt+cfar@uw.edu</a>.
-          Please track down the <% config.name || 'database' %> maintainers if you have
-          questions about the specific data available here.
+          <p>
+            The maintainers of <% config.name || 'this database' %> haven’t configured
+            a contact email. The ISDB developers may be able to answer some of your usage
+            questions; we can be reached at
+            <a href="mailto:<% 'mullspt+cfar@uw.edu' | uri | html %>?subject=ISDB%20usage">mullspt+cfar@uw.edu</a>.
+            Please track down the <% config.name || 'database' %> maintainers if you have
+            questions about the specific data available here.
+          </p>
       <% END %>
       <p>
         We at the <a href="https://mullinslab.microbiol.washington.edu">Mullins
