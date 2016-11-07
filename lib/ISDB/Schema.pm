@@ -18,7 +18,7 @@ __PACKAGE__->load_namespaces;
 sub default_connection_info {
     my $dbname = $ENV{PGDATABASE} || 'isdb';
     return {
-        dsn             => "dbi:Pg:dbname=$dbname",
+        dsn             => "dbi:Pg:dbname=$dbname;client_encoding=utf8",
         pg_enable_utf8  => 1,
         on_connect_do   => [],
     };
