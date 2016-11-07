@@ -23,7 +23,7 @@ my $SourceMetadata = Dict[
 ];
 
 my $json     = do { local $/; <> };
-my $metadata = decode_json($json);
+my $metadata = JSON->new->decode($json);
 $SourceMetadata->assert_valid($metadata);
 
 print "Creating source $metadata->{name}... ";
