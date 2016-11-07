@@ -33,8 +33,8 @@ sub register_column {
     return unless $info->{data_type} =~ /^jsonb?$/i;
 
     $self->inflate_column($column, {
-        inflate => sub { decode_json($_[0]) },
-        deflate => sub { encode_json($_[0]) },
+        inflate => sub { JSON::MaybeXS->new->decode($_[0]) },
+        deflate => sub { JSON::MaybeXS->new->encode($_[0]) },
     });
 
     return;
