@@ -10,6 +10,8 @@ use Getopt::Long::Descriptive;
 use Path::Tiny;
 use ISDB::Schema;
 use Bio::GFF3::LowLevel qw< gff3_format_feature >;
+use Digest::SHA qw< sha1_hex >;
+use JSON::MaybeXS;
 
 my ($opt, $usage) = describe_options(
     '%c [--gene NAME] <output-directory>',
@@ -62,7 +64,7 @@ my $integrations = $schema->resultset('IntegrationGeneSummary')->search_rs(
     }
 );
 
-my ($file, $fh, $feature_id);
+my ($file, $fh);
 my $files_written = 0;
 
 while (my $is = $integrations->next) {
@@ -73,7 +75,6 @@ while (my $is = $integrations->next) {
 
         $file = $output_path->child(format_filename($is));
         $fh   = $file->openw_utf8;
-        $feature_id = 1;
         $files_written++;
 
         # Status update
@@ -96,7 +97,7 @@ while (my $is = $integrations->next) {
         attributes => {
             # Geneious, and possibly other readers, use Name as a unique ID if
             # ID isn't provided.  So we provide one!
-            ID   => [ $feature_id++ ],
+            ID   => [ format_unique_id($is) ],
             Name => [ format_name($is) ],
         },
     });
@@ -162,4 +163,10 @@ sub format_name {
 
     return $name unless $is->multiplicity > 1;
     return sprintf "%s (x%d)", $name, $is->multiplicity;
+}
+
+sub format_unique_id {
+    my $is = shift;
+    state $json = JSON->new->canonical;
+    return sha1_hex( $json->encode({ $is->get_columns }) );
 }
