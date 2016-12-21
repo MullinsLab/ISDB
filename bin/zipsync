@@ -1,0 +1,72 @@
+#!/bin/bash
+set -e -o pipefail -o nounset
+
+if [[ $# -lt 2 ]]; then
+    cat <<.
+usage: $(basename $0) [-q] archive.zip directory/
+
+Synchronize a zip file with a filesystem directory by updating any existing
+files and removing files from the zip archive which are no longer present in
+the filesystem.
+
+This should be run from the same location every time, or else paths may not
+match correctly.
+
+The -q option will suppress informational output.
+
+Some modern versions of zip have a --filesync option which is similar.
+.
+    exit 1
+fi
+
+quiet=
+if [[ $1 == "-q" ]]; then
+    quiet=1
+    shift
+fi
+
+archive="$1"
+src="$2"
+
+if [[ ! -d "$src" ]]; then
+    echo "Source directory must be a directory" >&2
+    exit 1
+fi
+
+# Remove trailing slash from source dir for stupid BSD find
+src="${src%/}"
+
+function log-info() {
+    if [[ -z $quiet ]]; then
+        echo "-->" "$@"
+    fi
+}
+
+function zip-wrapper() {
+    ret=0
+    zip ${quiet:+-q} "$@" || ret=$?
+    if [[ $ret -ne 0 && $ret -ne 12 ]]; then
+        echo "Error running [zip ${quiet:+-q} $@]: exited $ret" >&2
+        return $ret
+    fi
+}
+
+function removed-files() {
+    comm -23 <(zipinfo -1 "$archive" | grep -vE '/$' | sort) \
+             <(find "$src" -type f -print | sort)
+}
+
+# Update existing archive (or create a new one!)
+log-info "Refreshing updated files and adding new files"
+zip-wrapper -u "$archive" -r "$src"
+
+# Remove files in archive which are no longer in the source directory tree.
+#
+# It's necessary to check if there's anything to do since we can't rely on GNU
+# xargs' --no-run-if-empty option (or BSD's similar default behaviour) and we
+# can't reliably export our zip-wrapper function to xargs without writing it to
+# a file.
+if [[ -n "$(removed-files)" ]]; then
+    log-info "Removing deleted files"
+    removed-files | perl -pe 's/\n/\0/' | xargs -0 zip ${quiet:+-q} -d "$archive"
+fi

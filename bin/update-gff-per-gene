@@ -1,0 +1,25 @@
+#!/bin/bash
+set -e -o pipefail -o nounset
+bin=$(dirname $0)
+
+if [[ $# -ne 1 ]]; then
+    cat <<.
+usage: $(basename $0) export/directory/
+
+Updates an existing GFF-per-gene export directory.  Updated files will be
+updated, files which didn't change won't be touched, and files which would no
+longer exist are deleted.
+
+This is done by running export-gff-per-gene on a temporary directory and then
+running rsync (in checksum mode) to synchronize the changes.
+.
+    exit 1
+fi
+
+destination="$1"
+mkdir -p "$destination"
+
+gfftmp=$(mktemp -d)
+$bin/export-gff-per-gene --quiet "$gfftmp"
+
+rsync -a --no-times --delete --checksum "$gfftmp/" "$destination/"
