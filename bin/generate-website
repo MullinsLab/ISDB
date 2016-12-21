@@ -1,8 +1,12 @@
 #!/bin/bash
 set -e -o pipefail
 shopt -s nullglob
-bin=$(dirname $0)
-base=$bin/..
+
+function abs-path() {
+    pushd "$1" >/dev/null
+        pwd
+    popd >/dev/null
+}
 
 function usage() {
     cat <<.
@@ -40,6 +44,9 @@ Options:
    -h --help            Show this usage information.
 .
 }
+
+bin=$(abs-path $(dirname $0))
+base=$bin/..
 
 version_name=latest
 run_exports=yes
@@ -108,14 +115,11 @@ if [[ $run_exports == yes ]]; then
     $bin/export-bed --in-vitro > $exports/tracks/in-vitro.bed
 
     echo "Exporting GFF for each gene"
-    rm -rf $exports/gff-per-gene
-    mkdir -p $exports/gff-per-gene
-    $bin/export-gff-per-gene --quiet $exports/gff-per-gene
+    $bin/update-gff-per-gene $exports/gff-per-gene/
 
     echo "Zipping up GFF per gene"
     pushd $exports >/dev/null
-        rm -f gff-per-gene.zip
-        zip -qr gff-per-gene.zip gff-per-gene/
+        $bin/zipsync -q gff-per-gene.zip gff-per-gene/
     popd >/dev/null
 fi
 
