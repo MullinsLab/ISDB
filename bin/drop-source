@@ -12,9 +12,11 @@ use Path::Tiny;
 $|++;
 
 my $source_metadata = shift
-    or die "usage: $Script source-metadata.json\n";
+    or die "usage: $Script source[/metadata.json]\n";
 
 $source_metadata = path($source_metadata);
+$source_metadata = $source_metadata->child("metadata.json")
+    if $source_metadata->is_dir;
 
 die "No such file $source_metadata\n"
     unless $source_metadata->is_file;

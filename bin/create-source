@@ -3,14 +3,25 @@ use 5.010;
 use strict;
 use warnings;
 use open qw< :std :encoding(UTF-8) >;
-use FindBin qw< $Bin >;
+use FindBin qw< $Bin $Script >;
 use lib "$Bin/../lib", "$Bin/../local/lib/perl5";
 use ISDB::Schema;
 use JSON::MaybeXS;
+use Path::Tiny;
 use Types::Standard qw< :types slurpy >;
 use Types::Common::String qw< :types >;
 
 $|++;
+
+my $file = shift
+    or die "usage: $Script source[/metadata.json]\n";
+
+$file = path($file);
+$file = $file->child("metadata.json")
+    if $file->is_dir;
+
+die "No such file $file\n"
+    unless $file->is_file;
 
 # Maybe someday we'll want to use a JSON schema (http://json-schema.org/) via
 # JSON::Schema, JSON::Schema::AsType, or otherwise, but this is quick and easy
@@ -22,7 +33,7 @@ my $SourceMetadata = Dict[
     slurpy HashRef
 ];
 
-my $json     = do { local $/; <> };
+my $json     = $file->slurp_utf8;
 my $metadata = JSON->new->decode($json);
 $SourceMetadata->assert_valid($metadata);
 
