@@ -1,6 +1,7 @@
 # This is an example config file documenting what options are available.  To
-# change values, you should make a copy of this file as config_local.yaml and
-# then edit it.
+# change values, you should make a new file as config_local.yaml and add
+# just the options you want to change.  If you copy the whole file, you won't
+# get updates to defaults when we change them.
 ---
 # Contact address responsible for this ISDB
 contact: ~
@@ -29,11 +30,13 @@ web:
   # Optional.  Custom Template::Alloy files which affect how the website
   # renders:
   #
-  #   blurb.tt  - front page description of database (included by web/index.tt)
-  #   footer.tt - at the bottom of every page (included by web/inc/layout.tt)
+  #   head   - in the <head> element of every page (included by web/inc/layout.tt)
+  #   blurb  - front page description of database (included by web/index.tt)
+  #   footer - at the bottom of every page (included by web/inc/layout.tt)
   #
   # Paths relative to the config file itself are ok.
   template:
+    head: ~
     blurb: ~
     footer: ~
 
