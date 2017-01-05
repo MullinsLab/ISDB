@@ -25,19 +25,12 @@ my %sample_extractor = (
     12843741 => qr/^(?<clone>(?:AL|AD|C)-\d+)_/,                            # Mack, et al., and also handled specially below
     15163705 => qr/^(?<subject>\d+)/,                                       # Han, et al.
     17262715 => qr/^(?<genbank>.+?)(?:\.\d+)?$/,                            # Ikeda, et al.
-  # 23953889, Sherrill-Mix, et al, handled specially below
 );
 if (my $re = $sample_extractor{ $t->{sample}{pubmed_id} }) {
     if ($t->{sample}{original_id} =~ $re) {
         $t->{sample}{$_} = $+{$_}
             for keys %+;
     }
-}
-
-# 23953889, Sherrill-Mix, et al.
-if ($t->{sample}{pubmed_id} == 23953889) {
-    $t->{sample}{tissue} = "cell culture";
-    $t->{environment} = "in vitro";
 }
 
 # 12843741, Mack, et al.
