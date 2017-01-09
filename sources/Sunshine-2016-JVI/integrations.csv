@@ -1,5 +1,4 @@
 info/source_file,info/source_line,landmark,location,orientation_in_landmark,ltr,sequence,sequence_junction,info/replicate,info/replicates,sample/pubmed_id,sample/tissue,sample/tissue_url,sample/clone,environment,source_name
-data/09-2014/sites/ACH2-clone1.sites,11,chr21,14511770,F,3p,,,1,1,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
 data/09-2014/sites/ACH2-clone1.sites,13,chr21,14511776,F,5p,,,1,37,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
 data/09-2014/sites/ACH2-clone1.sites,14,chr21,14511776,F,5p,,,2,37,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
 data/09-2014/sites/ACH2-clone1.sites,17,chr21,14511776,F,5p,,,3,37,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
@@ -80,7 +79,6 @@ data/09-2014/sites/ACH2-clone1.sites,171,chr7,33019785,R,5p,,,36,39,26912621,"AC
 data/09-2014/sites/ACH2-clone1.sites,189,chr7,33019785,R,5p,,,37,39,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
 data/09-2014/sites/ACH2-clone1.sites,160,chr7,33019785,R,5p,,,38,39,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
 data/09-2014/sites/ACH2-clone1.sites,145,chr7,33019785,R,5p,,,39,39,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
-data/09-2014/sites/ACH2-clone1.sites,12,chr7,33019791,R,3p,,,1,1,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
 data/09-2014/sites/BCL-2-6-18.sites,69,chr1,1311272,R,5p,,,1,1,26912621,"Primary CD4+ T cells (Bcl-2 transduced)",https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4378543/,,"in vitro",Sunshine-2016-JVI
 data/09-2014/sites/BCL-2-6-18.sites,3,chr1,35985619,R,5p,,,1,1,26912621,"Primary CD4+ T cells (Bcl-2 transduced)",https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4378543/,,"in vitro",Sunshine-2016-JVI
 data/09-2014/sites/BCL-2-6-18.sites,43,chr1,43682986,F,5p,,,1,1,26912621,"Primary CD4+ T cells (Bcl-2 transduced)",https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4378543/,,"in vitro",Sunshine-2016-JVI
@@ -170,12 +168,6 @@ data/09-2014/sites/BCL-2-6-18.sites,77,chr9,128175638,R,5p,,,1,1,26912621,"Prima
 data/09-2014/sites/BCL-2-6-18.sites,150,chr9,128693517,F,5p,,,1,1,26912621,"Primary CD4+ T cells (Bcl-2 transduced)",https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4378543/,,"in vitro",Sunshine-2016-JVI
 data/09-2014/sites/BCL-2-6-18.sites,175,chr9,136412529,F,5p,,,1,1,26912621,"Primary CD4+ T cells (Bcl-2 transduced)",https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4378543/,,"in vitro",Sunshine-2016-JVI
 data/09-2014/sites/BCL-2-6-18.sites,27,chr9,137025859,R,5p,,,1,1,26912621,"Primary CD4+ T cells (Bcl-2 transduced)",https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4378543/,,"in vitro",Sunshine-2016-JVI
-data/10-2014/sites/ACH2-clone1.sites,60,chr21,14511770,F,3p,,,1,2,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
-data/10-2014/sites/ACH2-clone1.sites,61,chr21,14511770,F,3p,,,2,2,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
-data/10-2014/sites/ACH2-clone1.sites,897,chr21,14511770,F,3p,,,1,2,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
-data/10-2014/sites/ACH2-clone1.sites,898,chr21,14511770,F,3p,,,2,2,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
-data/10-2014/sites/ACH2-clone1.sites,153,chr21,14511774,F,5p,,,1,2,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
-data/10-2014/sites/ACH2-clone1.sites,264,chr21,14511774,F,5p,,,2,2,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
 data/10-2014/sites/ACH2-clone1.sites,15,chr21,14511776,F,5p,,,1,1,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
 data/10-2014/sites/ACH2-clone1.sites,62,chr21,14511776,F,5p,,,1,188,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
 data/10-2014/sites/ACH2-clone1.sites,63,chr21,14511776,F,5p,,,2,188,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
@@ -583,11 +575,6 @@ data/10-2014/sites/ACH2-clone1.sites,691,chr7,33019785,R,5p,,,186,187,26912621,"
 data/10-2014/sites/ACH2-clone1.sites,742,chr7,33019785,R,5p,,,187,187,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
 data/10-2014/sites/ACH2-clone1.sites,893,chr7,33019785,R,5p,,,1,1,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
 data/10-2014/sites/ACH2-clone1.sites,580,chr7,33019787,R,5p,,,1,1,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
-data/10-2014/sites/ACH2-clone1.sites,55,chr7,33019791,R,3p,,,1,4,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
-data/10-2014/sites/ACH2-clone1.sites,56,chr7,33019791,R,3p,,,2,4,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
-data/10-2014/sites/ACH2-clone1.sites,57,chr7,33019791,R,3p,,,3,4,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
-data/10-2014/sites/ACH2-clone1.sites,58,chr7,33019791,R,3p,,,4,4,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
-data/10-2014/sites/ACH2-clone1.sites,59,chr7,33019791,R,3p,,,1,1,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
 data/10-2014/sites/ACH2-clone1.sites,486,chr7,33019794,R,5p,,,1,3,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
 data/10-2014/sites/ACH2-clone1.sites,592,chr7,33019794,R,5p,,,2,3,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
 data/10-2014/sites/ACH2-clone1.sites,683,chr7,33019794,R,5p,,,3,3,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,1,"in vitro",Sunshine-2016-JVI
@@ -806,7 +793,6 @@ data/10-2014/sites/ACH2-clone3.sites,697,chr7,33019785,R,5p,,,120,122,26912621,"
 data/10-2014/sites/ACH2-clone3.sites,640,chr7,33019785,R,5p,,,121,122,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,3,"in vitro",Sunshine-2016-JVI
 data/10-2014/sites/ACH2-clone3.sites,670,chr7,33019785,R,5p,,,122,122,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,3,"in vitro",Sunshine-2016-JVI
 data/10-2014/sites/ACH2-clone3.sites,848,chr7,33019785,R,5p,,,1,1,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,3,"in vitro",Sunshine-2016-JVI
-data/10-2014/sites/ACH2-clone3.sites,75,chr7,33019791,R,3p,,,1,1,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,3,"in vitro",Sunshine-2016-JVI
 data/10-2014/sites/ACH2-clone3.sites,781,chr7,33019794,R,5p,,,1,1,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,3,"in vitro",Sunshine-2016-JVI
 data/10-2014/sites/ACH2-clone3.sites,718,chr7,33019795,R,5p,,,1,1,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,3,"in vitro",Sunshine-2016-JVI
 data/10-2014/sites/ACH2-clone3.sites,93,chr7,117487900,R,5p,,,1,138,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,3,"in vitro",Sunshine-2016-JVI
@@ -952,7 +938,6 @@ data/10-2014/sites/ACH2-clone3.sites,850,chr7,117487900,R,5p,,,1,2,26912621,"ACH
 data/10-2014/sites/ACH2-clone3.sites,851,chr7,117487900,R,5p,,,2,2,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,3,"in vitro",Sunshine-2016-JVI
 data/10-2014/sites/ACH2-clone3.sites,408,chr7,117487904,R,5p,,,1,1,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,3,"in vitro",Sunshine-2016-JVI
 data/10-2014/sites/ACH2-clone3.sites,183,chr7,117487905,R,5p,,,1,1,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,3,"in vitro",Sunshine-2016-JVI
-data/10-2014/sites/ACH2-clone3.sites,72,chr7,117487906,R,3p,,,1,1,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,3,"in vitro",Sunshine-2016-JVI
 data/10-2014/sites/ACH2-clone3.sites,82,chr8,108102667,R,3p,,,1,1,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,3,"in vitro",Sunshine-2016-JVI
 data/10-2014/sites/ACH2-clone3.sites,856,chr8,129646707,F,5p,,,1,2,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,3,"in vitro",Sunshine-2016-JVI
 data/10-2014/sites/ACH2-clone3.sites,857,chr8,129646707,F,5p,,,2,2,26912621,"ACH-2 clone",https://www.aidsreagent.org/reagentdetail.cfm?t=cell_lines&id=222,3,"in vitro",Sunshine-2016-JVI

@@ -9,4 +9,4 @@ integrations-GRCh37.csv: $(data)
 	./transform $^ > $@
 
 integrations.csv: integrations-GRCh37.csv
-	$(ISDB)/bin/liftover hg19 hg38 $< | ./tocsv > $@
+	$(ISDB)/bin/liftover hg19 hg38 $< | $(ISDB)/bin/collapse-dual-ltr-records | ./tocsv > $@
