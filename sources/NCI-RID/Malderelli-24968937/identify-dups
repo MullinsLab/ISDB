@@ -4,7 +4,6 @@ use warnings;
 use 5.010;
 
 use JSON::MaybeXS;
-use List::Util qw< reduce >;
 use Getopt::Long;
 
 my $DEBUG = 0;
@@ -35,10 +34,14 @@ while (<STDIN>) {
 }
 output_best(@clump);
 
+# This is an embarrassingly-named function since it does the exact opposite.
+# It outputs the _duplicates_, omitting the best record.  The goal is a list of
+# records to delete, so it identifies the best and then prints everything else.
+# -trs, 5 Jan 2017
 sub output_best {
     return unless @_;
 
-    # Process clump and output location with highest multiplicity or
+    # Process clump and identify location with highest multiplicity or
     # lowest location, if multiplicity is the same.
     my @ranked = sort {
         $b->{multiplicity} <=> $a->{multiplicity} ||
@@ -58,12 +61,6 @@ sub output_best {
 
     say encode_json( $ranked[$_] )
         for 1 .. $#ranked;
-}
-
-sub uniq {
-    my %seen;
-    my @uniq = grep { not $seen{$_}++ } @_;
-    return @uniq;
 }
 
 sub contained {
