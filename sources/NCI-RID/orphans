@@ -1,9 +1,11 @@
 #!/bin/bash
-set -e -o pipefail
+set -e -o pipefail -o nounset
 
-recs join --left --operation '$d->{matched} = 1' \
-    info/source_line info/source_line \
-    <(recs fromcsv --header $1) \
-    <(recs fromcsv --header $2) \
-    | recs grep 'not {{matched}}' \
+GRCh37=$1
+orphans=$2
+
+recs join --operation '' \
+    landmark,location landmark,location \
+    <(recs fromcsv --header $GRCh37) \
+    <(recs fromsplit -d $'\t' -k landmark,location <(grep -vE '^#' $orphans || true)) \
     | ./tocsv
