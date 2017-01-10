@@ -4,12 +4,15 @@ set -e -o pipefail -o nounset
 rid=https://rid.ncifcrf.gov
 
 function query-rid() {
+  local pubmed=$1
+
   echo "Querying RID" >&2
   curl -fsS $rid/result.php \
     -d virusnm=HIV1 \
     -d subtypenm[]=all \
     -d host=hg19 \
     -d chr[]=all \
+    -d pubmed=$pubmed \
     -d site_info[]=origin_id \
     -d site_info[]=chr \
     -d site_info[]=insert_position \
@@ -30,8 +33,26 @@ function query-rid() {
     -d site_info[]=pubmed_id
 }
 
-echo "Extracting download URL" >&2
-tsv=$(query-rid | perl -nle '/(?<=href=)(.+?)(?=>Download\s+Result)/i and print $1')
+declare -a pubmed_ids
+pubmed_ids=(
+    15163705    # Han, et al.
+    17262715    # Ikeda, et al.
+    12843741    # Mack, et al.
+    24968937    # Maldarelli, et al.
+)
 
-echo "Downloading TSV" >&2
-curl -fsS $rid/$tsv
+start_line=
+
+for pubmed_id in ${pubmed_ids[@]}; do
+
+    echo "Working on PubMed ID $pubmed_id" >&2
+    tsv="$(query-rid $pubmed_id | perl -nle '/(?<=href=)(.+?)(?=>Download\s+Result)/i and print $1')"
+
+    # The tail is to print the TSV header the first time and skip it every
+    # subsequent time.
+    echo "Downloading TSV" >&2
+    curl -fsS "$rid/$tsv" | tail -n +${start_line:-1}
+    echo
+
+    start_line=2
+done
