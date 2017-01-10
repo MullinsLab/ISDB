@@ -85,7 +85,7 @@ $t->{location} = $r->{insert_position};
 # accession for "chrUn" data.  Luckily, the number of affected rows is in the
 # single digits.
 delete $t->{landmark}
-    if $t->{landmark} eq "chrUN";
+    if $t->{landmark} =~ /^chrUn$/i;
 
 delete $t->{location}
     if not $t->{landmark};
@@ -107,8 +107,15 @@ $t->{note} = $r->{comment};
 # Normalizing empty strings to undef/NULL should be handled by the loading
 # step.
 
-for my $replicate (1 .. $t->{info}{replicates}) {
-    my $tprime = clone($t);
-    $tprime->{info}{replicate} = $replicate;
-    push_output($tprime);
+if (not $t->{landmark} or not $t->{location}) {
+    # Don't output records missing a landmark or location
+    push_output();
+}
+else {
+    # Output one record per replicate
+    for my $replicate (1 .. $t->{info}{replicates}) {
+        my $tprime = clone($t);
+        $tprime->{info}{replicate} = $replicate;
+        push_output($tprime);
+    }
 }
