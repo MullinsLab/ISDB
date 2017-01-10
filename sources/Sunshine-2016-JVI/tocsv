@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e -o pipefail
+recs sort -k info/source_file,landmark,location=n \
+    | recs tocsv -k "info/source_file,info/source_line,landmark,location,orientation_in_landmark,ltr,sequence,sequence_junction,info/replicate,info/replicates,sample/pubmed_id,sample/tissue,sample/tissue_url,sample/clone,environment,source_name"

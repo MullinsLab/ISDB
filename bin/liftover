@@ -21,15 +21,20 @@ if [[ ! ( -e $liftOver && -e $chain ) ]]; then
     exit 1
 fi
 
+function input-records() {
+    recs fromcsv --header $input \
+        | recs xform '$r->{_join_key} = 1 + $line' \
+        | recs assert -v '$r->{_join_key}'
+}
+
 # XXX TODO: Support the full list of UCSC-style landmark/chromosome names for
 # unplaced, unlocalized, and alternative scaffolds.  See this task for details
 # <https://trello.com/c/Hj7QeUvy>.  Right now this tool is limited to chr1-22,
 # chrX, chrY, and chrMT and filters out anything else.
 # -trs, 12 Feb 2016
-recs fromcsv --header $input \
-    | recs assert -v '{{info/source_line}}' \
+input-records \
     | recs grep '{{landmark}} and {{location}}' \
-    | recs eval 'join "\t", $r->{landmark}, $r->{location}, $r->{location} + 1, $r->{info}{source_line}' \
+    | recs eval 'join "\t", $r->{landmark}, $r->{location}, $r->{location} + 1, $r->{_join_key}' \
     | uniq \
     | $liftOver \
         -minMatch=1 \
@@ -37,10 +42,10 @@ recs fromcsv --header $input \
         <(gunzip --stdout $chain) \
         /dev/stdout \
         $(dirname $input)/orphaned.bed \
-    | recs fromcsv -d $'\t' -k landmark,location,location_end,info/source_line \
+    | recs fromcsv -d $'\t' -k landmark,location,location_end,_join_key \
     | recs grep '{{landmark}} =~ /^chr(\d+|[XY]|MT)$/' \
     | recs join \
         --operation '@$d{qw[ landmark location ]} = @$i{qw[ landmark location ]}' \
-        info/source_line \
-        info/source_line \
-        <(recs fromcsv --header $input)
+        _join_key \
+        _join_key \
+        <(input-records)

@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e -o pipefail
+
+recs fromcsv -d ' ' --header --fk file "$@" \
+    | recs xform '$r->{line} = 1 + ++$line{ $r->{file} }' \
+    | ./collapse-sites \
+    | recs xform -E transform.recs \
+    | ./tocsv

@@ -1,0 +1,123 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use utf8;
+use 5.010;
+
+use JSON::MaybeXS;
+use Getopt::Long::Descriptive;
+
+my ($opt, $usage) = describe_options(
+    "%c [--distance 6] [--debug] < records > clumps",
+    [],
+    [ "You almost certainly do not want to use this by itself." ],
+    [ "Look at bin/collapse-dual-ltr-records instead." ],
+    [],
+    [ "Input MUST be sorted by landmark and location." ],
+    [],
+    [ "distance=i", "maximum distance beyond which complementary LTRs aren't "
+                  . "considered to be from the same provirus (default: 6)",
+        { default => 6 } ],
+    [],
+    [ "help",  "print usage message and exit" ],
+);
+
+print($usage->text), exit(!$opt->help)
+    if $opt->help;
+
+exit main();
+
+
+sub main {
+    # We keep a running list of active clumps, which are arrays of records.
+    # Each clump is defined by its first record.
+    my @clumps;
+    my %landmark_done;
+    my $last_landmark = '';
+    my $last_location = 0;
+
+    while (<STDIN>) {
+        my $r = decode_json($_);
+
+        # Bookkeeping: Output previous clumps and reset loop vars when we hit a
+        # new landmark
+        if ($last_landmark ne $r->{landmark}) {
+            $landmark_done{ $last_landmark }++;
+            $last_landmark = $r->{landmark};
+            $last_location = 0;
+
+            output_clump($_) for @clumps;
+            @clumps = ();
+        }
+
+        # Bookkeeping: Do any clumps need to be output?  Removes all clumps and
+        # then re-adds them if not output.
+        for my $clump (splice @clumps) {
+            if (abs($clump->[0]{location} - $last_location) > $opt->distance) {
+                output_clump($clump);
+            } else {
+                push @clumps, $clump;
+            }
+        }
+
+        # Sanity check for unsorted input
+        die "Input is unsorted"
+            if $landmark_done{ $r->{landmark} }
+            or $r->{location} < $last_location;
+
+
+        # Compare current record to active clumps
+        my @matching_clumps =
+            grep { adjacent_records($_->[0], $r) } @clumps;
+
+        if (@matching_clumps) {
+            if (@matching_clumps > 1) {
+                my $locs = join ", ", map { $_->[0]{location} } @matching_clumps;
+                warn "Line $.: $r->{ltr} site $r->{landmark}:$r->{location} could be clumped ",
+                     "with multiple $matching_clumps[0]->[0]{ltr} sites ($locs); picking first\n";
+            }
+            push @{ $matching_clumps[0] }, $r;
+        } else {
+            push @clumps, [ $r ];
+        }
+
+
+        # Update the last seen location
+        $last_location = $r->{location};
+    }
+
+    # Bookkeeping: Any remaining clumps must be output by now.
+    output_clump($_) for @clumps;
+}
+
+sub adjacent_records {
+    my ($a, $b) = @_;
+    return (
+            ($a->{sample}{subject} // '') eq ($b->{sample}{subject} // '')
+        and $a->{environment}             eq $b->{environment}
+        and $a->{landmark}                eq $b->{landmark}
+        and $a->{ltr}                     ne $b->{ltr}
+        and $a->{orientation_in_landmark} eq $b->{orientation_in_landmark}
+        and abs($a->{location} - $b->{location}) <= $opt->distance
+    );
+}
+
+sub output_clump {
+    my $clump = shift;
+
+    # Assert that our clump doesn't look fishy.
+    my $five_ltr  = grep { $_->{ltr} eq "5p" } @$clump;
+    my $three_ltr = grep { $_->{ltr} eq "3p" } @$clump;
+
+    die "Clumps shouldn't contain multiple records from both LTRs"
+        unless $five_ltr == 1 or $three_ltr == 1;
+
+    # Sort records in clump by highest multiplicity and earliest location.  The
+    # "best" record in the clump (the one to keep) will be the first.
+    my @sorted = sort {
+        $b->{multiplicity} <=> $a->{multiplicity} ||
+            $a->{location} <=> $b->{location}
+    } @$clump;
+
+    say encode_json({ clumped_records => \@sorted });
+}

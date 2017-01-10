@@ -1,0 +1,58 @@
+#!/bin/bash
+# usage: collapse-dual-ltr-records [--help] [--distance N] < input.recs > output.recs
+#
+# This script scans an input stream of JSON records and identifies plausible
+# sets of integration sites reported from complementary proviral LTRs.  The
+# "best" site from each such set (or clump) is output while the rest are
+# discarded.  The goal is to filter out evidence that is plausibly from
+# opposite ends of the same provirus in order to be conservative and reduce
+# double-counting.
+#
+# An outline of the process:
+#
+#   1. Group records into unique sites by environment, subject (if present),
+#      landmark, location, LTR, and orientation.
+#
+#   2. For each unique site, calculate multiplicity and stash records in the
+#      group for later.
+#
+#   3. Sort sites by landmark, location, and LTR.
+#
+#   4. Clump sites together which are from opposite LTRs and ±6bp.  A site which
+#      could belong to more than one clump is put in the first matching clump.
+#
+#   5. For the "best" site from each clump, output the original input records from
+#      step 1.  The "best" site is the one with the highest multiplicity (to
+#      preserve the most input records).  Ties are broken by choosing the site
+#      with the earliest location.
+#
+# Look at the Makefiles in the NCI-RID and Sunshine-2016-JVI sources to see
+# examples of this filter in use.
+#
+# All arguments are passed to bin/clump-dual-ltr-records.
+#
+set -e -o pipefail -o nounset
+bin=$(dirname "$0")
+
+function usage() {
+    perl -ne '2 .. not s/^# ?// ? print : exit' -- "$0"
+}
+
+case "${1:-}" in
+    -h|--help)
+        usage
+        exit 0;;
+esac
+
+# If stdin is a terminal, show usage.
+if [[ -t 0 ]]; then
+    usage
+    exit 1
+fi
+
+recs collate -k environment,sample/subject,landmark,location,ltr,orientation_in_landmark \
+             -a multiplicity=count \
+             -a multiplicity_evidence=recs \
+    | recs sort -k landmark,location=n,ltr=- \
+    | $bin/clump-dual-ltr-records --distance 6 "$@" \
+    | recs xform 'push_output($_) for @{ $r->{clumped_records}[0]{multiplicity_evidence} }'
