@@ -27,6 +27,15 @@
         collaborate with your local bioinformatics practitioner.
       </p>
 
+      <p>
+        Note that integration sites <strong>may be covered by multiple
+        genes</strong> (such as those on opposite strands or read-through
+        variants) and if so will be <strong>reported once per gene</strong>,
+        resulting in multiple rows for a single integration site.  If you want
+        to count integration sites, you should use the integration summary
+        <em>without</em> the gene annotations.
+      </p>
+
       <% FOR dataset IN exports.sort('name') %>
         <h3><% dataset.name %></h3>
         <p class="text-lg">
