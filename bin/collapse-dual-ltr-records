@@ -1,5 +1,6 @@
 #!/bin/bash
-# usage: collapse-dual-ltr-records [--help] [--distance N] < input.recs > output.recs
+# usage: collapse-dual-ltr-records [--sample-key K] [--distance N] < input.recs > output.recs
+#        collapse-dual-ltr-records --help
 #
 # This script scans an input stream of JSON records and identifies plausible
 # sets of integration sites reported from complementary proviral LTRs.  The
@@ -11,7 +12,9 @@
 # An outline of the process:
 #
 #   1. Group records into unique sites by environment, subject (if present),
-#      landmark, location, LTR, and orientation.
+#      landmark, location, LTR, and orientation.  Additional grouping keys
+#      which distinguish distinct samples may be added to this step by
+#      specifying --sample-key.
 #
 #   2. For each unique site, calculate multiplicity and stash records in the
 #      group for later.
@@ -20,6 +23,8 @@
 #
 #   4. Clump sites together which are from opposite LTRs and ±6bp.  A site which
 #      could belong to more than one clump is put in the first matching clump.
+#      The same set of grouping keys from step 1 are used to avoid clumping
+#      across subjects and samples.
 #
 #   5. For the "best" site from each clump, output the original input records from
 #      step 1.  The "best" site is the one with the highest multiplicity (to
@@ -38,11 +43,17 @@ function usage() {
     perl -ne '2 .. not s/^# ?// ? print : exit' -- "$0"
 }
 
-case "${1:-}" in
-    -h|--help)
-        usage
-        exit 0;;
-esac
+sample_key=
+
+for arg; do
+    case "$arg" in
+        --sample-key)
+            sample_key="$2";;
+        -h|--help)
+            usage
+            exit 0;;
+    esac
+done
 
 # If stdin is a terminal, show usage.
 if [[ -t 0 ]]; then
@@ -50,7 +61,7 @@ if [[ -t 0 ]]; then
     exit 1
 fi
 
-recs collate -k environment,sample/subject,landmark,location,ltr,orientation_in_landmark \
+recs collate -k environment,sample/subject,landmark,location,ltr,orientation_in_landmark${sample_key:+,}"$sample_key" \
              -a multiplicity=count \
              -a multiplicity_evidence=recs \
     | recs sort -k landmark,location=n,ltr=- \

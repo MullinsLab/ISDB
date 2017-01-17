@@ -8,7 +8,7 @@ integrations-GRCh37.csv: source.tsv
 	./transform $< > $@
 
 integrations.csv: integrations-GRCh37.csv
-	$(ISDB)/bin/liftover hg19 hg38 $< | $(ISDB)/bin/collapse-dual-ltr-records | ./tocsv > $@
+	$(ISDB)/bin/liftover hg19 hg38 $< | $(ISDB)/bin/collapse-dual-ltr-records --sample-key sample/years_on_art | ./tocsv > $@
 
 orphaned.bed: integrations.csv
 	# Running liftover to produce integrations.csv also produces orphaned.bed

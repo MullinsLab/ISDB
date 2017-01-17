@@ -4,17 +4,19 @@ use warnings;
 use utf8;
 use 5.010;
 
+use Hash::Fold 0.001002;
 use JSON::MaybeXS;
 use Getopt::Long::Descriptive;
 
 my ($opt, $usage) = describe_options(
-    "%c [--distance 6] [--debug] < records > clumps",
+    "%c [--sample-key K] [--distance 6] [--debug] < records > clumps",
     [],
     [ "You almost certainly do not want to use this by itself." ],
     [ "Look at bin/collapse-dual-ltr-records instead." ],
     [],
     [ "Input MUST be sorted by landmark and location." ],
     [],
+    [ "sample-key=s", "additional clumping key identifying distinct samples" ],
     [ "distance=i", "maximum distance beyond which complementary LTRs aren't "
                   . "considered to be from the same provirus (default: 6)",
         { default => 6 } ],
@@ -92,6 +94,19 @@ sub main {
 
 sub adjacent_records {
     my ($a, $b) = @_;
+
+    if ($opt->sample_key) {
+        my $key = $opt->sample_key;
+
+        state $hash = Hash::Fold->new(
+            array_delimiter => '/#',
+            hash_delimiter  => '/',
+        );
+
+        return 0 unless $hash->flatten($a)->{$key}
+                     eq $hash->flatten($b)->{$key};
+    }
+
     return (
             ($a->{sample}{subject} // '') eq ($b->{sample}{subject} // '')
         and $a->{environment}             eq $b->{environment}
