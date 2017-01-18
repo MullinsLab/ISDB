@@ -10,13 +10,11 @@ use ISDB::Schema;
 use JSON::MaybeXS;
 use List::Util qw< pairgrep >;
 
-my $db = ISDB::Schema->connect_default;
 my @tables =
     map { table_metadata($_) }
    sort { lc($a->table) cmp lc($b->table) }
-    map { $_->new_result({}) }
-    map { $db->resultset($_) or die "Unknown result class '$_'\n" }
-        $db->sources;
+    map { ISDB::Schema->class($_) or die "Unknown result class '$_'\n" }
+        ISDB::Schema->sources;
 
 say JSON->new->canonical->pretty->encode(\@tables);
 exit;
