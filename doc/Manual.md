@@ -123,7 +123,7 @@ the [NCBI Gene](http://www.ncbi.nlm.nih.gov/gene/) database.  Genes often have
 aliases, but ISDB does not use them.  The genes and their locations on the
 human assembly are parsed from the GFF annotations provided by the Genome
 Reference Consortium.  These correspond to [annotation release
-107][https://www.ncbi.nlm.nih.gov/genome/annotation_euk/Homo_sapiens/107/],
+107](https://www.ncbi.nlm.nih.gov/genome/annotation_euk/Homo_sapiens/107/),
 which was the current version when GRCh38 was first published.  In the future
 ISDB may switch to a newer annotation release.
 
