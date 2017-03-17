@@ -17,16 +17,16 @@ sub in_vitro {
     return $self->search_rs({ environment => 'in vitro' });
 }
 
-sub top_N_by_column {
+sub top_N_by_columns {
     my $self = shift;
-    my $col  = shift or return undef;
     my $rows = shift || 10;
+    my @cols = @_ or return undef;
     return $self->search_rs(
         {
             gene => { '!=' => undef }
         },
         {
-            order_by => { -desc => $col },
+            order_by => { -desc => \@cols },
             rows     => $rows,
         }
     );
