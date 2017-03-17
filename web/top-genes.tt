@@ -1,0 +1,41 @@
+<% page = {
+     title = "Top Genes"
+   }
+-%>
+<% page.head = BLOCK %>
+  <script src="assets/vendor/d3.min.js" type="text/javascript"></script>
+  <script src="assets/vendor/vega.min.js" type="text/javascript"></script>
+  <script src="assets/vendor/vega-embed.min.js" charset="utf-8" type="text/javascript"></script>
+  <link rel="stylesheet" href="assets/top-genes-viz/styles.css">
+<% END %>
+
+<% WRAPPER "inc/layout.tt" %>
+  <div class="row">
+    <div class="col col-sm-12">
+      <h2>Top genes containing <i>in vivo</i> integration sites</h2>
+      <figure id="top-genes-figure">
+        <figcaption>
+          <p>
+            Data from the <a href="doc/Manual.html#summary-by-gene">Summary by
+            Gene</a> dataset, as downloadable from the <a href="data.html">data
+            page</a>, filtered to just <i>in vivo</i> integrations.
+          </p>
+          <p>
+            Genes are ranked in descending order by <b>number of proliferating
+            sites</b>, then <b>number of unique sites</b>, then
+            <b>number of subjects</b>, and finally <b>number of integrations</b>.
+            Genes with no proliferating sites are not shown on the bottom two
+            panels.
+          </p>
+          <p>
+            Click on a plotted point or gene name to visit the relevant
+            <a href="https://www.ncbi.nlm.nih.gov/gene/">NCBI Gene</a> page.
+            Move the slider to increase or decrease the number of genes shown.
+          </p>
+        </figcaption>
+        <div id="top-genes-viz"></div>
+        <script src="assets/top-genes-viz/controller.js" type="text/javascript"></script>
+      </figure>
+    </div>
+  </div>
+<% END %>
