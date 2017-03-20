@@ -59,15 +59,15 @@ while (<$gff>) {
 
     my $gene_id  = first { s/^GeneID:// } @{ $row->{attributes}{Dbxref} };
     my $landmark = $refseq2chr{ $row->{seq_id} } // $row->{seq_id};
-	my $name     = $row->{attributes}{Name}[0];
+    my $name     = $row->{attributes}{Name}[0];
 
-	my $gene = $genes->find_or_create({
-		ncbi_gene_id	=> $gene_id,
-		name			=> $name,
-	});
+    my $gene = $genes->find_or_create({
+        ncbi_gene_id    => $gene_id,
+        name            => $name,
+    });
 
     $gene->add_to_locations({
-        landmark 	     => $landmark,
+        landmark          => $landmark,
         gene_start       => $row->{start} - 1,  # Conversion to interbase, zero-origin
         gene_end         => $row->{end},
         gene_orientation => $strand2orientation{ $row->{strand} },
