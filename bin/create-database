@@ -55,4 +55,5 @@ $psql --set owner=$owner < $isdb/schema/alterdb.sql
 # or similar in ISDB::Config, or adding an --as $owner option to load-genes.
 $isdb/bin/load-genes \
     --gff <(gunzip -qc $isdb/schema/data/ref_GRCh38.p2_top_level.gff3.gz) \
-    --chrmap $isdb/schema/data/chr_accessions_GRCh38.p2
+    --chrmap $isdb/schema/data/chr_accessions_GRCh38.p2 \
+    --gene-info <(gunzip -qc $isdb/schema/data/Homo_sapiens.gene_info.gz)

@@ -28,11 +28,35 @@ CREATE DOMAIN orientation AS text CHECK (
     VALUE IN ('F', 'R')
 );
 
+CREATE DOMAIN gene_type AS text CHECK (
+    -- Values from the ASN.1 definition of an NCBI Gene document:
+    --    https://www.ncbi.nlm.nih.gov/IEB/ToolBox/CPP_DOC/lxr/source/src/objects/entrezgene/entrezgene.asn
+    --
+    -- We'll use NULL for "unknown".
+    --
+    VALUE IN (
+        'protein-coding',
+        'pseudo',
+        'rRNA',
+        'tRNA',
+        'ncRNA',
+        'scRNA',
+        'snRNA',
+        'snoRNA',
+        'miscRNA',
+        'transposon',
+        'biological-region',
+        'other'
+    )
+);
+
 CREATE TABLE ncbi_gene (
     ncbi_gene_id    integer NOT NULL PRIMARY KEY,
-    name            text    NOT NULL
+    name            text    NOT NULL,
+    type            gene_type
 );
 CREATE INDEX ncbi_gene_name_upper_idx ON ncbi_gene(UPPER(name));
+CREATE INDEX ncbi_gene_type_idx       ON ncbi_gene(type);
 
 CREATE TABLE ncbi_gene_location (
     ncbi_gene_id        integer             NOT NULL REFERENCES ncbi_gene(ncbi_gene_id),

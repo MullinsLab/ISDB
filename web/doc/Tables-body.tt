@@ -119,6 +119,12 @@
           the <a href="Manual.html">manual</a> for more information.
         </dd>
 
+        <dt id="data-type-gene_type"><code>gene_type</code></dt>
+        <dd>
+          A fixed set of names for various classes of genes
+          <a href="https://www.ncbi.nlm.nih.gov/books/NBK3841/#EntrezGene.Summary_1">as used by NCBI Gene</a>.
+        </dd>
+
         <dt id="data-type-text"><code>text</code></dt>
         <dd>
           An arbitrary blob of text, which may be very short or very long
