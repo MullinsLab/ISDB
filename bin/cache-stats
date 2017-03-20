@@ -25,10 +25,15 @@ my $stats = {
             in_vitro => [ $is->in_vitro->counts_by_source_and_publication->all ],
         },
     },
-    top_5_genes => {
+    top_genes => {
         in_vivo => {
-            by_subjects     => [ $genes->in_vivo->top_N_by_columns(5, qw[ subjects      unique_sites   total_in_gene ])->all ],
-            by_unique_sites => [ $genes->in_vivo->top_N_by_columns(5, qw[ unique_sites  total_in_gene  subjects      ])->all ],
+            by_subjects => [
+                $genes->in_vivo->top_N_by_columns(12, qw[
+                    subjects
+                    unique_sites
+                    total_in_gene
+                ])->all
+            ],
         },
     },
     sources => {
