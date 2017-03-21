@@ -39,7 +39,11 @@
         { "type": "filter", "test": "datum.environment === environment && datum.gene" },
         { "type": "sort", "by": ["-subjects", "-unique_sites", "-total_in_gene"] },
         { "type": "rank" },
-        { "type": "filter", "test": "datum.rank <= topN" }
+        { "type": "filter", "test": "datum.rank <= topN" },
+
+        { "type": "formula", "field": "jitter",            "expr": "0.25 * random()" },
+        { "type": "formula", "field": "jitter_direction",  "expr": "if(random() < 0.5, 1, -1)" },
+        { "type": "formula", "field": "subjects_jittered", "expr": "datum.subjects + datum.jitter * datum.jitter_direction" }
       ]
     }
   ],
@@ -55,6 +59,7 @@
       "range": "width",
       "zero": false,
       "round": true,
+      "clamp": true,
       "domain": {"data": "genes", "field": "subjects"},
       "domainMin": 0
     },
@@ -106,7 +111,7 @@
       },
       "properties": {
         "update": {
-          "x": {"scale": "x", "field": "subjects"},
+          "x": {"scale": "x", "field": "subjects_jittered"},
           "y": {"scale": "y", "field": "unique_sites"},
           "shape": {"value": "circle"},
           "fill": {"scale": "color", "field": "gene"},
@@ -136,7 +141,7 @@
       },
       "properties": {
         "update": {
-          "x": {"scale": "x", "field": "subjects"},
+          "x": {"scale": "x", "field": "subjects_jittered"},
           "y": {"scale": "y", "field": "unique_sites"},
           "dx": [
             {"value": -12, "test": "scale('x', datum.subjects) > (width - 100)"},
