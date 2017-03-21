@@ -37,10 +37,13 @@ cache/hg19ToHg38.over.chain.gz:
 	mkdir -p cache
 	$(curl) http://hgdownload.cse.ucsc.edu/goldenPath/hg19/liftOver/$(notdir $@) > $@
 
-hg-data: schema/data/ref_GRCh38.p2_top_level.gff3.gz schema/data/chr_accessions_GRCh38.p2
+hg-data: schema/data/ref_GRCh38.p2_top_level.gff3.gz schema/data/chr_accessions_GRCh38.p2 schema/data/Homo_sapiens.gene_info.gz
 
 schema/data/ref_GRCh38.p2_top_level.gff3.gz:
 	$(curl) https://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/ARCHIVE/ANNOTATION_RELEASE.107/GFF/$(notdir $@) > $@
 
 schema/data/chr_accessions_GRCh38.p2:
 	$(curl) https://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/ARCHIVE/ANNOTATION_RELEASE.107/Assembled_chromosomes/$(notdir $@) > $@
+
+schema/data/Homo_sapiens.gene_info.gz:
+	$(curl) https://ftp.ncbi.nlm.nih.gov/gene/DATA/GENE_INFO/Mammalia/$(notdir $@) > $@

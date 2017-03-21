@@ -18,8 +18,9 @@ my ($opt, $usage) = describe_options(
     [ "Loads genes and gene locations into the database from the gene features of" ],
     [ "a human genome assembly." ],
     [],
-    [ 'gff=s',      "GFF3 for the top-level reference assembly; only 'gene' features are used", { required => 1 } ],
-    [ 'chrmap=s',   "Space-delimited file mapping chromosomes to RefSeq accessions", { required => 1 } ],
+    [ 'gff=s',       "GFF3 for the top-level reference assembly; only 'gene' features are used", { required => 1 } ],
+    [ 'chrmap=s',    "Space-delimited file mapping chromosomes to RefSeq accessions", { required => 1 } ],
+    [ 'gene-info=s', "Tab-delimited \"gene_info\" file from NCBI Gene FTP site", { required => 1 } ],
     [],
     [ 'help', "print usage message and exit" ],
 );
@@ -30,8 +31,9 @@ my $db    = ISDB::Schema->connect_default;
 my $genes = $db->resultset("NCBIGene");
 my $txn   = $db->txn_scope_guard;
 
-my $gff    = path($opt->gff)->openr_utf8;
-my $chrmap = path($opt->chrmap);
+my $gff       = path($opt->gff)->openr_utf8;
+my $chrmap    = path($opt->chrmap);
+my $gene_info = path($opt->gene_info)->openr_utf8;
 
 say "Reading chromosome to RefSeq accession map…";
 my %refseq2chr =
@@ -43,6 +45,16 @@ $_ = "chr$_" for values %refseq2chr;
 
 say sprintf "   %5s  %s", $refseq2chr{$_}, $_
     for sort keys %refseq2chr;
+
+
+say "Reading gene type information…";
+my %gene_type =
+    map { @$_ }
+   grep { $_->[1] ne "unknown" }
+    map { chomp; [(split /\t/, $_)[1,9]] }
+   grep { not /^#|^$/ }
+        <$gene_info>;
+
 
 say "Loading gene locations from genome assembly GFF…";
 my %strand2orientation = (
@@ -59,15 +71,16 @@ while (<$gff>) {
 
     my $gene_id  = first { s/^GeneID:// } @{ $row->{attributes}{Dbxref} };
     my $landmark = $refseq2chr{ $row->{seq_id} } // $row->{seq_id};
-	my $name     = $row->{attributes}{Name}[0];
+    my $name     = $row->{attributes}{Name}[0];
 
-	my $gene = $genes->find_or_create({
-		ncbi_gene_id	=> $gene_id,
-		name			=> $name,
-	});
+    my $gene = $genes->find_or_create({
+        ncbi_gene_id    => $gene_id,
+        name            => $name,
+        type            => $gene_type{$gene_id},
+    });
 
     $gene->add_to_locations({
-        landmark 	     => $landmark,
+        landmark          => $landmark,
         gene_start       => $row->{start} - 1,  # Conversion to interbase, zero-origin
         gene_end         => $row->{end},
         gene_orientation => $strand2orientation{ $row->{strand} },

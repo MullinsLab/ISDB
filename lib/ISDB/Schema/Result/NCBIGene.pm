@@ -50,6 +50,11 @@ __PACKAGE__->table("ncbi_gene");
   data_type: 'text'
   is_nullable: 0
 
+=head2 type
+
+  data_type: 'gene_type'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -57,6 +62,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 0 },
   "name",
   { data_type => "text", is_nullable => 0 },
+  "type",
+  { data_type => "gene_type", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -89,8 +96,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-25 13:58:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4OCENHtVFCs1FA9Z1gQtyg
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2017-03-20 16:10:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:n3kydXelEN5JNgT+u4O7EA
 
 use URI;
 
