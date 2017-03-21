@@ -181,6 +181,7 @@ columns before `multiplicity` are collapsed and counted towards the final
 | `subject`                  | text                 | `25011556_R1` |
 | `ncbi_gene_id`             | integer              | `80208`    |
 | `gene`                     | text                 | `SPG11`    |
+| `gene_type`                | text                 | `protein-coding` |
 | `landmark`                 | text                 | `chr5`     |
 | `location`                 | non-negative integer | `44642671` |
 | `orientation_in_landmark`  | orientation          | `F`        |
@@ -208,6 +209,11 @@ The ID number of the gene annotated at the integration site (if any) in the NCBI
 #### `gene`
 
 The name of the gene annotated at the integration site (if any).
+
+#### `gene_type`
+
+The type of gene annotated at the integration site.  Read more in the [data
+type glossary](Tables.html#data-type-gene_type).
 
 #### `landmark`
 
@@ -287,6 +293,11 @@ above.
 #### `ncbi_gene_id`, `gene`
 
 The annotated gene for which integrations are being summarized.
+
+#### `gene_type`
+
+The type of gene annotated at the integration site.  Read more in the [data
+type glossary](Tables.html#data-type-gene_type).
 
 #### `subjects`
 
