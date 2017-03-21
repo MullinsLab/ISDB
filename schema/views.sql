@@ -10,6 +10,7 @@ CREATE VIEW integration_genes AS
     SELECT integration.*,
            ncbi_gene_id                                     AS ncbi_gene_id,
            ncbi_gene.name                                   AS gene,
+           ncbi_gene.type                                   AS gene_type,
            CASE orientation_in_landmark || gene_orientation
                WHEN 'FF' THEN 'F'
                WHEN 'FR' THEN 'R'
@@ -45,6 +46,7 @@ CREATE VIEW integration_gene_summary AS
            sample->>'subject'                               AS subject,
            ncbi_gene_id                                     AS ncbi_gene_id,
            gene                                             AS gene,
+           gene_type                                        AS gene_type,
            landmark                                         AS landmark,
            location                                         AS location,
            orientation_in_landmark                          AS orientation_in_landmark,
@@ -56,13 +58,14 @@ CREATE VIEW integration_gene_summary AS
                FILTER (WHERE (sample->>'pubmed_id') IS NOT NULL)
                                                             AS pubmed_ids
       FROM integration_genes
-     GROUP BY environment, subject, ncbi_gene_id, gene, landmark, location, orientation_in_landmark, orientation_in_gene
+     GROUP BY environment, subject, ncbi_gene_id, gene, gene_type, landmark, location, orientation_in_landmark, orientation_in_gene
 ;
 
 CREATE VIEW summary_by_gene AS
     SELECT environment,
            ncbi_gene_id,
-           gene                                     AS gene,
+           gene,
+           gene_type,
            CASE environment
              WHEN 'in vivo'  THEN COUNT(DISTINCT subject)
              WHEN 'in vitro' THEN null
@@ -72,7 +75,7 @@ CREATE VIEW summary_by_gene AS
                  FILTER (WHERE multiplicity >= 2)   AS proliferating_sites,
            SUM(multiplicity)                        AS total_in_gene
       FROM integration_gene_summary
-     GROUP BY environment, ncbi_gene_id, gene
+     GROUP BY environment, ncbi_gene_id, gene, gene_type
 ;
 
 CREATE VIEW sample_fields_metadata AS

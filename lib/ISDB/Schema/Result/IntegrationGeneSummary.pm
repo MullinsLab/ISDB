@@ -61,6 +61,11 @@ __PACKAGE__->table("integration_gene_summary");
   data_type: 'text'
   is_nullable: 1
 
+=head2 gene_type
+
+  data_type: 'gene_type'
+  is_nullable: 1
+
 =head2 landmark
 
   data_type: 'landmark'
@@ -107,6 +112,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "gene",
   { data_type => "text", is_nullable => 1 },
+  "gene_type",
+  { data_type => "gene_type", is_nullable => 1 },
   "landmark",
   { data_type => "landmark", is_nullable => 1 },
   "location",
@@ -124,8 +131,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-25 13:58:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+n3K8vFg3vwgmZIvdznKXw
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2017-03-21 10:59:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wx5f4Mj0HUHXWDv2ip1Flw
 
 =head2 ncbi_gene
 

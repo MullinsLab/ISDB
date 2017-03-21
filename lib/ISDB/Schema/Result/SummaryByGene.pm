@@ -56,6 +56,11 @@ __PACKAGE__->table("summary_by_gene");
   data_type: 'text'
   is_nullable: 1
 
+=head2 gene_type
+
+  data_type: 'gene_type'
+  is_nullable: 1
+
 =head2 subjects
 
   data_type: 'bigint'
@@ -85,6 +90,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "gene",
   { data_type => "text", is_nullable => 1 },
+  "gene_type",
+  { data_type => "gene_type", is_nullable => 1 },
   "subjects",
   { data_type => "bigint", is_nullable => 1 },
   "unique_sites",
@@ -96,8 +103,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-09-23 14:07:22
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uMTjQ5ghZlV+FirBH3ioEA
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2017-03-21 10:59:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zohC1KAEt1l6hqlqsOUqAQ
 
 =head2 ncbi_gene
 
