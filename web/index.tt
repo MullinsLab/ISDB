@@ -1,3 +1,8 @@
+<% page.head = BLOCK %>
+  <script src="assets/vendor/d3.min.js" type="text/javascript"></script>
+  <script src="assets/vendor/vega.min.js" type="text/javascript"></script>
+<% END %>
+
 <% WRAPPER "inc/layout.tt" %>
   <div class="row">
     <div class="col col-md-7 col-sm-12">
@@ -18,30 +23,43 @@
       <% END %>
     </div>
     <div class="col col-md-5 col-sm-12">
-      <% FOREACH query IN [["Subjects", "by_subjects"], ["Unique IS", "by_unique_sites"]] %>
-        <h3>Top 5 Genes by # of <% query.0 %> <em>in vivo</em></h3>
-        <% genes = stats.top_5_genes.in_vivo.${query.1} %>
-        <table class="table table-condensed">
-          <thead>
-            <tr>
-              <th>Gene</th>
-              <th class="text-right"># of Subjects</th>
-              <th class="text-right">Unique IS</th>
-              <th class="text-right">Total IS</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% FOR gene IN genes %>
-            <tr>
-              <td><a href="<% gene.ncbi_gene.uri %>"><% gene.gene %></a></td>
-              <td class="text-right"><% gene.subjects %></td>
-              <td class="text-right"><% gene.unique_sites %></td>
-              <td class="text-right"><% gene.total_in_gene %></td>
-            </tr>
-            <% END %>
-          </tbody>
-        </table>
-      <% END %>
+      <% genes = stats.top_genes.in_vivo.by_subjects %>
+
+      <h4>
+        Top <% genes.size %> <i>in vivo</i> genes
+        <small>by # of Subjects and Unique IS</small>
+      </h4>
+
+      <div id="top-genes-viz-mini"></div>
+      <script src="assets/top-genes-viz/controller-mini.js" type="text/javascript"></script>
+
+      <p class="notice bg-info">
+        See an expanded version of this plot on the
+        <a href="top-genes.html">Top Genes</a> page.
+      </p>
+
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Gene</th>
+            <th class="text-right"># of Subjects</th>
+            <th class="text-right">Unique IS</th>
+            <th class="text-right">Total IS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% FOR gene IN genes %>
+          <tr>
+            <td><% loop.number %></td>
+            <td><a href="<% gene.ncbi_gene.uri %>" data-gene="<% gene.gene %>"><% gene.gene %></a></td>
+            <td class="text-right"><% gene.subjects %></td>
+            <td class="text-right"><% gene.unique_sites %></td>
+            <td class="text-right"><% gene.total_in_gene %></td>
+          </tr>
+          <% END %>
+        </tbody>
+      </table>
     </div>
   </div>
 <% END %>

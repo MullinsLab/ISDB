@@ -1,0 +1,11 @@
+{
+  "background": "white",
+  "axis": {
+    "tickLabelFontSize": 14,
+    "titleFontSize": 14
+  },
+  "legend": {
+    "labelFontSize": 14,
+    "titleFontSize": 14
+  }
+}

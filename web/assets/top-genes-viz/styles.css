@@ -1,0 +1,36 @@
+#top-genes-figure figcaption {
+  max-width: 50em;
+}
+
+#top-genes-figure .vega-params {
+  display: block;
+  max-width: 44em;
+  text-align: center;
+  margin: 1em 2em;
+}
+
+#top-genes-figure .vega-param-name {
+  display: block;
+  line-height: 22px;
+  vertical-align: top;
+}
+
+#top-genes-figure .vega-param-name label {
+  vertical-align: top;
+}
+
+#top-genes-figure .vega-actions a[download$=".svg"]::before {
+	/* Styling to match .glphyicon .glphyicon-picture */
+	position: relative;
+	top: 1px;
+	display: inline-block;
+	font-family: 'Glyphicons Halflings';
+	font-style: normal;
+	font-weight: 400;
+	content: "\e060";
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+
+	/* Space it out a bit */
+	padding-right: 4px;
+}
