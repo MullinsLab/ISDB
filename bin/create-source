@@ -6,10 +6,9 @@ use open qw< :std :encoding(UTF-8) >;
 use FindBin qw< $Bin $Script >;
 use lib "$Bin/../lib", "$Bin/../local/lib/perl5";
 use ISDB::Schema;
+use ISDB::Types qw< SourceMetadata >;
 use JSON::MaybeXS;
 use Path::Tiny;
-use Types::Standard qw< :types slurpy >;
-use Types::Common::String qw< :types >;
 
 $|++;
 
@@ -23,19 +22,9 @@ $file = $file->child("metadata.json")
 die "No such file $file\n"
     unless $file->is_file;
 
-# Maybe someday we'll want to use a JSON schema (http://json-schema.org/) via
-# JSON::Schema, JSON::Schema::AsType, or otherwise, but this is quick and easy
-# and low-dep and still gets us nice validation.
-# -trs, 2 Dec 2015
-my $SourceMetadata = Dict[
-    name    => NonEmptySimpleStr,
-    uri     => NonEmptySimpleStr,
-    slurpy HashRef
-];
-
 my $json     = $file->slurp_utf8;
 my $metadata = JSON->new->decode($json);
-$SourceMetadata->assert_valid($metadata);
+SourceMetadata->assert_valid($metadata);
 
 print "Creating source $metadata->{name}... ";
 

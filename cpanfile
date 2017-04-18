@@ -28,6 +28,7 @@ requires 'Template::Alloy';
 requires 'Text::CSV';
 requires 'Time::HiRes';
 requires 'Try::Tiny';
+requires 'Type::Library';
 requires 'Types::Standard';
 requires 'Types::Common::String';
 requires 'URI';
