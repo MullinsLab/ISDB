@@ -74,10 +74,12 @@ CREATE INDEX ncbi_gene_location_idx ON ncbi_gene_location(landmark, gene_start, 
 
 CREATE TABLE source (
     source_name     varchar(255) NOT NULL PRIMARY KEY,
-    document        jsonb
+    document        jsonb,
+    revision        jsonb
 );
 
 CREATE INDEX source_document ON source USING gin (document);
+CREATE INDEX source_revision ON source USING gin (revision);
 
 -- Sample document example fields
 --  • subject

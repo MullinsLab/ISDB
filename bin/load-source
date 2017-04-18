@@ -6,8 +6,10 @@ use utf8;
 use open qw< :std :encoding(UTF-8) >;
 use FindBin qw< $Bin >;
 use lib "$Bin/../lib", "$Bin/../local/lib/perl5";
+use Digest::SHA;
 use Getopt::Long::Descriptive;
 use Hash::Fold 0.001002;
+use IPC::Run3 qw< run3 >;
 use ISDB::Schema;
 use ISDB::Types qw< SourceMetadata >;
 use JSON::MaybeXS;
@@ -44,7 +46,8 @@ sub main {
     my $db  = ISDB::Schema->connect_default;
     my $txn = $db->txn_scope_guard;
 
-    create_source($db, $metadata);
+    my $revision = source_revision($dir, $metadata, $data);
+    create_source($db, $metadata, $revision);
     load_data($db, $data);
 
     die "This was a DRY RUN, aborting transaction.\n"
@@ -74,8 +77,40 @@ sub normalize_source_path {
     return ($dir, $metadata, $data);
 }
 
+sub source_revision {
+    my ($dir, $metadata, $data) = @_;
+    my $revision = {
+        metadata => {
+            path => $metadata->absolute->stringify,
+            sha1 => sha1_hex($metadata),
+        },
+        data => {
+            path => $data->absolute->stringify,
+            sha1 => sha1_hex($data),
+        },
+    };
+
+    my $git = try {
+        run3 [qw[ git -C ], $dir, qw[ describe --tags --abbrev=40 --long --always --dirty ]],
+            \undef, \(my $out), \undef;
+        chomp $out;
+        return $out;
+    };
+    $revision->{git} = $git
+        if $git;
+
+    return $revision;
+}
+
+sub sha1_hex {
+    my $file = shift;
+    my $sha  = Digest::SHA->new(1);
+    $sha->addfile( $file->openr_raw );
+    return $sha->hexdigest;
+}
+
 sub create_source {
-    my ($db, $file) = @_;
+    my ($db, $file, $revision) = @_;
 
     my $json     = $file->slurp_utf8;
     my $metadata = JSON->new->decode($json);
@@ -101,6 +136,7 @@ sub create_source {
     $db->resultset("Source")->create({
         source_name => $metadata->{name},
         document    => $json,
+        revision    => $revision,
     });
     say "OK";
 }

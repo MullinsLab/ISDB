@@ -52,12 +52,19 @@ __PACKAGE__->table("source");
   data_type: 'jsonb'
   is_nullable: 1
 
+=head2 revision
+
+  data_type: 'jsonb'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
   "source_name",
   { accessor => "source", data_type => "varchar", is_nullable => 0, size => 255 },
   "document",
+  { data_type => "jsonb", is_nullable => 1 },
+  "revision",
   { data_type => "jsonb", is_nullable => 1 },
 );
 
@@ -91,8 +98,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-25 13:58:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Fzw/lwJojEbfralOcUv0Wg
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2017-04-18 13:45:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UmGriQoWVIc3n+ficgg2Ag
 
 __PACKAGE__->add_columns("+source_name" => { accessor => "name" });
 
