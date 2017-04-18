@@ -42,12 +42,12 @@ user@host:~ $ ls
 isdb
 My-HIV-Integrations
 user@host:~ $ cd isdb
-user@host:~/isdb $ ./bin/load-source ../My-HIV-Integrations
+user@host:~/isdb $ ./bin/load-source --reload ../My-HIV-Integrations
 ```
 
-The `load-source` script _completely reloads_ the integrations from the source
-being loaded. Existing records from that source are removed from the database,
-then records from the current version of the source are added.
+Passing the `--reload` option to the `load-source` command _completely reloads_
+the given source.  Existing records from that source are removed from the
+database, then records from the current version of the source are added.
 
 # Removing a source
 
