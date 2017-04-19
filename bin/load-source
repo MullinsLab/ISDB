@@ -1,27 +1,223 @@
-#!/bin/bash
-set -e -o pipefail
-isdb=$(dirname $0)/..
+#!/usr/bin/env perl
+use 5.010;
+use strict;
+use warnings;
+use utf8;
+use open qw< :std :encoding(UTF-8) >;
+use FindBin qw< $Bin >;
+use lib "$Bin/../lib", "$Bin/../local/lib/perl5";
+use Digest::SHA;
+use Getopt::Long::Descriptive;
+use Hash::Fold 0.001002;
+use IPC::Run3 qw< run3 >;
+use ISDB::Schema;
+use ISDB::Types qw< SourceMetadata >;
+use JSON::MaybeXS;
+use Path::Tiny;
+use Text::CSV;
+use Time::HiRes qw< time >;
+use Try::Tiny;
 
-if [[ -z $1 ]]; then
-    echo "usage: $(basename $0) source-name|source-path [additional opts for load-integrations]"
-    exit 1
-fi
-source=$1
-shift
-[[ $source == . || $source == ./ ]] && source=$PWD
-name=$(basename $source)
+my ($opt, $usage) = describe_options(
+    '%c [--reload] [--dry-run] [--validate] source-path[/metadata.json]',
+    [],
+    [ "Loads integration site observations from a single source into an ISDB." ],
+    [],
+    [ 'no-in-vitro', "don't insert integrations which happened in vitro" ],
+    [],
+    [ 'reload',   "delete source and any existing data before loading it anew" ],
+    [ 'dry-run',  "insert data but rollback the transaction at the end" ],
+    [ 'validate', "validate rows and gene info, but don't try to insert any data; implies --dry-run", { implies => 'dry_run' } ],
+    [ 'help',     "print usage message and exit" ],
+);
 
-set -o nounset
+print($usage->text), exit(!$opt->help)
+    if $opt->help or not @ARGV;
 
-if [[ $source == $name ]]; then
-    source=$isdb/sources/$name
-fi
+$SIG{__WARN__} = sub {
+    warn "Warning: ", @_;
+};
 
-if ! test -d $source; then
-    echo "Error: $source ($name) is not a directory" 2>&1
-    exit 2
-fi
+exit main(@ARGV);
 
-$isdb/bin/drop-source $source
-$isdb/bin/create-source $source
-$isdb/bin/load-integrations "$@" $source/integrations.csv
+sub main {
+    my ($dir, $metadata, $data) = normalize_source_path(shift);
+
+    my $db  = ISDB::Schema->connect_default;
+    my $txn = $db->txn_scope_guard;
+
+    my $revision = source_revision($dir, $metadata, $data);
+    create_source($db, $metadata, $revision);
+    load_data($db, $data);
+
+    die "This was a DRY RUN, aborting transaction.\n"
+        if $opt->dry_run;
+    $txn->commit;
+    say "OK";
+
+    return 0;
+}
+
+sub normalize_source_path {
+    my $dir = path(shift);
+
+    my ($metadata, $data);
+    ($metadata, $dir) = ($dir, $dir->parent)
+        if $dir->is_file;
+
+    $data       = $dir->child("integrations.csv");
+    $metadata //= $dir->child("metadata.json");
+
+    die "Metadata file $metadata missing\n"
+        unless $metadata->is_file;
+
+    die "Data file $data missing\n"
+        unless $data->is_file;
+
+    return ($dir, $metadata, $data);
+}
+
+sub source_revision {
+    my ($dir, $metadata, $data) = @_;
+    my $revision = {
+        metadata => {
+            path => $metadata->absolute->stringify,
+            sha1 => sha1_hex($metadata),
+        },
+        data => {
+            path => $data->absolute->stringify,
+            sha1 => sha1_hex($data),
+        },
+    };
+
+    my $git = try {
+        run3 [qw[ git -C ], $dir, qw[ describe --tags --abbrev=40 --long --always --dirty ]],
+            \undef, \(my $out), \undef;
+        chomp $out;
+        return $out;
+    };
+    $revision->{git} = $git
+        if $git;
+
+    return $revision;
+}
+
+sub sha1_hex {
+    my $file = shift;
+    my $sha  = Digest::SHA->new(1);
+    $sha->addfile( $file->openr_raw );
+    return $sha->hexdigest;
+}
+
+sub create_source {
+    my ($db, $file, $revision) = @_;
+
+    my $json     = $file->slurp_utf8;
+    my $metadata = JSON->new->decode($json);
+    SourceMetadata->assert_valid($metadata);
+
+    my $source = $db->resultset("Source")->find({ source_name => $metadata->{name} });
+    if ($source) {
+        if ($opt->reload) {
+            print "Dropping all data from source $metadata->{name}... ";
+            $source->integrations->delete;
+            $source->delete;
+            say "OK";
+        }
+        else {
+            die "Source $metadata->{name} already exists!\n\n",
+                "Use --reload if you want to unconditionally delete the existing data\n",
+                "before loading new data.\n\n";
+        }
+    }
+
+    print "Creating source $metadata->{name}... ";
+
+    $db->resultset("Source")->create({
+        source_name => $metadata->{name},
+        document    => $json,
+        revision    => $revision,
+    });
+    say "OK";
+}
+
+sub load_data {
+    my ($db, $data) = @_;
+    my $is = $db->resultset("Integration");
+    my $fh = $data->openr_utf8;
+
+    my $csv = Text::CSV->new({ binary => 1 })
+        or die "Can't create new Text::CSV: " . Text::CSV->error_diag;
+
+    my $header = $csv->getline($fh)
+        or die "No CSV header? " . $csv->error_diag;
+    $csv->column_names(@$header);
+
+    my $inserted = 0;
+
+    say "Loading integration sites... ";
+    while (my $row = $csv->getline_hr($fh)) {
+        $inserted += try {
+            $row = normalize($db, $row);
+
+            return 0 if $opt->no_in_vitro
+                    and $row->{environment} eq "in vitro";
+
+            $is->create($row)
+                unless $opt->validate;
+            return 1;
+        } catch {
+            s/ at \S+ line \d+//;
+            if ($opt->validate) {
+                warn "Error: $_, input line ", $fh->input_line_number;
+                return 0;
+            } else {
+                die "Error: $_, input line ", $fh->input_line_number;
+            }
+        };
+        report_status($fh->input_line_number, every => 1000);
+    }
+    report_status($fh->input_line_number, every => 1);
+    say "$inserted observations inserted";
+}
+
+sub report_status {
+    state $start = time;
+    my $count    = shift;
+    my $every    = { @_ }->{every} || 1000;
+    my $elapsed  = time - $start;
+    printf "$count lines processed in %0.3f seconds (%0.0f lines/s)\n",
+        $elapsed, $count / $elapsed
+            if $count % $every == 0;
+}
+
+sub normalize {
+    my ($db, $row) = @_;
+
+    state $hash = Hash::Fold->new(
+        array_delimiter => '/#',
+        hash_delimiter  => '/',
+    );
+
+    # Normalize empty strings into NULL
+    $_ = undef for grep { not length } values %$row;
+
+    # Reconstitute any flattened structures; encoding JSON fields back to JSON
+    # is handled by our schema classes
+    $row = $hash->unflatten($row);
+
+    # We now look this up in the database by intersecting the IS location with
+    # gene locations.
+    delete $row->{ncbi_gene_id};
+    delete $row->{gene};
+    delete $row->{orientation_in_gene};
+
+    $row->{landmark}                ||= delete $row->{chromosome};
+    $row->{orientation_in_landmark} ||= delete $row->{orientation_in_reference};
+
+    $row->{landmark} = "chr$row->{landmark}"
+        if $row->{landmark}
+       and $row->{landmark} =~ /^(\d+|[XY]|MT)$/;
+
+    return $row;
+}
