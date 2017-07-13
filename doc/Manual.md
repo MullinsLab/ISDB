@@ -31,8 +31,9 @@ page](../) of an ISDB website.  Freezing allows analyses to lock in a specific
 version of the data for repeatability while still allowing corrections and new
 data to flow into the latest in-flight version.
 
-Custom reporting may be accomplished using SQL via R (with dplyr), Perl, or
-a "business intelligence" tool such as [re:dash][redash] or [Tableau][].
+Custom reporting may be accomplished using almost any data analysis tool,
+including direct SQL, R/dplyr, Python, Perl, and "business intelligence"
+programs such as [re:dash][redash] and [Tableau][].
 
 This documentation also includes [a reference guide to the tables and
 views](Tables.html) within an ISDB.
