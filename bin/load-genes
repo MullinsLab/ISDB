@@ -22,6 +22,8 @@ my ($opt, $usage) = describe_options(
     [ 'chrmap=s',    "Space-delimited file mapping chromosomes to RefSeq accessions", { required => 1 } ],
     [ 'gene-info=s', "Tab-delimited \"gene_info\" file from NCBI Gene FTP site", { required => 1 } ],
     [],
+    [ 'reload',      "delete all existing genes before loading" ],
+    [],
     [ 'help', "print usage message and exit" ],
 );
 print($usage->text), exit(!$opt->help)
@@ -54,6 +56,14 @@ my %gene_type =
     map { chomp; [(split /\t/, $_)[1,9]] }
    grep { not /^#|^$/ }
         <$gene_info>;
+
+
+if ($opt->reload) {
+    print "Deleting all existing gene data… ";
+    $genes->related_resultset("locations")->delete;
+    $genes->delete;
+    say "OK";
+}
 
 
 say "Loading gene locations from genome assembly GFF…";
