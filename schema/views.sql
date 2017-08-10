@@ -21,7 +21,7 @@ CREATE VIEW integration_genes AS
       LEFT JOIN ncbi_gene_location
              AS geneloc
              ON (    integration.landmark = geneloc.landmark
-                 AND integration.location BETWEEN geneloc.gene_start AND geneloc.gene_end)
+                 AND integration.location BETWEEN geneloc.gene_start + 1 AND geneloc.gene_end - 1)
       LEFT JOIN ncbi_gene USING (ncbi_gene_id)
 ;
 

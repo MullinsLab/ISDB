@@ -66,7 +66,8 @@ CREATE TABLE ncbi_gene_location (
     gene_orientation    orientation         NOT NULL,
     PRIMARY KEY (ncbi_gene_id, landmark, gene_start)
 );
-CREATE INDEX ncbi_gene_location_idx ON ncbi_gene_location(landmark, gene_start, gene_end);
+CREATE INDEX ncbi_gene_location_idx         ON ncbi_gene_location(landmark, gene_start, gene_end);
+CREATE INDEX ncbi_gene_location_between_idx ON ncbi_gene_location(landmark, (gene_start + 1), (gene_end - 1));
 
 -- Source document example fields
 --  • pubmed_id

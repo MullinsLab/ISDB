@@ -52,8 +52,8 @@ my $integrations = $schema->resultset('IntegrationGeneSummary')->search_rs(
         'me.landmark' => { -ident => 'locations.landmark' },
         'me.location' => {
             -between => [
-                { -ident => 'locations.gene_start' },
-                { -ident => 'locations.gene_end' },
+                { -ident => 'locations.gene_start + 1' },
+                { -ident => 'locations.gene_end - 1' },
             ]
         },
     },
