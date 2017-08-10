@@ -90,10 +90,30 @@ while (<$gff>) {
     });
 
     $gene->add_to_locations({
-        landmark          => $landmark,
-        gene_start       => $row->{start} - 1,  # Conversion to interbase, zero-origin
-        gene_end         => $row->{end},
+        landmark         => $landmark,
         gene_orientation => $strand2orientation{ $row->{strand} },
+
+        # Conversion to interbase, zero-origin
+        gene_start => $row->{start} - 1,
+        gene_end   => $row->{end},
+
+        # Produce an exclusive range — () vs. [] — so expected operations like:
+        #
+        #     gene_range @> integration.location
+        #
+        # work correctly out-of-the-box.  This is because both gene ranges and
+        # integration locations are stored in zero-origin, interbase
+        # coordinates.  For example:
+        #
+        #     →       ←       → ← gene start and end
+        #  A T·C G C G A T     ·  is proviral location
+        # 0 1 2 3 4 5 6 7 8
+        #
+        # The gene spans positions (2,6) and consists of 4 bases.  An IS at
+        # position 2 (or 6) is just _outside_ of the gene.  When used with the
+        # range containment operator, @>, the inclusive range [2,6] incorrectly
+        # results in the IS overlapping while the exclusive range (2,6) does not.
+        gene_range => sprintf("(%d,%d)", $row->{start} - 1, $row->{end}),
     });
 
     $loaded++;
