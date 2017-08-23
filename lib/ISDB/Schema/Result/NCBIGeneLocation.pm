@@ -61,6 +61,11 @@ __PACKAGE__->table("ncbi_gene_location");
   data_type: 'integer'
   is_nullable: 0
 
+=head2 gene_range
+
+  data_type: 'int4range'
+  is_nullable: 0
+
 =head2 gene_orientation
 
   data_type: 'orientation'
@@ -77,6 +82,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 0 },
   "gene_end",
   { data_type => "integer", is_nullable => 0 },
+  "gene_range",
+  { data_type => "int4range", is_nullable => 0 },
   "gene_orientation",
   { data_type => "orientation", is_nullable => 0 },
 );
@@ -115,8 +122,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-25 13:58:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ilv2QwrKZ7zFR3Dl3M+ypA
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2017-08-10 14:48:46
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wdpUyuafS3ImzPl9qP/lOg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

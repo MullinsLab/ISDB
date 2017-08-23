@@ -9,4 +9,8 @@ ALTER SCHEMA public OWNER TO :owner;
 -- Otherwise, it quietly does nothing!
 REVOKE CREATE ON SCHEMA public FROM PUBLIC;
 
+-- Standard extension adding support for btree operators on multi-column GIST
+-- indexes, which we use for (landmark, gene_range)
+CREATE EXTENSION btree_gist;
+
 COMMIT;
