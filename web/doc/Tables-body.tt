@@ -145,6 +145,12 @@
           A whole number which may be very large
         </dd>
 
+        <dt id="data-type-int4range"><code>int4range</code></dt>
+        <dd>
+          A range between two whole numbers, useful for checking region
+          overlap, containment, adjacency, and other similar operations
+        </dd>
+
         <dt id="data-type-jsonb"><code>jsonb</code></dt>
         <dd>
           A <a href="https://en.wikipedia.org/wiki/JSON">JSON</a> document, which
