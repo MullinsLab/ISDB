@@ -30,6 +30,11 @@ $(cpanm):
 liftover: bin/liftOver.$(SYS) cache/hg19ToHg38.over.chain.gz
 
 bin/liftOver.$(SYS):
+	@echo "Before downloading liftOver from UCSC, please be advised that"
+	@echo "commercial use requires a license."
+	@echo
+	@echo "Type Ctrl-C (^C) to abort or enter to proceed."
+	@read
 	$(curl) http://hgdownload.soe.ucsc.edu/admin/exe/$(OS).$(ARCH)/liftOver > $@
 	chmod +x $@
 
