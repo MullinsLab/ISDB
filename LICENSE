@@ -1,0 +1,59 @@
+Copyright © 2015—2017 Mullins Lab
+Department of Microbiology
+School of Medicine
+University of Washington
+
+———————————————————————————————————————————————————————————————————————————————
+
+SOFTWARE AND DOCUMENTATION
+
+All software and documentation is provided under the MIT license (below).
+
+Some programs in this project download and use the the liftOver program from
+UCSC's Genome Browser.  This program is free for non-commercial use, but must
+be licensed separately for commercial use.  See the following two resources for
+more information:
+
+   http://hgdownload.cse.ucsc.edu/downloads.html#source_downloads
+   https://genome-store.ucsc.edu/
+
+
+DATASETS
+
+The previously published integration site datasets included in this project
+under the sources/ directory are copyright their respective authors and used in
+accordance with their licenses.
+
+Some programs in this project download genome annotation data from the NCBI.
+This data is in the public domain.
+
+All other datasets are provided under the Creative Commons Attribution 4.0
+International (CC BY 4.0) license, described briefly at
+
+   https://creativecommons.org/licenses/by/4.0/
+
+and available in full at
+
+   https://creativecommons.org/licenses/by/4.0/legalcode
+
+———————————————————————————————————————————————————————————————————————————————
+
+The MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
