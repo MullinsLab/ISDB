@@ -3,4 +3,5 @@
 /bin/liftOver.Linux
 /config_local.*
 /bin/cpanm
+/bin/pandoc
 /local

@@ -226,7 +226,7 @@ if [[ $refresh_docs == yes ]]; then
     done
 
     if [[ $doc_failed -eq 1 ]]; then
-        echo "Warning: Couldn't generate documentation, but succeeding anyway. Is pandoc installed?"
+        echo "Warning: Couldn't generate documentation but continuing on…"
     fi
 
     echo "Indexing documentation"
