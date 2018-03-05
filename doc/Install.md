@@ -20,8 +20,7 @@ contacting a local expert familiar with your computing systems.
 
 [Perl](https://www.perl.org) 5.14 or later, standard Unix tools including
 `make`, and [libcurl](https://curl.haxx.se) are all required to run the ISDB
-tools. [Pandoc](http://pandoc.org) 1.16 or later is used for generating
-documentation web pages. It is optional but recommended.
+tools.
 
 ISDB is designed to use [PostgreSQL](https://www.postgresql.org) as the
 database server. You must either have "superuser" access to a PostgreSQL
@@ -33,9 +32,6 @@ server, or access to the owner role of a database set up for your use.
 
 2. Download and install [Postgres.app](http://postgresapp.com)
 
-3. Install [pandoc](http://pandoc.org/installing.html) with its installer
-   package
-
 MacOS versions starting with 10.9 (Mavericks), released in 2013, include a
 sufficiently new version of Perl to run all the ISDB tools. libcurl is included
 with macOS as well.
@@ -43,7 +39,7 @@ with macOS as well.
 ## Installing prerequisites on Debian or Ubuntu
 
 1. Install packaged dependencies:
-   `apt-get install build-essential pkg-config libcurl4-gnutls-dev pandoc`
+   `apt-get install build-essential pkg-config libcurl4-gnutls-dev`
 
 2. Set up the PostgreSQL APT repository appropriate for your system
    [Debian](https://www.postgresql.org/download/linux/debian/),
@@ -62,7 +58,7 @@ These instructions should also work on Fedora and other RHEL variants, although
 they've only been tested on CentOS 7.
 
 1. Install packaged dependencies:
-   `yum install @development libcurl-devel pandoc perl-core`
+   `yum install @development libcurl-devel perl-core`
 
 2. Set up the [PostgreSQL yum repository](https://www.postgresql.org/download/linux/redhat/)
    for at least Pg 9.4 or newer following their instructions
@@ -83,6 +79,7 @@ directory:
 * The UCSC Genome Browser's `liftOver` tool
 * The `liftOver` chain file for mapping hg19 to hg38 coordinates
 * Gene annotation and chromosome metadata from the [NCBI](https://www.ncbi.nlm.nih.gov)
+* [Pandoc](http://pandoc.org) for generating documentation web pages
 
 # Create the database
 

@@ -87,12 +87,12 @@ dd {
 }
 
 /* Fancier footnotes */
-.pandoc .footnoteRef sup {
+.pandoc .footnote-ref sup {
     border: 1px solid #777;
     padding: 1px 4px;
     border-radius: 100%;
 }
-.pandoc .footnoteRef:hover sup {
+.pandoc .footnote-ref:hover sup {
     border-color: #337ab7; /* match link color */
 }
 

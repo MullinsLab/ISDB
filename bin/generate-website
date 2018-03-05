@@ -204,7 +204,7 @@ if [[ $refresh_docs == yes ]]; then
         # using Pandoc templates.  These will be consumed by the web template we
         # copied above.
         for part in metadata.json head.html body.html; do
-            if ! pandoc --smart --base-header-level=3 -t html5 --template $base/web/pandoc/$part.tmpl $md > $tmp/$part; then
+            if ! $bin/pandoc --base-header-level=3 -t html5+smart --template $base/web/pandoc/$part.tmpl $md > $tmp/$part; then
                 echo "error: pandoc failed processing $md into $tmp/$part (exited $?)" >&2
                 doc_failed=1
                 continue 2
@@ -226,7 +226,7 @@ if [[ $refresh_docs == yes ]]; then
     done
 
     if [[ $doc_failed -eq 1 ]]; then
-        echo "Warning: Couldn't generate documentation, but succeeding anyway. Is pandoc installed?"
+        echo "Warning: Couldn't generate documentation but continuing on…"
     fi
 
     echo "Indexing documentation"

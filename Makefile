@@ -5,19 +5,25 @@ export SHELLOPTS:=errexit:pipefail
 SYS  := $(shell uname -s)
 ARCH := $(shell uname -m)
 
+PANDOC_VERSION ?= 2.1.1
+
 ifeq ($(SYS), Darwin)
-OS := macOSX
+LIFTOVER_SYS   := macOSX
+PANDOC_PKG     := pandoc-$(PANDOC_VERSION)-macOS.zip
+PANDOC_EXTRACT := unzip -DD -o
 else ifeq ($(SYS), Linux)
-OS := linux
+LIFTOVER_SYS   := linux
+PANDOC_PKG     := pandoc-$(PANDOC_VERSION)-linux.tar.gz
+PANDOC_EXTRACT := tar xzvmf
 else
-OS := $(SYS)
+LIFTOVER_SYS := $(SYS)
 endif
 
 cpanm := bin/cpanm
 
 curl := curl -fsSL
 
-deps: $(cpanm) liftover perl-deps hg-data
+deps: $(cpanm) pandoc liftover perl-deps hg-data
 
 perl-deps: cpanfile
 	mkdir -p local
@@ -27,6 +33,19 @@ $(cpanm):
 	$(curl) https://raw.githubusercontent.com/miyagawa/cpanminus/master/cpanm > $@
 	chmod +x $@
 
+pandoc: bin/pandoc
+
+bin/pandoc: cache/pandoc-$(PANDOC_VERSION)/bin/pandoc
+	ln -snvf ../$< $@
+
+cache/pandoc-$(PANDOC_VERSION)/bin/pandoc: cache/$(PANDOC_PKG)
+	cd cache && $(PANDOC_EXTRACT) $(<:cache/%=%) $(@:cache/%=%)
+	chmod +x $@
+
+cache/$(PANDOC_PKG):
+	mkdir -p cache
+	$(curl) https://github.com/jgm/pandoc/releases/download/$(PANDOC_VERSION)/$(PANDOC_PKG) > $@
+
 liftover: bin/liftOver.$(SYS) cache/hg19ToHg38.over.chain.gz
 
 bin/liftOver.$(SYS):
@@ -35,7 +54,7 @@ bin/liftOver.$(SYS):
 	@echo
 	@echo "Type Ctrl-C (^C) to abort or enter to proceed."
 	@read
-	$(curl) http://hgdownload.soe.ucsc.edu/admin/exe/$(OS).$(ARCH)/liftOver > $@
+	$(curl) http://hgdownload.soe.ucsc.edu/admin/exe/$(LIFTOVER_SYS).$(ARCH)/liftOver > $@
 	chmod +x $@
 
 cache/hg19ToHg38.over.chain.gz:
