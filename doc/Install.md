@@ -20,7 +20,7 @@ contacting a local expert familiar with your computing systems.
 
 [Perl](https://www.perl.org) 5.14 or later, standard Unix tools including
 `make`, and [libcurl](https://curl.haxx.se) are all required to run the ISDB
-tools. [Pandoc](http://pandoc.org) 1.16 or later is used for generating
+tools. [Pandoc](http://pandoc.org) 2.0 or later is used for generating
 documentation web pages. It is optional but recommended.
 
 ISDB is designed to use [PostgreSQL](https://www.postgresql.org) as the
