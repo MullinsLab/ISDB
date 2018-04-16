@@ -32,6 +32,8 @@ server, or access to the owner role of a database set up for your use.
 
 2. Download and install [Postgres.app](http://postgresapp.com)
 
+3. Set your POSTGRES_HOME with `export POSTGRES_HOME=/Applications/Postgres.app/Contents/Versions/latest`
+
 MacOS versions starting with 10.9 (Mavericks), released in 2013, include a
 sufficiently new version of Perl to run all the ISDB tools. libcurl is included
 with macOS as well.
