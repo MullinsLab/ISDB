@@ -32,6 +32,12 @@ server, or access to the owner role of a database set up for your use.
 
 2. Download and install [Postgres.app](http://postgresapp.com)
 
+3. Configure your shell to make the PostgreSQL command line tools available:
+
+       sudo mkdir -p /etc/paths.d
+       sudo tee /etc/paths.d/postgresapp <<</Applications/Postgres.app/Contents/Versions/latest/bin
+       export PATH="/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH"
+
 MacOS versions starting with 10.9 (Mavericks), released in 2013, include a
 sufficiently new version of Perl to run all the ISDB tools. libcurl is included
 with macOS as well.
