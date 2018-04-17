@@ -23,7 +23,11 @@ cpanm := bin/cpanm
 
 curl := curl -fsSL
 
+
 deps: $(cpanm) pandoc liftover perl-deps hg-data
+
+clean: 
+	rm -rf local cache
 
 perl-deps: cpanfile
 	mkdir -p local
