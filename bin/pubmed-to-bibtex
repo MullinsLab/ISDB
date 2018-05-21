@@ -1,0 +1,102 @@
+#!/usr/bin/env perl
+use 5.010;
+use strict;
+use warnings;
+use utf8;
+use open qw< :std :encoding(UTF-8) >;
+use FindBin qw< $Bin >;
+use lib "$Bin/../lib", "$Bin/../local/lib/perl5";
+use Getopt::Long::Descriptive;
+use JSON::MaybeXS;
+
+my ($opt, $usage) = describe_options(
+    '%c [cache/pubmed.json]',
+    [],
+    [ "Converts the JSON output of cache-pubmed-info to BibTeX format for citation management" ],
+    [],
+    [ 'pubmed-keys',    "generate citation keys like: pubmed-<PMID>" ],
+    [ 'author-keys',    "generate citation keys like: <author>-<year>-<journal> (the default)", { default => 1 }],
+    [ 'help',           "print usage message and exit" ],
+);
+print($usage->text), exit
+    if $opt->help;
+
+# Track the citation keys we've used
+my %used_citation_keys;
+
+# Read in JSON output of cache-pubmed-info, either from stdin or named file(s)
+my $json   = do { local $/; <> };
+my $pubmed = JSON->new->decode($json);
+
+# Generate a BibTeX entry for each PubMed entry cited by the database sources
+for my $pmid (@{ $pubmed->{uids} }) {
+    my $info = $pubmed->{$pmid}
+        or die "No entry for PMID $pmid!\n";
+
+    # Basic fields
+    my $title   = bibtex_escape( $info->{title} );
+    my $journal = bibtex_escape( $info->{fulljournalname} =~ s/\s*\(.+\)$//r );     # remove silly trailing parentheticals from journal names
+    my ($year)  = $info->{pubdate} =~ /^(\d{4})(?: |$)/;                            # some pub dates are just a year, others are like 2018 May 21
+
+    my $authors =
+       join " and ",
+        map { bibtex_escape($_) }
+        map { punctuate_author($_->{name}) }
+           @{ $info->{authors} };
+
+    my ($doi) =
+        map { $_->{value} }
+       grep { $_->{idtype} eq "doi" }
+           @{ $info->{articleids} };
+
+    $doi //= "";
+
+    my $url = $doi
+        ? "http://dx.doi.org/$doi"
+        : "https://www.ncbi.nlm.nih.gov/pubmed/$pmid";
+
+    # Generate citation key for this entry
+    my $journal_abbr = bibtex_escape( $info->{source} =~ s/ +//gr );
+    my $first_author = bibtex_escape( $info->{authors}[0]{name} =~ s/ \S+$//r );    # strip trailing initials
+    my $citation_key =
+        $opt->pubmed_keys ?                      "pubmed-$pmid" :
+        $opt->author_keys ? "$first_author-$year-$journal_abbr" :
+                                       die "Unknown key option" ;
+
+    # Keep track of how many times we've used a citation key and append -2, -3,
+    # -4, … as we use them more than once.  Hopefully this happens very rarely.
+    $citation_key .= "-$used_citation_keys{ $citation_key }"
+        if $used_citation_keys{ $citation_key }++;
+
+    say <<"    BIBTEX" =~ s/^\s*//mgr;
+        \@Article{$citation_key,
+            author = {$authors},
+            title = {$title},
+            journal = {$journal},
+            year = {$year},
+            volume = {$info->{volume}},
+            number = {$info->{issue}},
+            pages = {$info->{pages}},
+            issn = {$info->{issn}},
+            doi = {$doi},
+            url = {$url}
+        }
+    BIBTEX
+}
+
+sub punctuate_author {
+    my $name     = shift;
+    my @names    = split ' ', $name;
+    my $initials = join ' ', map { "$_." } split '', pop @names;
+    my $given    = join ' ', @names;
+
+    return "$given, $initials";
+}
+
+sub bibtex_escape {
+    # Based on note at the bottom of http://www.bibtex.org/SpecialSymbols/.  It
+    # doesn't mention being able to escape \ as \\, so I guess we'll leave that
+    # alone.  We're not doing this for security anyway, just to make the chance
+    # of a broken BibTeX file less likely.
+    shift =~ s/(?=[{"\$])/\\/gr
+}
