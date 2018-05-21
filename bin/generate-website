@@ -138,6 +138,9 @@ if [[ $refresh_cached == yes ]]; then
     echo "Caching PubMed info"
     $bin/cache-pubmed-info > $output/cache/pubmed.json
 
+    echo "Caching BibTeX entries"
+    $bin/pubmed-to-bibtex --author-keys < $output/cache/pubmed.json > $output/cache/data-sources.bib
+
     # Known issues
     service=$($bin/read-config issues.service || true)
     if [[ -z $service ]]; then

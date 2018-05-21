@@ -27,6 +27,14 @@
       <% INCLUDE 'source_list', source_list = stats.counts.by_source_and_publication.in_vitro %>
     </div>
 
+    <div class="col col-md-7 col-sm-12">
+      <p>
+        Citation entries for the published data sources above are
+        <a href="cache/data-sources.bib">available for download in BibTeX format</a>,
+        which is readable by most citation management software.
+      </p>
+    </div>
+
     <% BLOCK source_list %>
       <table class="table table-condensed table-striped source-table">
         <thead>
