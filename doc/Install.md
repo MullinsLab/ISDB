@@ -97,7 +97,7 @@ You can use the `bin/create-database` tool to create a new database called
 `isdb` on your local PostgreSQL server.  It must be run as a database
 superuser since it creates users and a database.  This tool connects to
 PostgreSQL based on environment variables; see the [database connection
-documentation](Database-connection.html) for details.
+documentation](Database-connection.md) for details.
 
 If you're using macOS and Postgres.app, then your macOS user is already a
 superuser so you can run:
@@ -137,5 +137,5 @@ ISDB tools are distributed with some of the source data used to populate
 [HIRIS](https://mullinslab.microbiol.washington.edu/hiris/). Even if you don't
 plan on using this data in your ISDB installation, we suggest loading these
 sources to make sure the ISDB tools and the database you just set up are
-working correctly. You can use the [`load-source` tool](Workflows.html) to load
-the sources (found in the `sources` directory of this distribution).
+working correctly. You can use the [`load-source` tool](Workflows.md) to load
+the example sources (found in the `sources` directory of this distribution).
