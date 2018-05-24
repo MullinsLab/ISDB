@@ -21,9 +21,10 @@ our analyses across datasets__.
 [HIRIS][], our HIV-1 Reservoirs Integration Sites database, is built and
 published using ISDB.
 
-Please see the [ISDB website][] for more information, including [installation
-instructions][].
+Please see the [ISDB website][] for more information, including [how to get
+started][] and [other documentation][].
 
 [ISDB website]: https://mullinslab.microbiol.washington.edu/isdb/
 [HIRIS]: https://mullinslab.microbiol.washington.edu/hiris/
-[installation instructions]: https://mullinslab.microbiol.washington.edu/isdb/doc/Install.html
+[how to get started]: https://mullinslab.microbiol.washington.edu/isdb/doc/Getting-started.html
+[other documentation]: https://mullinslab.microbiol.washington.edu/isdb/doc/

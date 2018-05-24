@@ -1,5 +1,5 @@
 ---
-title: Setting up ISDB
+title: Installation guide
 topic: About data curation
 order: 0
 ...
@@ -172,3 +172,6 @@ plan on using this data in your ISDB installation, we suggest loading these
 sources to make sure the ISDB tools and the database you just set up are
 working correctly. You can use the [`load-source` tool](Workflows.md) to load
 the example sources (found in the `sources` directory of this distribution).
+
+For step-by-step instructions, pick up the [getting started
+guide](Getting-started.md) at the "Load example data sources" section.
