@@ -11,10 +11,10 @@
     <% IF config.web.title OR config.name %><% config.web.title || config.name %><% END %>
   </title>
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="<% webroot %>assets/vendor/css/bootstrap-3.3.6.min.css">
   <link rel="stylesheet" href="<% webroot %>assets/isdb.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  <script src="<% webroot %>assets/vendor/js/jquery-1.11.3.min.js"></script>
+  <script src="<% webroot %>assets/vendor/js/bootstrap-3.3.6.min.js"></script>
   <!-- Page-specific <head> elements -->
   <% IF page.head %><% page.head | none %><% END %>
 
@@ -65,7 +65,7 @@
       <div class="media">
         <div class="media-left">
           <a href="https://mullinslab.microbiol.washington.edu">
-            <img src="https://mullinslab.microbiol.washington.edu/img/ml.png"
+            <img src="<% webroot %>assets/vendor/ml.png"
                  alt="Mullins Lab"
                class="media-object">
           </a>

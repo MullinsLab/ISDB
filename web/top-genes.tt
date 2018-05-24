@@ -3,9 +3,9 @@
    }
 -%>
 <% page.head = BLOCK %>
-  <script src="assets/vendor/d3.min.js" type="text/javascript"></script>
-  <script src="assets/vendor/vega.min.js" type="text/javascript"></script>
-  <script src="assets/vendor/vega-embed.min.js" charset="utf-8" type="text/javascript"></script>
+  <script src="assets/vendor/js/d3.min.js" type="text/javascript"></script>
+  <script src="assets/vendor/js/vega.min.js" type="text/javascript"></script>
+  <script src="assets/vendor/js/vega-embed.min.js" charset="utf-8" type="text/javascript"></script>
   <link rel="stylesheet" href="assets/top-genes-viz/styles.css">
 <% END %>
 
