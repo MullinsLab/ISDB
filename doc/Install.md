@@ -28,7 +28,9 @@ server, or access to the owner role of a database set up for your use.
 
 ## Installing prerequisites on Mac OS X/macOS
 
-1. Install Apple's command line developer tools with `xcode-select --install`
+1. Install Apple's command line developer tools with:
+
+       xcode-select --install
 
 2. Download and install [Postgres.app](http://postgresapp.com)
 
@@ -45,7 +47,8 @@ with macOS as well.
 ## Installing prerequisites on Debian or Ubuntu
 
 1. Install packaged dependencies:
-   `apt-get install build-essential pkg-config libcurl4-gnutls-dev`
+
+       apt-get install build-essential git pkg-config libcurl4-gnutls-dev
 
 2. Set up the PostgreSQL APT repository appropriate for your system
    [Debian](https://www.postgresql.org/download/linux/debian/),
@@ -53,7 +56,8 @@ with macOS as well.
    instructions
 
 3. Install libpq and PostgreSQL 9.4 or later:
-   `apt-get install libpq-dev postgresql-9.4` (or 9.5, or 9.6)
+
+       apt-get install libpq-dev postgresql-9.4
 
 The oldest currently supported Ubuntu release, Ubuntu 12.04.5 LTS, is known to
 work with ISDB tools.
@@ -64,18 +68,24 @@ These instructions should also work on Fedora and other RHEL variants, although
 they've only been tested on CentOS 7.
 
 1. Install packaged dependencies:
-   `yum install @development libcurl-devel perl-core`
+
+       yum install @development libcurl-devel perl-core
 
 2. Set up the [PostgreSQL yum repository](https://www.postgresql.org/download/linux/redhat/)
    for at least Pg 9.4 or newer following their instructions
 
 3. Install PostgreSQL 9.4 or later:
-   `yum install postgresql9.4{,-docs,-devel}` (or 9.5, or 9.6)
+
+       yum install postgresql9.4{,-docs,-devel}
+
 
 # Install ISDB's direct dependencies
 
 The tools for populating the ISDB have dependencies that do not need to be
-installed system-wide. Once all the prerequisites are met, run `make deps`
+installed system-wide. Once all the prerequisites are met, run:
+
+    make deps
+
 inside your local `isdb` directory to download these dependencies. The
 following components will be downloaded and installed within the `isdb`
 directory:
@@ -102,17 +112,17 @@ documentation](Database-connection.md) for details.
 If you're using macOS and Postgres.app, then your macOS user is already a
 superuser so you can run:
 
-    user@mac:~/isdb/ $ ./bin/create-database
+    ./bin/create-database
 
 If you're on Linux or a vanilla PostgreSQL install, you'll need to run the
 tool as the `postgres` system user:
 
-    user@linux:~/isdb/ $ sudo -u postgres ./bin/create-database
+    sudo -u postgres ./bin/create-database
 
 After that, add your own Linux user as an ISDB administrator so you'll be able
 to run ISDB tools without using `sudo -u postgres` again:
 
-    user@linux:~/isdb/ $ sudo -u postgres createuser --role=isdb_admin $USER
+    sudo -u postgres createuser --role=isdb_admin $USER
 
 You should now be able to connect to the `isdb` database and confirm that the
 basics have been loaded. For example:
