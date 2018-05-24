@@ -12,9 +12,10 @@ contacting a local expert familiar with your computing systems.
 # Overview
 
 1. Install software prerequisites for your operating system
-2. Install ISDB's direct dependencies
-3. Create your database and test connection
-4. Next steps
+2. Download ISDB source code
+3. Install ISDB's direct dependencies
+4. Create your database and test your connection
+5. Next steps
 
 # Prerequisites
 
@@ -77,6 +78,28 @@ they've only been tested on CentOS 7.
 3. Install PostgreSQL 9.4 or later:
 
        yum install postgresql9.4{,-docs,-devel}
+
+
+# Download ISDB
+
+ISDB is distributed as source code and data directly from our [version control
+repository][].  We aim to keep the branch ("version") named `master` up-to-date
+and suitable for use at all times.
+
+To download a copy of ISDB, use [git][] (which was installed if necessary in
+the previous steps):
+
+    git clone https://github.com/MullinsLab/ISDB.git isdb
+
+This will show its progress and should generally take less than a minute.  When
+it's done, you'll have a new directory called `isdb`.  Move into it on the
+command line by running:
+
+    cd isdb
+
+
+[version control repository]: https://github.com/MullinsLab/ISDB
+[git]: https://en.wikipedia.org/wiki/Git_(software)
 
 
 # Install ISDB's direct dependencies
