@@ -8,8 +8,8 @@
     topN = parseInt(match[1], 10);
 
   var spec = {
-    url: "assets/top-genes-viz/spec.json",
-    config: "assets/top-genes-viz/theme.json",
+    spec: TopGenesViz.Spec,
+    config: TopGenesViz.Theme,
     renderer: "svg",
     actions: {
       export: true,

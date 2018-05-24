@@ -1,4 +1,21 @@
-{
+(function(){
+
+if (!window.TopGenesViz)
+  window.TopGenesViz = {}
+
+var dataKey, dataType, dataValue;
+
+if (window.ISDB && window.ISDB.Exports && window.ISDB.Exports["summary-by-gene"]) {
+  dataKey   = "values";
+  dataType  = "json";
+  dataValue = window.ISDB.Exports["summary-by-gene"];
+} else {
+  dataKey   = "url";
+  dataType  = "csv";
+  dataValue = "exports/summary-by-gene.csv";
+}
+
+window.TopGenesViz.Spec = {
   "width": 700,
   "height": 1000,
   "name": "Genes containing in vivo integration sites",
@@ -31,9 +48,9 @@
   "data": [
     {
       "name": "genes",
-      "url": "exports/summary-by-gene.csv",
+      [dataKey]: dataValue,
       "format": {
-        "type": "csv",
+        "type": dataType,
         "parse": {
           "subjects": "integer",
           "total_in_gene": "integer",
@@ -338,4 +355,18 @@
       ]
     }
   ]
-}
+};
+
+window.TopGenesViz.Theme = {
+  "background": "white",
+  "axis": {
+    "tickLabelFontSize": 14,
+    "titleFontSize": 14
+  },
+  "legend": {
+    "labelFontSize": 14,
+    "titleFontSize": 14
+  }
+};
+
+})();

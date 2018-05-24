@@ -31,6 +31,8 @@
       </h4>
 
       <div id="top-genes-viz-mini"></div>
+      <script src="exports/summary-by-gene.js" type="text/javascript"></script>
+      <script src="assets/top-genes-viz/spec-mini.js" type="text/javascript"></script>
       <script src="assets/top-genes-viz/controller-mini.js" type="text/javascript"></script>
 
       <p class="notice bg-info">

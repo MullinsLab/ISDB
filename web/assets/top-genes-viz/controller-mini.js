@@ -3,7 +3,7 @@
   'use strict';
 
   var viz  = document.querySelector("#top-genes-viz-mini"),
-      spec = "assets/top-genes-viz/spec-mini.json";
+      spec = TopGenesVizMini.Spec;
 
   vg.parse.spec(spec, function(error, chart) {
     if (error) {
