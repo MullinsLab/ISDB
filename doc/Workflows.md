@@ -24,7 +24,7 @@ user@host:~ $ path/to/isdb/bin/generate-website
 will work correctly.
 
 All ISDB tools respect the database connection environment variables checked by
-PostgreSQL; see the [Database connection](Database-connection.html)
+PostgreSQL; see the [Database connection](Database-connection.md)
 documentation for details.
 
 # Loading sources
@@ -96,7 +96,8 @@ scope of this document.)
 Run `generate-website --help` to see a summary of other options.
 
 You may also want to learn more about [tailoring the website for
-you](Website.html).
+you](Website.md), which includes information on keeping your website
+automatically up-to-date.
 
 # Exporting data files
 
@@ -115,5 +116,11 @@ and should be left in place in the output directory.
 By default, the `export` tool outputs several data sets in several different
 formats. Run `export --help` to see a summary of other options.
 
+# Freezing a version of the database
+
+Every database made with ISDB can be frozen at a point in time to prevent data
+drift during analyses.  To learn more, read the [freezing
+documentation](Freezing.md).
+
 [HIRIS]: http://mullinslab.microbiol.washington.edu/hiris/
-[Sources]: Sources.html
+[Sources]: Sources.md

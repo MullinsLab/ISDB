@@ -1,4 +1,21 @@
-{
+(function(){
+
+if (!window.TopGenesVizMini)
+  window.TopGenesVizMini = {}
+
+var dataKey, dataType, dataValue;
+
+if (window.ISDB && window.ISDB.Exports && window.ISDB.Exports["summary-by-gene"]) {
+  dataKey   = "values";
+  dataType  = "json";
+  dataValue = window.ISDB.Exports["summary-by-gene"];
+} else {
+  dataKey   = "url";
+  dataType  = "csv";
+  dataValue = "exports/summary-by-gene.csv";
+}
+
+window.TopGenesVizMini.Spec = {
   "width": 400,
   "height": 200,
   "padding": "strict",
@@ -25,9 +42,9 @@
   "data": [
     {
       "name": "genes",
-      "url": "exports/summary-by-gene.csv",
+      [dataKey]: dataValue,
       "format": {
-        "type": "csv",
+        "type": dataType,
         "parse": {
           "subjects": "integer",
           "total_in_gene": "integer",
@@ -163,4 +180,6 @@
       }
     }
   ]
-}
+};
+
+})();

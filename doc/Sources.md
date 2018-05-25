@@ -121,7 +121,7 @@ The following fields are supported:
 
 For more information on how these fields are used and what values they should
 contain (paying particular attention to coordinate systems), please read the
-["Data usage guidelines" in the Manual](Manual.html#data-usage-guidelines).
+["Data usage guidelines" in the Manual](Manual.md#data-usage-guidelines).
 
 Two fields, _sample_ and _info_, are JSON documents which can have arbitrary
 structure.  These structured documents are reconstructed from the flat CSV
@@ -152,7 +152,7 @@ _sample_ and _info_ document conventions.
 
 # Reference version and coordinate liftover
 
-As [described in the manual](Manual.html#hg38), ISDB tools handle genome
+As [described in the manual](Manual.md#hg38), ISDB tools handle genome
 coordinates using the GRCh38/hg38 human genome reference. This means that when
 loading your own integrations, if they were mapped to an earlier reference
 release (such as GRCh37/hg19), chromosomal coordinates must be translated to

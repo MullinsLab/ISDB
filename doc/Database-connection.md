@@ -55,5 +55,5 @@ specifying database connection details are the same across all ISDB tools.
 [envvars]: https://www.postgresql.org/docs/current/static/libpq-envars.html
 [pgpass]: https://www.postgresql.org/docs/current/static/libpq-pgpass.html
 [pgservice]: https://www.postgresql.org/docs/current/static/libpq-pgservice.html
-[frozen versions]: Freezing.html
-[sources]: Sources.html
+[frozen versions]: Freezing.md
+[sources]: Sources.md

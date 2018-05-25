@@ -21,8 +21,8 @@ explanatory paragraphs to the front page to creating your own documentation
 pages.  All changes start with providing your own configuration file that
 tweaks the default settings.
 
-[intro]: Workflows.html#generating-the-website
-[Workflows]: Workflows.html
+[intro]: Workflows.md#generating-the-website
+[Workflows]: Workflows.md
 
 
 # A local config file
