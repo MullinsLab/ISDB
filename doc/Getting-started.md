@@ -5,11 +5,11 @@ order: -1
 ...
 
 This guide is intended to help you get started using ISDB and familiarize you
-with the major components.  It assumes the reader is comfortable using the
-command line, installing software on their system, and troubleshooting errors
-that arise when installing and configuring software.  If you need help, we
-suggest contacting a local expert familiar with your computing systems or
-[opening an issue][].
+with the major components.  It assumes you are comfortable using the command
+line, installing software on your system, and troubleshooting errors that arise
+when installing and configuring software.  If you need help, we suggest
+contacting a local expert familiar with your computing systems or [opening an
+issue][].
 
 [opening an issue]: https://github.com/MullinsLab/ISDB/issues/new?labels=question&title=Help+getting+started
 
@@ -27,7 +27,7 @@ suggest contacting a local expert familiar with your computing systems or
 ISDB is known to work on macOS and Linux (Ubuntu, Debian, Red Hat, CentOS) and
 will likely work on any Unix-like operating system.  On Windows 10, you can
 probably use ISDB via the [Windows Subsystem for Linux][], although we haven't
-tried it out ourselves (so let us know how it goes if you do!).
+tried it out ourselves. (If you do, please let us know how it goes.)
 
 Please follow the steps in the [installation guide](Install.md) and then come
 back here to continue.
@@ -52,14 +52,6 @@ your `isdb` directory:
     └── Wang-2007/
 
 You can load all of those by running:
-
-    ./bin/load-source sources/NCI-RID
-    ./bin/load-source sources/SherrillMix-2013
-    ./bin/load-source sources/Sunshine-2016-JVI
-    ./bin/load-source sources/Wagner-2014-Science
-    ./bin/load-source sources/Wang-2007
-
-or more succinctly:
 
     for src in sources/*; do ./bin/load-source $src; done
 
@@ -95,10 +87,16 @@ running:
 
     ./bin/generate-website ../isdb-example-website/
 
-This will take a few minutes and go through the process of exporting data and
-building the website.  When it's done, the directory `isdb-example-website`
-will exist alongside your `isdb` directory and contain a plethora of files.
-Open up the `index.html` file in your web browser to view your website!
+It will take a few minutes to export the data and build the website.  When it's
+done, the directory `isdb-example-website` will exist alongside your `isdb`
+directory and contain a plethora of files.  Open up the `index.html` file in
+your web browser to view your website. On macOS, you can run:
+
+    open ../isdb-example-website/index.html
+
+On many Linux desktops, you can run:
+
+    xdg-open ../isdb-example-website/index.html
 
 Note that the generated website is _static_, which means it won't change when
 your database changes unless you re-run the `generate-website` command above.
