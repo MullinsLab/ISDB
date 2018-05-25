@@ -59,10 +59,6 @@ You can load all of those by running:
     ./bin/load-source sources/Wagner-2014-Science
     ./bin/load-source sources/Wang-2007
 
-or more succinctly:
-
-    for src in sources/*; do ./bin/load-source $src; done
-
 You should see output that looks like the following:
 
     Creating source NCI-RID... OK
