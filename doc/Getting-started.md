@@ -5,11 +5,11 @@ order: -1
 ...
 
 This guide is intended to help you get started using ISDB and familiarize you
-with the major components.  It assumes you are comfortable using the command
+with its major components.  It assumes you are comfortable using the command
 line, installing software on your system, and troubleshooting errors that arise
 when installing and configuring software.  If you need help, we suggest
 contacting a local expert familiar with your computing systems or [opening an
-issue][].
+issue with us][].
 
 [opening an issue]: https://github.com/MullinsLab/ISDB/issues/new?labels=question&title=Help+getting+started
 

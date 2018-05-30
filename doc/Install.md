@@ -29,7 +29,7 @@ server, or access to the owner role of a database set up for your use.
 
 ## Installing prerequisites on Mac OS X/macOS
 
-1. Install Apple's command line developer tools with:
+1. Install Apple's command line developer tools (Xcode) with:
 
        xcode-select --install
 
