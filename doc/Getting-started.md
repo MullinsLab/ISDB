@@ -11,7 +11,7 @@ when installing and configuring software.  If you need help, we suggest
 contacting a local expert familiar with your computing systems or [opening an
 issue with us][].
 
-[opening an issue]: https://github.com/MullinsLab/ISDB/issues/new?labels=question&title=Help+getting+started
+[opening an issue with us]: https://github.com/MullinsLab/ISDB/issues/new?labels=question&title=Help+getting+started
 
 
 # Overview
